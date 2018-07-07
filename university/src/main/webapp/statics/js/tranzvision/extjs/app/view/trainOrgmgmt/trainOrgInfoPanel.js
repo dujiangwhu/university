@@ -108,6 +108,115 @@
         }, {
             xtype: 'hidden',
             //fieldLabel: '背景图片路径',
+            fieldLabel: Ext.tzGetResourse("TZ_PX_ORG_COM.TZ_PX_ORG_STD.orgLogoImgUrl","Logo"),
+            name: 'orgLogoImgUrl'
+        },{
+			xtype: 'form',
+			layout: 'hbox',
+			width:'100%',
+			height:'100%',
+			defaults:{
+				margin:'0 0 0 20px',
+			},
+			items:[{
+				margin:'10 35 0 0',		
+				xtype:'label',
+				html:'<span style="font-weight:bold">'+ Ext.tzGetResourse("TZ_PX_ORG_COM.TZ_PX_ORG_STD.orgLogoImg","Logo") +':</span>'
+			},{
+				xtype:'image',
+				name:'orgLogoImage',
+				width:70,
+				height:50,
+				border:1,
+				style: {
+				    borderColor: '#eee'
+				},
+				margin:'0 20 10 73',
+				src:''
+			},{
+				xtype:'button',
+				text:'删除',
+				listeners:{
+					click:function(file, value, eOpts ){
+						file.previousSibling().setSrc("");
+						//获取该类
+						var panel = file.findParentByType("trainOrgInfo");
+						panel.child("form").getForm().findField("orgLogoImgUrl").setValue("");
+					}
+				}
+			},{
+	            xtype: 'fileuploadfield',
+	            name: 'orguploadfile',
+	            buttonText: '上传',
+	            //msgTarget: 'side',
+	            buttonOnly:true,
+							listeners:{
+								change:function(file, value, eOpts ){
+									if(value != ""){
+										var form = file.findParentByType("form").getForm();
+										//获取该类
+										var panel = file.findParentByType("trainOrgInfo");
+										
+											//获取后缀
+											var fix = value.substring(value.lastIndexOf(".") + 1,value.length);
+											if(fix.toLowerCase() == "jpg" || fix.toLowerCase() == "jpeg" || fix.toLowerCase() == "jpeg" || fix.toLowerCase() == "png" || fix.toLowerCase() == "gif" || fix.toLowerCase() == "bmp" || fix.toLowerCase() == "ico"){
+												form.submit({
+													url: TzUniversityContextPath + '/UpdServlet?filePath=org',
+													waitMsg: '图片正在上传，请耐心等待....',
+													success: function (form, action) {
+														var message = action.result.msg;
+														var path = message.accessPath;
+														var sysFileName = message.sysFileName;
+														if(path.charAt(path.length - 1) == '/'){
+															path = path + sysFileName;
+														}else{
+															path = path + "/" + sysFileName;
+														}
+														
+														file.previousSibling().previousSibling().setSrc(TzUniversityContextPath + path);	
+														panel.child("form").getForm().findField("orgLogoImgUrl").setValue(path);
+																		
+														tzParams = '{"ComID":"TZ_PX_ORGGL_COM","PageID":"TZ_PX_ORGDEF_STD","OperateType":"HTML","comParams":' + Ext.JSON.encode(action.result.msg) +'}';
+				
+														Ext.Ajax.request({
+														    url: Ext.tzGetGeneralURL,
+														    params: {
+														        tzParams: tzParams
+														    },
+														    success: function(response){
+														    	var responseText = eval( "(" + response.responseText + ")" );
+														      if(responseText.success == 0){
+																		
+																	}else{
+																		file.previousSibling().previousSibling().setSrc("");
+																		panel.child("form").getForm().findField("orgLogoImgUrl").setValue("");
+																		Ext.MessageBox.alert("错误", responseText.message);	
+																	}
+																}
+														});
+														
+														//重置表单
+														form.reset();
+													},
+													failure: function (form, action) {
+														//重置表单
+														form.reset();
+														Ext.MessageBox.alert("错误", action.result.msg);
+													}
+												});
+											}else{
+												//重置表单
+												form.reset();
+												Ext.MessageBox.alert("提示", "请上传jpg|png|gif|bmp|ico格式的图片。");
+											}
+										
+									}
+								}
+							}
+	      }]
+			}, {
+            xtype: 'hidden',
+            //fieldLabel: '背景图片路径',
             fieldLabel: Ext.tzGetResourse("TZ_PX_ORGGL_COM.TZ_PX_ORGDEF_STD.orgLoginBjImgUrl","背景图片路径"),
             name: 'orgLoginBjImgUrl'
         },{
@@ -124,13 +233,14 @@
 				html:'<span style="font-weight:bold">'+ Ext.tzGetResourse("TZ_PX_ORGGL_COM.TZ_PX_ORGDEF_STD.orgLoginBjImg","登录页面背景图") +':</span>'
 			},{
 				xtype:'image',
+				name:'orgLoginBjImage',
 				width:70,
 				height:50,
 				border:1,
 				style: {
 				    borderColor: '#eee'
 				},
-				margin:'0 20 10 0',
+				margin:'0 20 10 13',
 				src:''
 			},{
 				xtype:'button',
@@ -227,12 +337,16 @@
             xtype: 'textfield',
             //fieldLabel: '拥有的课时卡',
             fieldLabel: Ext.tzGetResourse("TZ_PX_ORGGL_COM.TZ_PX_ORGDEF_STD.orgTimeCardHave","拥有的课时卡"),
-            name: 'orgTimeCardHave'
+            name: 'orgTimeCardHave',
+			readOnly:true,
+			fieldStyle:'background:#F4F4F4'
         }, {
             xtype: 'textfield',
             //fieldLabel: '已分配课时卡',
             fieldLabel: Ext.tzGetResourse("TZ_PX_ORGGL_COM.TZ_PX_ORGDEF_STD.orgTimeCardAssign","已分配课时卡"),
-            name: 'orgTimeCardAssign'
+            name: 'orgTimeCardAssign',
+			readOnly:true,
+			fieldStyle:'background:#F4F4F4'
         },{
             xtype: 'ueditor',
             fieldLabel: Ext.tzGetResourse("TZ_PX_ORGGL_COM.TZ_PX_ORGDEF_STD.orgIntro","机构介绍"),

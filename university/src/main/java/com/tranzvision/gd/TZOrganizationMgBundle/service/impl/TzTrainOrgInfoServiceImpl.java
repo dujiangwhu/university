@@ -191,6 +191,15 @@ public class TzTrainOrgInfoServiceImpl extends FrameworkImpl {
 							String[] arrUrl = orgLoginBjImgUrl.split("/");
 							sysFileName = arrUrl[arrUrl.length - 1];
 						}
+						
+						// 系统文件名;
+						String orgLogoImgUrl = infoData.get("orgLogoImgUrl").toString();
+						// 获取图片文件名
+						String sysFileNameLogo = "";
+						if (null != orgLogoImgUrl && !"".equals(orgLogoImgUrl)) {
+							String[] arrUrl = orgLogoImgUrl.split("/");
+							sysFileNameLogo = arrUrl[arrUrl.length - 1];
+						}
 
 						PsTzJgBaseTWithBLOBs psTzJgBaseT = new PsTzJgBaseTWithBLOBs();
 						psTzJgBaseT.setTzJgId(tzJgId);
@@ -205,6 +214,8 @@ public class TzTrainOrgInfoServiceImpl extends FrameworkImpl {
 						psTzJgBaseT.setTzJgLoginCopr(orgLoginCopr);
 						psTzJgBaseT.setTzAttachsysfilena(sysFileName);
 						psTzJgBaseT.setTzJgJtfjPath(tzJgJtfjPath);
+						
+						psTzJgBaseT.setTzLogoSysfilena(sysFileNameLogo);
 						
 						psTzJgBaseT.setTzJgAuditSta(tzJgAuditSta);
 						psTzJgBaseT.setTzJgAddress(tzOrganContactAddress);
@@ -221,7 +232,7 @@ public class TzTrainOrgInfoServiceImpl extends FrameworkImpl {
 						/*添加默认角色*/
 						Map<String, Object> mapJgRole = new HashMap<String, Object>();
 						mapJgRole.put("orgId", tzJgId);
-						mapJgRole.put("roleName", "TRAIN_TZGD_JG_GLY");
+						mapJgRole.put("roleName", "PX_TZGD_JG_GLY");
 						mapJgRole.put("roleType", "F");
 						this.tzEditOrgRoleInfo(mapJgRole, errMsg);
 						
@@ -324,6 +335,15 @@ public class TzTrainOrgInfoServiceImpl extends FrameworkImpl {
 							sysFileName = arrUrl[arrUrl.length - 1];
 						}
 
+						// 系统文件名;
+						String orgLogoImgUrl = infoData.get("orgLogoImgUrl").toString();
+						// 获取图片文件名
+						String sysFileNameLogo = "";
+						if (null != orgLogoImgUrl && !"".equals(orgLogoImgUrl)) {
+							String[] arrUrl = orgLogoImgUrl.split("/");
+							sysFileNameLogo = arrUrl[arrUrl.length - 1];
+						}
+						
 						PsTzJgBaseTWithBLOBs psTzJgBaseT = new PsTzJgBaseTWithBLOBs();
 						psTzJgBaseT.setTzJgId(tzJgId);
 						psTzJgBaseT.setTzJgName(tzJgName);
@@ -337,6 +357,9 @@ public class TzTrainOrgInfoServiceImpl extends FrameworkImpl {
 						psTzJgBaseT.setTzJgLoginCopr(orgLoginCopr);
 						psTzJgBaseT.setTzAttachsysfilena(sysFileName);
 						psTzJgBaseT.setTzJgJtfjPath(tzJgJtfjPath);
+						
+						psTzJgBaseT.setTzLogoSysfilena(sysFileNameLogo);
+						
 						psTzJgBaseT.setTzJgAuditSta(tzJgAuditSta);
 						psTzJgBaseT.setTzJgAddress(tzOrganContactAddress);
 						psTzJgBaseT.setTzJgArea(tzOrganContactArea);
@@ -491,6 +514,22 @@ public class TzTrainOrgInfoServiceImpl extends FrameworkImpl {
 						}
 					}
 				}
+				
+				String orgLogoImgUrl = "";
+				if (null != psTzJgBaseT.getTzLogoSysfilena()
+						&& !"".equals(psTzJgBaseT.getTzLogoSysfilena().trim())) {
+					PsTzJgLoginbjT psTzJgLoginbjT = psTzJgLoginbjTMapper
+							.selectByPrimaryKey(psTzJgBaseT.getTzLogoSysfilena());
+					if (psTzJgLoginbjT != null) {
+						String tzAttAUrl = psTzJgLoginbjT.getTzAttAUrl();
+						String lastChar = tzAttAUrl.substring(tzAttAUrl.length() - 2);
+						if ("/".equals(lastChar)) {
+							orgLogoImgUrl = tzAttAUrl + psTzJgBaseT.getTzLogoSysfilena();
+						} else {
+							orgLogoImgUrl = tzAttAUrl + "/" + psTzJgBaseT.getTzLogoSysfilena();
+						}
+					}
+				}
 
 				Map<String, Object> mapData = new HashMap<String, Object>();
 				mapData.put("orgId", psTzJgBaseT.getTzJgId());
@@ -504,6 +543,7 @@ public class TzTrainOrgInfoServiceImpl extends FrameworkImpl {
 				mapData.put("orgLxrQQ", psTzJgBaseT.getTzOrganContactqq());
 				mapData.put("orgLoginInf", psTzJgBaseT.getTzJgLoginInfo());
 				mapData.put("orgLoginBjImgUrl", orgLoginBjImgUrl);
+				mapData.put("orgLogoImgUrl", orgLogoImgUrl);
 				mapData.put("orgLoginCopr", psTzJgBaseT.getTzJgLoginCopr());
 				
 				mapData.put("orgAddress", psTzJgBaseT.getTzJgAddress());

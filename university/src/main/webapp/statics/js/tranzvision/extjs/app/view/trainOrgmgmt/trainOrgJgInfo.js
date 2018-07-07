@@ -197,7 +197,7 @@
 														}
 														
 														file.previousSibling().previousSibling().setSrc(TzUniversityContextPath + path);	
-														panel.child("form")[0].getForm().findField("orgLogoImgUrl").setValue(path);
+														panel.child("form").getForm().findField("orgLogoImgUrl").setValue(path);
 																		
 														tzParams = '{"ComID":"TZ_PX_ORG_COM","PageID":"TZ_PX_ORG_STD","OperateType":"HTML","comParams":' + Ext.JSON.encode(action.result.msg) +'}';
 				
@@ -306,7 +306,7 @@
 														}
 														
 														file.previousSibling().previousSibling().setSrc(TzUniversityContextPath + path);	
-														panel.child("form")[1].getForm().findField("orgLoginBjImgUrl").setValue(path);
+														panel.child("form").getForm().findField("orgLoginBjImgUrl").setValue(path);
 																		
 														tzParams = '{"ComID":"TZ_PX_ORG_COM","PageID":"TZ_PX_ORG_STD","OperateType":"HTML","comParams":' + Ext.JSON.encode(action.result.msg) +'}';
 				

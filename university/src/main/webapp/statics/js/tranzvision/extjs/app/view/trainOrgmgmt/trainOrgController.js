@@ -413,8 +413,18 @@
 				form.setValues(formData);
 				//页面注册信息列表数据
 				var roleList = responseData.listData;
-				if(formData.orgLoginBjImgUrl!=""){
+				/*
+				if(formData.orgLogoImgUrl!=""){
 					panel.down("image").setSrc(TzUniversityContextPath + formData.orgLoginBjImgUrl);
+				}*/
+				
+				if(formData.orgLogoImgUrl!=""){
+					//panel.down("image").setSrc(TzUniversityContextPath + formData.orgLoginBjImgUrl);
+					panel.down('image[name=orgLogoImage]').setSrc(TzUniversityContextPath + formData.orgLogoImgUrl);
+				}
+				if(formData.orgLoginBjImgUrl!=""){
+					//panel.down("image").setSrc(TzUniversityContextPath + formData.orgLoginBjImgUrl);
+					panel.down('image[name=orgLoginBjImage]').setSrc(TzUniversityContextPath + formData.orgLoginBjImgUrl);
 				}
 
 				var queryType="USER";

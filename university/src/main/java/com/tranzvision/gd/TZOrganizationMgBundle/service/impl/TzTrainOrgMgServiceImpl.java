@@ -16,6 +16,7 @@ import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseT;
 import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseTWithBLOBs;
+import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgLoginbjT;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
@@ -171,6 +172,25 @@ public class TzTrainOrgMgServiceImpl extends FrameworkImpl {
 							orgLoginBjImgUrl = "";
 						}
 					}
+					
+					String orgLogoImgUrl = psTzJgBaseT.getTzLogoSysfilena();
+					if (null != orgLogoImgUrl && !"".equals(orgLogoImgUrl)) {
+						String attUrl = sqlQuery.queryForObject(
+								"select TZ_ATT_A_URL from PS_TZ_JG_LOGINBJ_T where TZ_ATTACHSYSFILENA=?",
+								new Object[] { orgLogoImgUrl }, "String");
+
+						if (null != attUrl) {
+							int sindex = attUrl.lastIndexOf("/");
+							int lastIndex = attUrl.length() - 1;
+							if (sindex == lastIndex) {
+								orgLogoImgUrl = attUrl + orgLogoImgUrl;
+							} else {
+								orgLogoImgUrl = attUrl + "/" + orgLogoImgUrl;
+							}
+						} else {
+							orgLogoImgUrl = "";
+						}
+					}
 
 					Map<String, Object> mapOrg = new HashMap<String, Object>();
 					mapOrg.put("orgId", psTzJgBaseT.getTzJgId());
@@ -185,6 +205,7 @@ public class TzTrainOrgMgServiceImpl extends FrameworkImpl {
 					mapOrg.put("staticPath", psTzJgBaseT.getTzJgJtfjPath());
 					mapOrg.put("orgLoginInf", psTzJgBaseT.getTzJgLoginInfo());
 					mapOrg.put("orgLoginBjImgUrl", orgLoginBjImgUrl);
+					mapOrg.put("orgLogoImgUrl", orgLogoImgUrl);
 					mapOrg.put("orgLoginCopr", psTzJgBaseT.getTzJgLoginCopr());
 					mapOrg.put("orgAddress", psTzJgBaseT.getTzJgAddress());
 					mapOrg.put("orgArea", psTzJgBaseT.getTzJgArea());
