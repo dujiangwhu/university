@@ -139,7 +139,7 @@
 					click:function(file, value, eOpts ){
 						file.previousSibling().setSrc("");
 						//获取该类
-						var panel = file.findParentByType("orgInfo");
+						var panel = file.findParentByType("trainOrgInfo");
 						panel.child("form").getForm().findField("orgLoginBjImgUrl").setValue("");
 					}
 				}
@@ -154,7 +154,7 @@
 									if(value != ""){
 										var form = file.findParentByType("form").getForm();
 										//获取该类
-										var panel = file.findParentByType("orgInfo");
+										var panel = file.findParentByType("trainOrgInfo");
 										
 											//获取后缀
 											var fix = value.substring(value.lastIndexOf(".") + 1,value.length);
