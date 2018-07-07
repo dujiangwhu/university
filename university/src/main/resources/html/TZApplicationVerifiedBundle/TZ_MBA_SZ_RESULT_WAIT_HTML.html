@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+
+<style type="text/css">
+	.main{width:98%;height:auto;margin:5px auto;}
+	.Notice_Title{text-align:left;color:#333;font-weight:bold;font-size:14px;}
+	.Notice_Content{line-height:24px; font-size:14px; font-family:"楷体_GB2312"; text-align:left; color:#000000; margin:5px auto;}
+	.Notice_Table{width:100%;border:1px solid #000;border-collapse:collapse;}
+	.Notice_Table td{border:1px solid #000;font-size:14px;text-align:left;padding:10px 5px;}
+	.notice_foot{text-align:right;line-height:24px; font-size:14px; font-family:"楷体_GB2312"; color:#000000; margin:5px auto;}
+	@media only screen and (min-width:750px) {
+    	.Notice_Table{width:700px;}
+    	.notice_foot{text-align:left;padding-left:650px;}
+    	.main{width:860px;margin:5px}
+    }
+</style>
+<title>面试结果通知</title>
+</head>
+
+<body>
+<div class="main">
+	<div class="Notice_Title">%bind(:1)（%bind(:2)） 同学，您好！</div>
+	<br/>
+	<div  class="Notice_Content">
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;综合素质面试结果：等待 <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;您申请的项目是：%bind(:3)  <br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;虽然您没有获得北京大学光华管理学院%bind(:3)%bind(:4)预录取资格，但并不代表您没有机会，我们将您放在等待名单(waiting list)中，候补方式及相关信息我们之后会有详细通知，请您关注。<br />
+	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;根据今年的招生政策，您也可以放弃项目的等待资格，重新申请全日制MBA项目（中文授课/英文授课），如有意愿，请发邮件至 %bind(:7)，并注明面试申请号，姓名，再次申请的批次和项目。我们将对您的申请材料重新进行审核。
+	</div>
+	<br/><br/>
+  	<div class="notice_foot">北京大学光华管理学院MBA项目</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxScoreLogMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxScoreLog" >
+    <id column="TEA_OPRID" property="teaOprid" jdbcType="VARCHAR" />
+    <id column="CHANGE_TIME" property="changeTime" jdbcType="TIMESTAMP" />
+    <result column="CHANGE_TYPE" property="changeType" jdbcType="VARCHAR" />
+    <result column="CHANGE_SCORE" property="changeScore" jdbcType="INTEGER" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TEA_OPRID, CHANGE_TIME, CHANGE_TYPE, CHANGE_SCORE
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScoreLogKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from PX_SCORE_LOG_T
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and CHANGE_TIME = #{changeTime,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScoreLogKey" >
+    delete from PX_SCORE_LOG_T
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and CHANGE_TIME = #{changeTime,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScoreLog" >
+    insert into PX_SCORE_LOG_T (TEA_OPRID, CHANGE_TIME, CHANGE_TYPE, 
+      CHANGE_SCORE)
+    values (#{teaOprid,jdbcType=VARCHAR}, #{changeTime,jdbcType=TIMESTAMP}, #{changeType,jdbcType=VARCHAR}, 
+      #{changeScore,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScoreLog" >
+    insert into PX_SCORE_LOG_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teaOprid != null" >
+        TEA_OPRID,
+      </if>
+      <if test="changeTime != null" >
+        CHANGE_TIME,
+      </if>
+      <if test="changeType != null" >
+        CHANGE_TYPE,
+      </if>
+      <if test="changeScore != null" >
+        CHANGE_SCORE,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teaOprid != null" >
+        #{teaOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="changeTime != null" >
+        #{changeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="changeType != null" >
+        #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="changeScore != null" >
+        #{changeScore,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScoreLog" >
+    update PX_SCORE_LOG_T
+    <set >
+      <if test="changeType != null" >
+        CHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      </if>
+      <if test="changeScore != null" >
+        CHANGE_SCORE = #{changeScore,jdbcType=INTEGER},
+      </if>
+    </set>
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and CHANGE_TIME = #{changeTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScoreLog" >
+    update PX_SCORE_LOG_T
+    set CHANGE_TYPE = #{changeType,jdbcType=VARCHAR},
+      CHANGE_SCORE = #{changeScore,jdbcType=INTEGER}
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and CHANGE_TIME = #{changeTime,jdbcType=TIMESTAMP}
+  </update>
+</mapper>

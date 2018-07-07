@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+
+<script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/jquery.min.js"></script>
+<style type="text/css">
+	.main{width:98%;height:auto;margin:5px auto;}
+	.Notice_Title{text-align:left;color:#333;font-weight:bold;font-size:16px;}
+	.Notice_Content{line-height:24px; font-size:14px; font-family:"楷体_GB2312"; text-align:left; color:#000000; margin:5px auto;}
+	.Notice_Table{width:100%;border:1px solid #000;border-collapse:collapse;}
+	.Notice_Table td{border:1px solid #000;font-size:14px;text-align:left;padding:10px 5px;}
+	.notice_foot{text-align:right;line-height:24px; font-size:14px; font-family:"楷体_GB2312"; color:#000000; margin:5px auto;}
+	@media only screen and (min-width:750px) {
+    	.Notice_Table{width:700px;}
+    	.notice_foot{text-align:left;padding-left:580px;}
+    	.main{width:800px;margin:5px}
+    	.notice_span{margin:5px 5px 0px;float:none;}
+    }
+</style>
+<script type="text/javascript">
+	var TzUniversityContextPath = "%bind(:1)";
+</script>
+<script type = "text/javascript">
+	function prtSave() {
+		var tzSubmitParams = '{"ComID":"TZ_BMGL_BMBSH_COM","PageID":"TZ_VIEW_MSTZ_STD","OperateType":"CONFIM","comParams":{"OPRID":"%bind(:3)","TZ_CLASS_ID":"%bind(:4)","TZ_MSH_ID":"%bind(:5)","TZ_APP_INS_ID":"%bind(:6)"}}';
+ 		$.ajax({
+            type: "post",   
+            url: '%bind(:2)',
+            data: {tzParams: tzSubmitParams},       
+            dataType: 'json',  
+            success: function(result) {
+				if(result.comContent.resultFlg =="success"){
+					window.location.reload();
+				}else{
+					alert(result.comContent.errorDescr);
+				}
+            }
+		 } );
+	}
+
+	function prtCancel() {
+		var tzSubmitParams = '{"ComID":"TZ_BMGL_BMBSH_COM","PageID":"TZ_VIEW_MSTZ_STD","OperateType":"ABANDON","comParams":{"OPRID":"%bind(:3)","TZ_CLASS_ID":"%bind(:4)","TZ_MSH_ID":"%bind(:5)","TZ_APP_INS_ID":"%bind(:6)"}}';
+		 $.ajax({
+		            type: "post",   
+		            url: '%bind(:2)',
+		            data: {tzParams: tzSubmitParams},      
+		            dataType: 'json',  
+		            success: function(result) {  
+						if(result.comContent.resultFlg =="success"){
+		           			window.location.reload();
+						}
+						else{
+							alert(result.comContent.errorDescr);
+						}
+					}
+		  		});
+	}
+</script>
+<title>面试通知</title>
+</head>
+<body>
+<div class="main">
+	<div class="Notice_Content">
+		<div style="padding-left:10px;">尊敬的%bind(:7)同学</div>
+		<div style="text-indent:2em;padding-top:10px;padding-left:10px;">万分感谢您报读我院的工商管理硕士（MBA）学位项目，谨诚邀您于 %bind(:8) %bind(:9) 拨冗莅临我院深圳校区（%bind(:16)）参加入学面试。</div>
+		
+		<div style="padding-top:10px;padding-left:10px;"><strong style="color:#C00000;">面试形式和内容：</strong></div>
+		<div style="padding-left:10px;">1. 面试分为前后两轮，每轮面试时间为十五分钟。两轮面试均为个人单独面试。</div>
+		<div style="padding-left:10px;">2. <span style="color:red">申请表一式六份，分六份装订；其他材料一式两份，分两份装订。</span> </div>
+		
+
+		<div style="padding-top:10px;padding-left:10px;"><strong style="color:#C00000;">注意事项：</strong></div>
+		<div style="padding-left:10px;">1. 面试时间不能调整，也不能后补，务必准时参加。</div>
+		<div style="padding-left:10px;">2. 参加面试的同学需要缴纳100元人民币面试费，面试收费标准按照北京教育考试院规定执行。</div>
+		<div style="padding-left:10px;">
+		请您登录北京大学收费平台：<a href="http://cwsf.pku.edu.cn/" target="_blank"><span>http://cwsf.pku.edu.cn</span></a></div>
+		<div style="padding-left:10px;"><span style="color:red">注：登录方式：校外人员平台账号登陆；登录账号：身份证号码；密码：身份证号码后六位，只接受在线缴费，不接受现场缴纳。</span></div>
+		<br/>
+		<div style="padding-left:10px;">如有疑问，敬请随时致电%bind(:10)。</div>
+		<div style="padding-left:10px;">北京大学期待您的光临。</div>
+		<div style="padding-left:10px;">祝您吉祥、顺意！</div>
+		<div style="padding-left:10px;padding-top:10px;">
+		%bind(:11)&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">确认参加面试后，请点击右键打印此页面，面试报到时请携带。</span> 
+		</div>
+		<div style="padding-left:10px;">
+		<input type="button" id="TZ_SAVE" value="确认参加" style="width:75px;text-align: center;padding:10px 0;background-color:%bind(:13);color:#fff;border-radius:5px;border:none;" onclick="prtSave();"  %bind(:12)/>
+		<input type="button" id="TZ_CANCEL" value="放弃" style="width:75px;text-align: center;padding:10px 0;background-color:%bind(:14);color:#fff;border-radius:5px;border:none;" onclick="prtCancel();" %bind(:12) />
+		</div>
+		<div class="notice_foot"><strong>北京大学光华管理学院MBA项目</strong></div>
+	</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+
+<script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/jquery.min.js"></script>
+<style type="text/css">
+	.main{width:98%;height:auto;margin:5px auto;}
+	.Notice_Title{text-align:left;color:#333;font-weight:bold;font-size:16px;}
+	.Notice_Content{line-height:24px; font-size:14px; font-family:"楷体_GB2312"; text-align:left; color:#000000; margin:5px auto;}
+	.Notice_Table{width:100%;border:1px solid #000;border-collapse:collapse;}
+	.Notice_Table td{border:1px solid #000;font-size:14px;text-align:left;padding:10px 5px;}
+	.notice_foot{text-align:right;line-height:24px; font-size:14px; font-family:"楷体_GB2312"; color:#000000; margin:5px auto;}
+	@media only screen and (min-width:750px) {
+    	.Notice_Table{width:700px;}
+    	.notice_foot{text-align:left;padding-left:600px;}
+    }
+</style>
+<script type="text/javascript">
+	var TzUniversityContextPath = "%bind(:1)";
+</script>
+<script type = "text/javascript">
+	function prtSave() {
+		var tzSubmitParams = '{"ComID":"TZ_BMGL_BMBSH_COM","PageID":"TZ_VIEW_MSTZ_STD","OperateType":"CONFIM","comParams":{"OPRID":"%bind(:3)","TZ_CLASS_ID":"%bind(:4)","TZ_MSH_ID":"%bind(:5)","TZ_APP_INS_ID":"%bind(:6)"}}';
+ 		$.ajax({
+            type: "post",   
+            url: '%bind(:2)',
+            data: {tzParams: tzSubmitParams},       
+            dataType: 'json',  
+            success: function(result) {
+				if(result.comContent.resultFlg =="success"){
+					window.location.reload();
+				}else{
+					alert(result.comContent.errorDescr);
+				}
+            }
+		 } );
+	}
+
+	function prtCancel() {
+		var tzSubmitParams = '{"ComID":"TZ_BMGL_BMBSH_COM","PageID":"TZ_VIEW_MSTZ_STD","OperateType":"ABANDON","comParams":{"OPRID":"%bind(:3)","TZ_CLASS_ID":"%bind(:4)","TZ_MSH_ID":"%bind(:5)","TZ_APP_INS_ID":"%bind(:6)"}}';
+		 $.ajax({
+		            type: "post",   
+		            url: '%bind(:2)',
+		            data: {tzParams: tzSubmitParams},      
+		            dataType: 'json',  
+		            success: function(result) {  
+						if(result.comContent.resultFlg =="success"){
+		           			window.location.reload();
+						}
+						else{
+							alert(result.comContent.errorDescr);
+						}
+					}
+		  		});
+	}
+	function onlinePay(){
+		window.open("%bind(:16)");
+	}
+</script>
+<title>面试通知</title>
+</head>
+<body>
+<div class="main">
+
+<div class="Notice_Title">%bind(:7)（%bind(:5)）同学</div>
+<div  class="Notice_Content"><strong>恭喜您获得北京大学光华管理学院%bind(:8)面试资格！</strong></div>
+
+<div class="Notice_Content" style="padding-top:10px;"> <strong style="color:#C00000;">面试前准备:</strong><br />
+  <strong>1. 此页面下方：</strong>请您先点击缴费链接缴纳费用，再点击确认参加面试（如未缴费不能点击确认参加），并打印面试通知。<br />
+  <strong>2. 书面申请材料：</strong><span style="color:red">请您务必携带书面申请材料参加面试：申请表一式六份，分六份装订；其他附加材料一式两份，分两份装订。</span><br />
+  请按以下顺序排列，带<span style="color:red;font-weight:bold"> *</span> 号为必需提供材料<br />
+  <span style="color:red;font-weight:bold"> *</span> 在线打印申请表；<br />
+  <span style="color:red;font-weight:bold"> *</span> 当前/最后一份工作单位组织结构图及您个人所处位置；<br />
+  <span style="color:red;font-weight:bold"> *</span> 学历学位证书原件及复印件；<br />
+  <span style="color:red;font-weight:bold"> *</span> 大学期间或研究生成绩单原件及复印件（原件可为复印件上加盖档案所在机构人事章或毕业院校教务章、档案馆章）<br />
+  ◆ 您还可提交其他能帮助我们进行有效判断的材料，比如：GMAT成绩单或者其它语言成绩证明（TOFEL或者IELTS）；<br/>
+      &nbsp;&nbsp;&nbsp;其他证明书（荣誉证书，职业资格证书等）。<br />
+  ◆ 推荐信：由MBA中心打印，面试当天与您的其他材料合并。<br />
+  <strong>当前有创业经历者，请提交以下材料的复印件：</strong><br />
+  <span style="color:red;font-weight:bold"> *</span> 营业执照复印件<br />
+  <span style="color:red;font-weight:bold"> *</span> 如申请人不是公司法人代表，请提供出资证明（如验资报告）复印件<br />
+  ◆ 财务报表、完税证明等文件复印件<br />
+  3. <strong>面试着装：</strong>商务正装 
+</div>
+
+<div  class="Notice_Content" style="padding-top:10px;"> <strong style="color:#C00000;">面试形式和内容：</strong><br />
+个人综合素质面试：非全日制MBA项目为两轮个人面试（中文面试）。<br />
+面试主要考察：申请人教育背景、职业背景、沟通能力、领导能力、创新能力、思维与分析能力、职业素养等。 </div>
+
+<div  class="Notice_Content" style="padding-top:10px;"><strong style="color:#C00000;">面试信息确认：</strong>
+  <table  class="Notice_Table" cellspacing="0" cellpadding="0">
+    <tr>
+      <td  class="Notice_Td"><span class="Notice_Td_Text">&nbsp;&nbsp;<strong>姓名：</strong>%bind(:7)（%bind(:5)）</span> </td>
+    </tr>
+    <tr>
+      <td  class="Notice_Td"><span class="Notice_Td_Text">&nbsp;&nbsp;<strong>申请项目：</strong>%bind(:8)</span> </td>
+    </tr>
+    <tr>
+      <td  class="Notice_Td"><span class="Notice_Td_Text">&nbsp;&nbsp;<strong>面试报到时间：</strong>%bind(:9)&nbsp;%bind(:10)</span></td>
+    </tr>
+    <tr>
+      <td ><span class="Notice_Td_Text">&nbsp;&nbsp;<strong>面试报到地点：</strong>%bind(:11) <br /></span>
+        <span style="color:red">&nbsp;&nbsp;* 报到时请携带：面试通知打印页、书面申请材料、本人身份证原件、学历学位证书原件。</span> </td>
+    </tr>
+  </table>
+</div>
+<div  class="Notice_Content" style="padding-top:10px;">
+<strong style="color:#C00000;">注意事项：</strong><br />
+1. 面试时间不能调整，也不能后补，务必准时参加。<br />
+2. 参加面试的同学需要缴纳100元人民币面试费，面试收费标准按照北京教育考试院规定执行。<br/>
+<!-- 
+&nbsp;&nbsp;&nbsp;<input type="button" id="onlinePay" onclick="onlinePay();" value="在线支付" style="width:75px;text-align: center;padding:10px 0;background-color:#1f9bd4;color:#fff;border-radius:5px;border:none;" onclick="" /><br/>
+ -->
+&nbsp;&nbsp;&nbsp;&nbsp;请您登录北京大学收费平台：<a href="http://cwsf.pku.edu.cn/" target="_blank"><span>http://cwsf.pku.edu.cn</span></a><br />
+<span style="color:red">&nbsp;&nbsp;&nbsp;&nbsp;注：登录方式：校外人员平台账号登陆；登录账号：身份证号码；密码：身份证号码后六位，只接受在线缴费，不接受现场缴纳。</span><br />
+3. 为保证面试的公平性，除本通知及网站所发布信息外，我们不再就面试有关问题提供咨询，请您谅解。<br />
+</div>
+<div  class="Notice_Content" style="padding-top:10px;">
+%bind(:12)&nbsp;&nbsp;&nbsp;&nbsp;<span style="color:red">确认参加面试后，请点击右键打印此页面，面试报到时请携带。</span> <br/>
+<input type="button" id="TZ_SAVE" value="确认参加" style="width:75px;text-align: center;padding:10px 0;background-color:%bind(:14);color:#fff;border-radius:5px;border:none;" onclick="prtSave();" %bind(:13)/>
+<input type="button" id="TZ_CANCEL" value="放弃" style="width:75px;text-align: center;padding:10px 0;background-color:%bind(:15);color:#fff;border-radius:5px;border:none;" onclick="prtCancel();"%bind(:13) />
+</div>
+<div class="notice_foot">北京大学光华管理学院MBA项目</div>
+
+</div>
+</body>
+</html>

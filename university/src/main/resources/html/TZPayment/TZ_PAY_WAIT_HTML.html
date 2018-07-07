@@ -1,0 +1,268 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta charset="utf-8">
+<title>%bind(:8)</title>
+<link href="page_stylecss" rel="stylesheet" type="text/css" />
+<style type="text/css">
+input[type="text"], input[type="password"] {
+	border: solid 1px #d2d2d2;
+	border-left-color: #ccc;
+	border-top-color: #ccc;
+	border-radius: 2px;
+	box-shadow: inset 0 1px 0 #f8f8f8;
+	background-color: #fff;
+	padding: 4px 6px;
+	line-height: 18px;
+	color: #555;
+	vertical-align: baseline;
+	height: 18px;
+}
+
+ol, ul {
+	list-style: none
+}
+
+button, input {
+	border: 1px solid;
+	outline: none;
+	line-height: normal;
+}
+
+li {
+	list-style: none;
+}
+
+body, button, input, select, textarea {
+	/*font-size: 12px; */
+	font-family: microsoft yahei;
+	color: #444;
+}
+
+.apply-poptit a {
+	color: #0088DB;
+	text-decoration: none;
+	cursor: pointer
+}
+
+.apply-poptit a:hover {
+	color: #2A5E8E
+}
+
+.apply-poptit a:focus {
+	outline: none
+}
+
+.apply-poptit h3 {
+	font-size: 16px;
+	padding-left: 15px;
+	line-height: 40px;
+}
+
+.apply-items {
+	border: solid 1px #d2d2d2;
+	border-left-color: #ccc;
+	border-top-color: #ccc;
+	border-radius: 2px;
+	box-shadow: inset 0 1px 0 #f8f8f8;
+	background-color: #fff;
+	padding: 4px 6px;
+	line-height: 18px;
+	color: #555;
+	vertical-align: baseline;
+}
+
+.apply-items.inptype {
+	width: 320px; //
+	height: 18px;
+}
+
+.apply-items.seltype {
+	width: 335px;
+	height: 49px;
+}
+
+.apply-items:focus {
+	border-color: #95C8F1;
+	box-shadow: 0 0 4px #95C8F1;
+}
+
+/*.apply-signin {
+	font-size: 12px;
+} */
+.apply-poptit {
+	border-bottom: 1px solid #ddd;
+	padding: 1px;
+	position: relative;
+	line-height: 40px;
+	height: 40px;
+}
+
+.apply-popbody {
+	padding: 60px 15px;
+	max-height: 325px;
+	margin-bottom: 30px;
+	color: #444;
+	overflow: auto;
+	margin: 0 auto;
+	text-align: center;
+	width: 600px
+}
+
+.apply-poptit .close {
+	float: right;
+	color: #999;
+	padding: 5px;
+	margin: -2px;
+	font: bold 18px/18px simsun;
+	text-shadow: 0 1px 0 #ddd
+}
+
+.apply-poptit .close:hover {
+	color: #444;
+}
+
+.apply-signin {
+	margin: -50px 20px -50px 65px;
+	text-align: left;
+	font-size: 14px;
+}
+
+.apply-signin h4 {
+	/*color: #999; */
+	font-weight: 100;
+	margin: 5px 70px 20px 0;
+	font-size: 14px;
+}
+
+.apply-signin li {
+	padding-left: 60px;
+	margin-bottom: 15px;
+}
+
+.apply-signin li strong {
+	float: left;
+	margin-left: -120px;
+	width: 150px;
+	text-align: right;
+	margin-right: 20px;
+	height: 28px;
+	line-height: 28px;
+}
+
+.apply-btn {
+	margin-left: 125px;
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
+.apply-btn .btn {
+	width: 80px;
+	height: 40px;
+	border-radius: 3px;
+	cursor: pointer;
+	color: #FFF;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0 10px;
+}
+
+.apply-btn .btn2 {
+	width: 160px;
+	height: 40px;
+	line-height: 40px;
+	border-radius: 2px;
+	cursor: pointer;
+	color: #FFF;
+	font-size: 14px;
+	font-weight: bold;
+	margin: 0 10px;
+}
+
+.apply-back {
+	background-color: #666;
+	border: 1px solid #999;
+}
+
+.apply-back:hover {
+	background-color: #999
+}
+
+.apply-back {
+	background-color: #666;
+	border: 1px solid #999;
+}
+
+.apply-back:hover {
+	background-color: #999
+}
+
+.apply-popover {
+	/*z-index: 999999; */
+	/*position: absolute; 
+	top: 50%;
+	left: 50%;*/
+	width: 660px;
+	max-height: 519px;
+	/*margin: -180px 0 0 -330px;*/
+	border-radius: 5px;
+	border: solid 2px #666;
+	background-color: #fff;
+	box-shadow: 0 0 10px #666;
+	margin: 50px auto;
+}
+</style>
+<script type="text/javascript">
+	var TzUniversityContextPath = "%bind(:1)";
+</script>
+<script type="text/javascript"
+	src="%bind(:1)/statics/js/tranzvision/extjs/app/view/website/set/js/pagefunc.js"></script>
+<script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript">
+	//var TzUniversityContextPath = "%bind(:1)";
+
+	$(document).ready(function() {
+		LoadHeader("%bind(:3)", "%bind(:2)", "");
+		LoadFooter("%bind(:3)", "%bind(:2)", "");
+		LoadWelcome("%bind(:3)", "%bind(:2)", "");
+	});
+</script>
+</head>
+<body>
+	<!--头部内容开始-->
+	<div class="top assdiv header-mt46" id="headarea"
+		style="background-color: rgb(155, 0, 0);" area-id="20" area-type="YT"
+		area-postion="H" area-movedown="false" area-moveup="false"
+		area-copy="false" area-del="false" area-edit="true" area-add="false">
+
+	</div>
+	<div class="apply-popover" id="showpay">
+		<div class="apply-poptit">
+			<!--  <a href="javascript:;" title="%bind(:9)" class="close"
+				onClick="parent.tz_close_float_iframe_apply();">×</a> -->
+			<h3>%bind(:4)</h3>
+		</div>
+		<div class="apply-popbody">
+			<form class="apply-signin" name="applyRegForm" method="post">
+				<h4>%bind(:5)</h4>
+				<div class="apply-btn">
+					<input class="btn apply-back" type="button" name="submit"
+						value="%bind(:6)" onclick="window.close();" /> <input
+						class="btn apply-submit" type="button" name="submit"
+						value="%bind(:7)" onclick=" location.reload();"
+						style="background-color: #b1193b" />
+				</div>
+			</form>
+		</div>
+	</div>
+
+	<!--底部开始-->
+
+	<div id="footarea" class="foot assdiv" area-add="false"
+		area-edit="true" area-del="false" area-copy="false"
+		area-moveup="false" area-movedown="false" area-postion="F"
+		area-type="YW"></div>
+	<!--底部结束-->
+
+</body>
+</html>

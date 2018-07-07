@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title></title>
+</head>
+<style>
+table{background:"#999"}
+td{background:"#FFF"}
+tr{height:25px}
+</style>
+<body>
+<table width="100%" cellspacing="1" border="0" style="background:#999">
+<tr style="background:#f3f3f3; color:#292929;height:40px">
+     <td valign="middle" align="center">面试申请ID</td>
+     <td valign="middle" align="center">姓名</td>
+     <td valign="middle" align="center">面试日期</td>
+     <td valign="middle" align="center">报到时间</td>
+     <td valign="middle" align="center">面试地点</td>
+</tr>
+			%bind(:1)
+		<tbody></tbody>
+	</table>
+</body>
+</html>

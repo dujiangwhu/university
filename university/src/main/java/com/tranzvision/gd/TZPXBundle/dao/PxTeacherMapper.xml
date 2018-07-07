@@ -1,0 +1,270 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxTeacher" >
+    <id column="OPRID" property="oprid" jdbcType="VARCHAR" />
+    <result column="NAME" property="name" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="LEVEL" property="level" jdbcType="VARCHAR" />
+    <result column="SCHOOL" property="school" jdbcType="VARCHAR" />
+    <result column="EDUCATION_BG" property="educationBg" jdbcType="VARCHAR" />
+    <result column="SCHOOL_AGE" property="schoolAge" jdbcType="INTEGER" />
+    <result column="TEACHER_CARD" property="teacherCard" jdbcType="VARCHAR" />
+    <result column="INTRODUCE" property="introduce" jdbcType="VARCHAR" />
+    <result column="ACCOUNT_TYPE" property="accountType" jdbcType="VARCHAR" />
+    <result column="ACCOUNT_NUM" property="accountNum" jdbcType="VARCHAR" />
+    <result column="SCORE" property="score" jdbcType="INTEGER" />
+    <result column="QQ" property="qq" jdbcType="VARCHAR" />
+    <result column="EMAIL" property="email" jdbcType="VARCHAR" />
+    <result column="CONTACTOR" property="contactor" jdbcType="VARCHAR" />
+    <result column="CONTACTOR_PHONE" property="contactorPhone" jdbcType="VARCHAR" />
+    <result column="CONTACTOR_ADDRESS" property="contactorAddress" jdbcType="VARCHAR" />
+    <result column="STATU" property="statu" jdbcType="VARCHAR" />
+    <result column="ID_CARD" property="idCard" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OPRID, NAME, SEX, AGE, LEVEL, SCHOOL, EDUCATION_BG, SCHOOL_AGE, TEACHER_CARD, INTRODUCE, 
+    ACCOUNT_TYPE, ACCOUNT_NUM, SCORE, QQ, EMAIL, CONTACTOR, CONTACTOR_PHONE, CONTACTOR_ADDRESS, 
+    STATU, ID_CARD
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from PX_TEACHER_T
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PX_TEACHER_T
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeacher" >
+    insert into PX_TEACHER_T (OPRID, NAME, SEX, 
+      AGE, LEVEL, SCHOOL, 
+      EDUCATION_BG, SCHOOL_AGE, TEACHER_CARD, 
+      INTRODUCE, ACCOUNT_TYPE, ACCOUNT_NUM, 
+      SCORE, QQ, EMAIL, CONTACTOR, 
+      CONTACTOR_PHONE, CONTACTOR_ADDRESS, STATU, 
+      ID_CARD)
+    values (#{oprid,jdbcType=VARCHAR}, #{name,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{level,jdbcType=VARCHAR}, #{school,jdbcType=VARCHAR}, 
+      #{educationBg,jdbcType=VARCHAR}, #{schoolAge,jdbcType=INTEGER}, #{teacherCard,jdbcType=VARCHAR}, 
+      #{introduce,jdbcType=VARCHAR}, #{accountType,jdbcType=VARCHAR}, #{accountNum,jdbcType=VARCHAR}, 
+      #{score,jdbcType=INTEGER}, #{qq,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR}, #{contactor,jdbcType=VARCHAR}, 
+      #{contactorPhone,jdbcType=VARCHAR}, #{contactorAddress,jdbcType=VARCHAR}, #{statu,jdbcType=VARCHAR}, 
+      #{idCard,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeacher" >
+    insert into PX_TEACHER_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        OPRID,
+      </if>
+      <if test="name != null" >
+        NAME,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="age != null" >
+        AGE,
+      </if>
+      <if test="level != null" >
+        LEVEL,
+      </if>
+      <if test="school != null" >
+        SCHOOL,
+      </if>
+      <if test="educationBg != null" >
+        EDUCATION_BG,
+      </if>
+      <if test="schoolAge != null" >
+        SCHOOL_AGE,
+      </if>
+      <if test="teacherCard != null" >
+        TEACHER_CARD,
+      </if>
+      <if test="introduce != null" >
+        INTRODUCE,
+      </if>
+      <if test="accountType != null" >
+        ACCOUNT_TYPE,
+      </if>
+      <if test="accountNum != null" >
+        ACCOUNT_NUM,
+      </if>
+      <if test="score != null" >
+        SCORE,
+      </if>
+      <if test="qq != null" >
+        QQ,
+      </if>
+      <if test="email != null" >
+        EMAIL,
+      </if>
+      <if test="contactor != null" >
+        CONTACTOR,
+      </if>
+      <if test="contactorPhone != null" >
+        CONTACTOR_PHONE,
+      </if>
+      <if test="contactorAddress != null" >
+        CONTACTOR_ADDRESS,
+      </if>
+      <if test="statu != null" >
+        STATU,
+      </if>
+      <if test="idCard != null" >
+        ID_CARD,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        #{oprid,jdbcType=VARCHAR},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="educationBg != null" >
+        #{educationBg,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolAge != null" >
+        #{schoolAge,jdbcType=INTEGER},
+      </if>
+      <if test="teacherCard != null" >
+        #{teacherCard,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null" >
+        #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null" >
+        #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNum != null" >
+        #{accountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="qq != null" >
+        #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="contactor != null" >
+        #{contactor,jdbcType=VARCHAR},
+      </if>
+      <if test="contactorPhone != null" >
+        #{contactorPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactorAddress != null" >
+        #{contactorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="statu != null" >
+        #{statu,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeacher" >
+    update PX_TEACHER_T
+    <set >
+      <if test="name != null" >
+        NAME = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        AGE = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="level != null" >
+        LEVEL = #{level,jdbcType=VARCHAR},
+      </if>
+      <if test="school != null" >
+        SCHOOL = #{school,jdbcType=VARCHAR},
+      </if>
+      <if test="educationBg != null" >
+        EDUCATION_BG = #{educationBg,jdbcType=VARCHAR},
+      </if>
+      <if test="schoolAge != null" >
+        SCHOOL_AGE = #{schoolAge,jdbcType=INTEGER},
+      </if>
+      <if test="teacherCard != null" >
+        TEACHER_CARD = #{teacherCard,jdbcType=VARCHAR},
+      </if>
+      <if test="introduce != null" >
+        INTRODUCE = #{introduce,jdbcType=VARCHAR},
+      </if>
+      <if test="accountType != null" >
+        ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR},
+      </if>
+      <if test="accountNum != null" >
+        ACCOUNT_NUM = #{accountNum,jdbcType=VARCHAR},
+      </if>
+      <if test="score != null" >
+        SCORE = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="qq != null" >
+        QQ = #{qq,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        EMAIL = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="contactor != null" >
+        CONTACTOR = #{contactor,jdbcType=VARCHAR},
+      </if>
+      <if test="contactorPhone != null" >
+        CONTACTOR_PHONE = #{contactorPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactorAddress != null" >
+        CONTACTOR_ADDRESS = #{contactorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="statu != null" >
+        STATU = #{statu,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        ID_CARD = #{idCard,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeacher" >
+    update PX_TEACHER_T
+    set NAME = #{name,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      AGE = #{age,jdbcType=INTEGER},
+      LEVEL = #{level,jdbcType=VARCHAR},
+      SCHOOL = #{school,jdbcType=VARCHAR},
+      EDUCATION_BG = #{educationBg,jdbcType=VARCHAR},
+      SCHOOL_AGE = #{schoolAge,jdbcType=INTEGER},
+      TEACHER_CARD = #{teacherCard,jdbcType=VARCHAR},
+      INTRODUCE = #{introduce,jdbcType=VARCHAR},
+      ACCOUNT_TYPE = #{accountType,jdbcType=VARCHAR},
+      ACCOUNT_NUM = #{accountNum,jdbcType=VARCHAR},
+      SCORE = #{score,jdbcType=INTEGER},
+      QQ = #{qq,jdbcType=VARCHAR},
+      EMAIL = #{email,jdbcType=VARCHAR},
+      CONTACTOR = #{contactor,jdbcType=VARCHAR},
+      CONTACTOR_PHONE = #{contactorPhone,jdbcType=VARCHAR},
+      CONTACTOR_ADDRESS = #{contactorAddress,jdbcType=VARCHAR},
+      STATU = #{statu,jdbcType=VARCHAR},
+      ID_CARD = #{idCard,jdbcType=VARCHAR}
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,248 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZApplicationVerifiedBundle.dao.PsTzStuExtTMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZApplicationVerifiedBundle.model.PsTzStuExtT" >
+    <id column="OPRID" property="oprid" jdbcType="VARCHAR" />
+    <id column="TZ_MSH_ID" property="tzMshId" jdbcType="VARCHAR" />
+    <result column="TZ_MSHF_FLAG" property="tzMshfFlag" jdbcType="VARCHAR" />
+    <result column="TZ_IS_ABANDON" property="tzIsAbandon" jdbcType="VARCHAR" />
+    <result column="TZ_LQS_FLAG" property="tzLqsFlag" jdbcType="VARCHAR" />
+    <result column="TZ_IS_FILE_IN" property="tzIsFileIn" jdbcType="VARCHAR" />
+    <result column="TZ_ATTACHSYSFILENA" property="tzAttachsysfilena" jdbcType="VARCHAR" />
+    <result column="TZ_ATTACHFILE_NAME" property="tzAttachfileName" jdbcType="VARCHAR" />
+    <result column="TZ_ATT_P_URL" property="tzAttPUrl" jdbcType="VARCHAR" />
+    <result column="TZ_ATT_A_URL" property="tzAttAUrl" jdbcType="VARCHAR" />
+    <result column="TZ_APP_YEAR" property="tzAppYear" jdbcType="VARCHAR" />
+    <result column="TZ_COM_NAME" property="tzComName" jdbcType="VARCHAR" />
+    <result column="TZ_COM_POSI" property="tzComPosi" jdbcType="VARCHAR" />
+    <result column="TZ_INDUSTRY_MC" property="tzIndustryMc" jdbcType="VARCHAR" />
+    <result column="TZ_INDUSTRY_MS" property="tzIndustryMs" jdbcType="VARCHAR" />
+    <result column="TZ_SCHOOL_NAME" property="tzSchoolName" jdbcType="VARCHAR" />
+    <result column="TZ_COM_NATURE" property="tzComNature" jdbcType="VARCHAR" />
+    <result column="TZ_COM_NATUREVAL" property="tzComNatureval" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OPRID, TZ_MSH_ID, TZ_MSHF_FLAG, TZ_IS_ABANDON, TZ_LQS_FLAG, TZ_IS_FILE_IN, TZ_ATTACHSYSFILENA, 
+    TZ_ATTACHFILE_NAME, TZ_ATT_P_URL, TZ_ATT_A_URL, TZ_APP_YEAR, TZ_COM_NAME, TZ_COM_POSI, 
+    TZ_INDUSTRY_MC, TZ_INDUSTRY_MS, TZ_SCHOOL_NAME, TZ_COM_NATURE, TZ_COM_NATUREVAL
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tranzvision.gd.TZApplicationVerifiedBundle.model.PsTzStuExtTKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from PS_TZ_STU_EXT_T
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_MSH_ID = #{tzMshId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZApplicationVerifiedBundle.model.PsTzStuExtTKey" >
+    delete from PS_TZ_STU_EXT_T
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_MSH_ID = #{tzMshId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZApplicationVerifiedBundle.model.PsTzStuExtT" >
+    insert into PS_TZ_STU_EXT_T (OPRID, TZ_MSH_ID, TZ_MSHF_FLAG, 
+      TZ_IS_ABANDON, TZ_LQS_FLAG, TZ_IS_FILE_IN, 
+      TZ_ATTACHSYSFILENA, TZ_ATTACHFILE_NAME, TZ_ATT_P_URL, 
+      TZ_ATT_A_URL, TZ_APP_YEAR, TZ_COM_NAME, 
+      TZ_COM_POSI, TZ_INDUSTRY_MC, TZ_INDUSTRY_MS, 
+      TZ_SCHOOL_NAME, TZ_COM_NATURE, TZ_COM_NATUREVAL
+      )
+    values (#{oprid,jdbcType=VARCHAR}, #{tzMshId,jdbcType=VARCHAR}, #{tzMshfFlag,jdbcType=VARCHAR}, 
+      #{tzIsAbandon,jdbcType=VARCHAR}, #{tzLqsFlag,jdbcType=VARCHAR}, #{tzIsFileIn,jdbcType=VARCHAR}, 
+      #{tzAttachsysfilena,jdbcType=VARCHAR}, #{tzAttachfileName,jdbcType=VARCHAR}, #{tzAttPUrl,jdbcType=VARCHAR}, 
+      #{tzAttAUrl,jdbcType=VARCHAR}, #{tzAppYear,jdbcType=VARCHAR}, #{tzComName,jdbcType=VARCHAR}, 
+      #{tzComPosi,jdbcType=VARCHAR}, #{tzIndustryMc,jdbcType=VARCHAR}, #{tzIndustryMs,jdbcType=VARCHAR}, 
+      #{tzSchoolName,jdbcType=VARCHAR}, #{tzComNature,jdbcType=VARCHAR}, #{tzComNatureval,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZApplicationVerifiedBundle.model.PsTzStuExtT" >
+    insert into PS_TZ_STU_EXT_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        OPRID,
+      </if>
+      <if test="tzMshId != null" >
+        TZ_MSH_ID,
+      </if>
+      <if test="tzMshfFlag != null" >
+        TZ_MSHF_FLAG,
+      </if>
+      <if test="tzIsAbandon != null" >
+        TZ_IS_ABANDON,
+      </if>
+      <if test="tzLqsFlag != null" >
+        TZ_LQS_FLAG,
+      </if>
+      <if test="tzIsFileIn != null" >
+        TZ_IS_FILE_IN,
+      </if>
+      <if test="tzAttachsysfilena != null" >
+        TZ_ATTACHSYSFILENA,
+      </if>
+      <if test="tzAttachfileName != null" >
+        TZ_ATTACHFILE_NAME,
+      </if>
+      <if test="tzAttPUrl != null" >
+        TZ_ATT_P_URL,
+      </if>
+      <if test="tzAttAUrl != null" >
+        TZ_ATT_A_URL,
+      </if>
+      <if test="tzAppYear != null" >
+        TZ_APP_YEAR,
+      </if>
+      <if test="tzComName != null" >
+        TZ_COM_NAME,
+      </if>
+      <if test="tzComPosi != null" >
+        TZ_COM_POSI,
+      </if>
+      <if test="tzIndustryMc != null" >
+        TZ_INDUSTRY_MC,
+      </if>
+      <if test="tzIndustryMs != null" >
+        TZ_INDUSTRY_MS,
+      </if>
+      <if test="tzSchoolName != null" >
+        TZ_SCHOOL_NAME,
+      </if>
+      <if test="tzComNature != null" >
+        TZ_COM_NATURE,
+      </if>
+      <if test="tzComNatureval != null" >
+        TZ_COM_NATUREVAL,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        #{oprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzMshId != null" >
+        #{tzMshId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzMshfFlag != null" >
+        #{tzMshfFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIsAbandon != null" >
+        #{tzIsAbandon,jdbcType=VARCHAR},
+      </if>
+      <if test="tzLqsFlag != null" >
+        #{tzLqsFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIsFileIn != null" >
+        #{tzIsFileIn,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttachsysfilena != null" >
+        #{tzAttachsysfilena,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttachfileName != null" >
+        #{tzAttachfileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttPUrl != null" >
+        #{tzAttPUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttAUrl != null" >
+        #{tzAttAUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAppYear != null" >
+        #{tzAppYear,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComName != null" >
+        #{tzComName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComPosi != null" >
+        #{tzComPosi,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIndustryMc != null" >
+        #{tzIndustryMc,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIndustryMs != null" >
+        #{tzIndustryMs,jdbcType=VARCHAR},
+      </if>
+      <if test="tzSchoolName != null" >
+        #{tzSchoolName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComNature != null" >
+        #{tzComNature,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComNatureval != null" >
+        #{tzComNatureval,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZApplicationVerifiedBundle.model.PsTzStuExtT" >
+    update PS_TZ_STU_EXT_T
+    <set >
+      <if test="tzMshfFlag != null" >
+        TZ_MSHF_FLAG = #{tzMshfFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIsAbandon != null" >
+        TZ_IS_ABANDON = #{tzIsAbandon,jdbcType=VARCHAR},
+      </if>
+      <if test="tzLqsFlag != null" >
+        TZ_LQS_FLAG = #{tzLqsFlag,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIsFileIn != null" >
+        TZ_IS_FILE_IN = #{tzIsFileIn,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttachsysfilena != null" >
+        TZ_ATTACHSYSFILENA = #{tzAttachsysfilena,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttachfileName != null" >
+        TZ_ATTACHFILE_NAME = #{tzAttachfileName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttPUrl != null" >
+        TZ_ATT_P_URL = #{tzAttPUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAttAUrl != null" >
+        TZ_ATT_A_URL = #{tzAttAUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAppYear != null" >
+        TZ_APP_YEAR = #{tzAppYear,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComName != null" >
+        TZ_COM_NAME = #{tzComName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComPosi != null" >
+        TZ_COM_POSI = #{tzComPosi,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIndustryMc != null" >
+        TZ_INDUSTRY_MC = #{tzIndustryMc,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIndustryMs != null" >
+        TZ_INDUSTRY_MS = #{tzIndustryMs,jdbcType=VARCHAR},
+      </if>
+      <if test="tzSchoolName != null" >
+        TZ_SCHOOL_NAME = #{tzSchoolName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComNature != null" >
+        TZ_COM_NATURE = #{tzComNature,jdbcType=VARCHAR},
+      </if>
+      <if test="tzComNatureval != null" >
+        TZ_COM_NATUREVAL = #{tzComNatureval,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_MSH_ID = #{tzMshId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZApplicationVerifiedBundle.model.PsTzStuExtT" >
+    update PS_TZ_STU_EXT_T
+    set TZ_MSHF_FLAG = #{tzMshfFlag,jdbcType=VARCHAR},
+      TZ_IS_ABANDON = #{tzIsAbandon,jdbcType=VARCHAR},
+      TZ_LQS_FLAG = #{tzLqsFlag,jdbcType=VARCHAR},
+      TZ_IS_FILE_IN = #{tzIsFileIn,jdbcType=VARCHAR},
+      TZ_ATTACHSYSFILENA = #{tzAttachsysfilena,jdbcType=VARCHAR},
+      TZ_ATTACHFILE_NAME = #{tzAttachfileName,jdbcType=VARCHAR},
+      TZ_ATT_P_URL = #{tzAttPUrl,jdbcType=VARCHAR},
+      TZ_ATT_A_URL = #{tzAttAUrl,jdbcType=VARCHAR},
+      TZ_APP_YEAR = #{tzAppYear,jdbcType=VARCHAR},
+      TZ_COM_NAME = #{tzComName,jdbcType=VARCHAR},
+      TZ_COM_POSI = #{tzComPosi,jdbcType=VARCHAR},
+      TZ_INDUSTRY_MC = #{tzIndustryMc,jdbcType=VARCHAR},
+      TZ_INDUSTRY_MS = #{tzIndustryMs,jdbcType=VARCHAR},
+      TZ_SCHOOL_NAME = #{tzSchoolName,jdbcType=VARCHAR},
+      TZ_COM_NATURE = #{tzComNature,jdbcType=VARCHAR},
+      TZ_COM_NATUREVAL = #{tzComNatureval,jdbcType=VARCHAR}
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_MSH_ID = #{tzMshId,jdbcType=VARCHAR}
+  </update>
+</mapper>

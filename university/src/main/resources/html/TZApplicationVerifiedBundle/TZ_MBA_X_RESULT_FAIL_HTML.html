@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+
+<style type="text/css">
+	.main{width:98%;height:auto;margin:5px auto;}
+	.Notice_Title{text-align:left;color:#333;font-weight:bold;font-size:14px;}
+	.Notice_Content{line-height:24px; font-size:14px; font-family:"楷体_GB2312"; text-align:left; color:#000000; margin:5px auto;}
+	.Notice_Table{width:100%;border:1px solid #000;border-collapse:collapse;}
+	.Notice_Table td{border:1px solid #000;font-size:14px;text-align:left;padding:10px 5px;}
+	.notice_foot{text-align:right;line-height:24px; font-size:14px; font-family:"楷体_GB2312"; color:#000000; margin:5px auto;}
+	@media only screen and (min-width:750px) {
+    	.Notice_Table{width:700px;}
+    	.notice_foot{text-align:left;padding-left:650px;}
+    	.main{width:860px;margin:5px}
+    }
+</style>
+<title>面试结果通知</title>
+</head>
+
+<body>
+<div class="main">
+	<div class="Notice_Title">%bind(:1)（%bind(:2)） 同学,您好！</div>
+
+	<div  class="Notice_Content">
+	<div style="text-indent:2em"><strong>感谢您申请北京大学光华管理学院MBA项目%bind(:3)！</strong></div>
+	<div style="text-indent:2em">谨此遗憾地通知您，您未获得北京大学光华管理学院%bind(:3)保送资格。</div>
+	<div style="text-indent:2em">我们真诚地坚信，尽管本次的结果不尽如人意，但这一定丝毫无损您光明的前程。更热切期待您在满足工作年限要求后，直接报考北大光华MBA，我们愿意看到您的进步，也希望和您共同成长。如您需要得到其他有关申请和报考方面的信息或帮助，请通过北大光华MBA官方网站了解相关信息，或与招生部联系：%bind(:5). </div>
+	<br/>
+    <div class="notice_foot">北京大学光华管理学院MBA项目</div>
+    </div>
+</body>
+</html>

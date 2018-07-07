@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+
+<style type="text/css">
+	.main{width:98%;height:auto;margin:5px auto;}
+	.Notice_Title{text-align:left;color:#333;font-weight:bold;font-size:14px;}
+	.Notice_Content{line-height:24px; font-size:14px; font-family:"楷体_GB2312"; text-align:left; color:#000000; margin:5px auto;}
+	.Notice_Table{width:100%;border:1px solid #000;border-collapse:collapse;}
+	.Notice_Table td{border:1px solid #000;font-size:14px;text-align:left;padding:10px 5px;}
+	.notice_foot{text-align:right;line-height:24px; font-size:14px; font-family:"楷体_GB2312"; color:#000000; margin:5px auto;}
+	@media only screen and (min-width:750px) {
+    	.Notice_Table{width:700px;}
+    	.notice_foot{text-align:left;padding-left:600px;}
+    	.main{width:860px;margin:5px}
+    }
+</style>
+
+<title>面试通知</title>
+</head>
+<body>
+<div class="main">
+  <div class="Notice_Title">%bind(:1)（%bind(:2)）同学</div>
+  <div  class="Notice_Content" style="text-indent:2em">
+  <strong>感谢您申请北京大学光华管理学院%bind(:3)！</strong>
+  <p style="text-indent:2em">经过评审专家对您申请材料的综合评阅，目前没有给予您北京大学光华管理学院社会公益管理硕士%bind(:3)面试的机会；但我们仍然对您充满信心，将您放在等待名单（waiting list）中，您的材料将与后续申请材料合并再次参与审核，结果也将和后续面试名单同时发布。希望您能获得后续批次的面试机会。</p>
+  <p style="text-indent:2em"><strong>特别提醒：</strong>由于您目前还处于材料审核过程中，为了对下一批次申请同学公平起见，MSEM项目办公室不接受有关评审意见的咨询，敬请理解！</p>
+  <p style="text-indent:2em">任何疑问，请联系MSEM项目办公室：<a href='mailto:msemadmi@gsm.pku.edu.cn'>msemadmi@gsm.pku.edu.cn</a></p>
+ </div>
+ <br />
+ <br />
+  <div class="Notice_Content"  style="text-align:right">北京大学光华管理学院MSEM项目</div>
+</div>
+</body>
+</html>

@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxStudentTMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
+    <id column="OPRID" property="oprid" jdbcType="VARCHAR" />
+    <result column="TZ_JG_ID" property="tzJgId" jdbcType="VARCHAR" />
+    <result column="PHOTO_SYSFILENAME" property="photoSysfilename" jdbcType="VARCHAR" />
+    <result column="TZ_FILE_PATH" property="tzFilePath" jdbcType="VARCHAR" />
+    <result column="SEX" property="sex" jdbcType="VARCHAR" />
+    <result column="AGE" property="age" jdbcType="INTEGER" />
+    <result column="CONTACT" property="contact" jdbcType="VARCHAR" />
+    <result column="CONTACT_QQ" property="contactQq" jdbcType="VARCHAR" />
+    <result column="CONTACT_PHONE" property="contactPhone" jdbcType="VARCHAR" />
+    <result column="CONTACT_EMAIL" property="contactEmail" jdbcType="VARCHAR" />
+    <result column="EMERGENT_CONTACT" property="emergentContact" jdbcType="VARCHAR" />
+    <result column="EMERGENT_CONTACT_PHONE" property="emergentContactPhone" jdbcType="VARCHAR" />
+    <result column="EMERGENT_CONTACT_EMAIL" property="emergentContactEmail" jdbcType="VARCHAR" />
+    <result column="TIMECARD_REMAIND" property="timecardRemaind" jdbcType="INTEGER" />
+    <result column="STU_STATUS" property="stuStatus" jdbcType="VARCHAR" />
+    <result column="ROW_LASTMANT_DTTM" property="rowLastmantDttm" jdbcType="TIMESTAMP" />
+    <result column="ROW_LASTMANT_OPRID" property="rowLastmantOprid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OPRID, TZ_JG_ID, PHOTO_SYSFILENAME, TZ_FILE_PATH, SEX, AGE, CONTACT, CONTACT_QQ, 
+    CONTACT_PHONE, CONTACT_EMAIL, EMERGENT_CONTACT, EMERGENT_CONTACT_PHONE, EMERGENT_CONTACT_EMAIL, 
+    TIMECARD_REMAIND, STU_STATUS, ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from px_student_t
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from px_student_t
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
+    insert into px_student_t (OPRID, TZ_JG_ID, PHOTO_SYSFILENAME, 
+      TZ_FILE_PATH, SEX, AGE, 
+      CONTACT, CONTACT_QQ, CONTACT_PHONE, 
+      CONTACT_EMAIL, EMERGENT_CONTACT, EMERGENT_CONTACT_PHONE, 
+      EMERGENT_CONTACT_EMAIL, TIMECARD_REMAIND, 
+      STU_STATUS, ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID
+      )
+    values (#{oprid,jdbcType=VARCHAR}, #{tzJgId,jdbcType=VARCHAR}, #{photoSysfilename,jdbcType=VARCHAR}, 
+      #{tzFilePath,jdbcType=VARCHAR}, #{sex,jdbcType=VARCHAR}, #{age,jdbcType=INTEGER}, 
+      #{contact,jdbcType=VARCHAR}, #{contactQq,jdbcType=VARCHAR}, #{contactPhone,jdbcType=VARCHAR}, 
+      #{contactEmail,jdbcType=VARCHAR}, #{emergentContact,jdbcType=VARCHAR}, #{emergentContactPhone,jdbcType=VARCHAR}, 
+      #{emergentContactEmail,jdbcType=VARCHAR}, #{timecardRemaind,jdbcType=INTEGER}, 
+      #{stuStatus,jdbcType=VARCHAR}, #{rowLastmantDttm,jdbcType=TIMESTAMP}, #{rowLastmantOprid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
+    insert into px_student_t
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        OPRID,
+      </if>
+      <if test="tzJgId != null" >
+        TZ_JG_ID,
+      </if>
+      <if test="photoSysfilename != null" >
+        PHOTO_SYSFILENAME,
+      </if>
+      <if test="tzFilePath != null" >
+        TZ_FILE_PATH,
+      </if>
+      <if test="sex != null" >
+        SEX,
+      </if>
+      <if test="age != null" >
+        AGE,
+      </if>
+      <if test="contact != null" >
+        CONTACT,
+      </if>
+      <if test="contactQq != null" >
+        CONTACT_QQ,
+      </if>
+      <if test="contactPhone != null" >
+        CONTACT_PHONE,
+      </if>
+      <if test="contactEmail != null" >
+        CONTACT_EMAIL,
+      </if>
+      <if test="emergentContact != null" >
+        EMERGENT_CONTACT,
+      </if>
+      <if test="emergentContactPhone != null" >
+        EMERGENT_CONTACT_PHONE,
+      </if>
+      <if test="emergentContactEmail != null" >
+        EMERGENT_CONTACT_EMAIL,
+      </if>
+      <if test="timecardRemaind != null" >
+        TIMECARD_REMAIND,
+      </if>
+      <if test="stuStatus != null" >
+        STU_STATUS,
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM,
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        #{oprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzJgId != null" >
+        #{tzJgId,jdbcType=VARCHAR},
+      </if>
+      <if test="photoSysfilename != null" >
+        #{photoSysfilename,jdbcType=VARCHAR},
+      </if>
+      <if test="tzFilePath != null" >
+        #{tzFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="contact != null" >
+        #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactQq != null" >
+        #{contactQq,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null" >
+        #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="emergentContact != null" >
+        #{emergentContact,jdbcType=VARCHAR},
+      </if>
+      <if test="emergentContactPhone != null" >
+        #{emergentContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="emergentContactEmail != null" >
+        #{emergentContactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="timecardRemaind != null" >
+        #{timecardRemaind,jdbcType=INTEGER},
+      </if>
+      <if test="stuStatus != null" >
+        #{stuStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
+    update px_student_t
+    <set >
+      <if test="tzJgId != null" >
+        TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR},
+      </if>
+      <if test="photoSysfilename != null" >
+        PHOTO_SYSFILENAME = #{photoSysfilename,jdbcType=VARCHAR},
+      </if>
+      <if test="tzFilePath != null" >
+        TZ_FILE_PATH = #{tzFilePath,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        SEX = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        AGE = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="contact != null" >
+        CONTACT = #{contact,jdbcType=VARCHAR},
+      </if>
+      <if test="contactQq != null" >
+        CONTACT_QQ = #{contactQq,jdbcType=VARCHAR},
+      </if>
+      <if test="contactPhone != null" >
+        CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="contactEmail != null" >
+        CONTACT_EMAIL = #{contactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="emergentContact != null" >
+        EMERGENT_CONTACT = #{emergentContact,jdbcType=VARCHAR},
+      </if>
+      <if test="emergentContactPhone != null" >
+        EMERGENT_CONTACT_PHONE = #{emergentContactPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="emergentContactEmail != null" >
+        EMERGENT_CONTACT_EMAIL = #{emergentContactEmail,jdbcType=VARCHAR},
+      </if>
+      <if test="timecardRemaind != null" >
+        TIMECARD_REMAIND = #{timecardRemaind,jdbcType=INTEGER},
+      </if>
+      <if test="stuStatus != null" >
+        STU_STATUS = #{stuStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
+    update px_student_t
+    set TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR},
+      PHOTO_SYSFILENAME = #{photoSysfilename,jdbcType=VARCHAR},
+      TZ_FILE_PATH = #{tzFilePath,jdbcType=VARCHAR},
+      SEX = #{sex,jdbcType=VARCHAR},
+      AGE = #{age,jdbcType=INTEGER},
+      CONTACT = #{contact,jdbcType=VARCHAR},
+      CONTACT_QQ = #{contactQq,jdbcType=VARCHAR},
+      CONTACT_PHONE = #{contactPhone,jdbcType=VARCHAR},
+      CONTACT_EMAIL = #{contactEmail,jdbcType=VARCHAR},
+      EMERGENT_CONTACT = #{emergentContact,jdbcType=VARCHAR},
+      EMERGENT_CONTACT_PHONE = #{emergentContactPhone,jdbcType=VARCHAR},
+      EMERGENT_CONTACT_EMAIL = #{emergentContactEmail,jdbcType=VARCHAR},
+      TIMECARD_REMAIND = #{timecardRemaind,jdbcType=INTEGER},
+      STU_STATUS = #{stuStatus,jdbcType=VARCHAR},
+      ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR}
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+  </update>
+</mapper>

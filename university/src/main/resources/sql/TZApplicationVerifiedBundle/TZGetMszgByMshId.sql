@@ -1,0 +1,1 @@
+select 'Y' from PS_TZ_MSZG_DR_T where TZ_MSH_ID=?

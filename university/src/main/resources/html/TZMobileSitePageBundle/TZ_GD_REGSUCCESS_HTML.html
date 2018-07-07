@@ -1,0 +1,40 @@
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+<title></title>
+<link href="mobilepage_stylecss" rel="stylesheet" type="text/css">
+<script type="text/javascript" src="%bind(:2)/statics/js/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="%bind(:2)/statics/js/website/m/rem.js"></script>
+<script type="text/javascript">
+	$(document).ready(function(){
+		atime();
+	});
+
+	var stop;
+	var wait=3;
+	function atime() {
+		if(wait <= 0){
+			window.location.href = "%bind(:1)";
+			wait =3;
+		} else{
+			$("#miao_time").html(wait);
+			if(wait>=0){
+				wait=wait-1;}
+			stop = setTimeout("atime()",1000);
+		}
+	}
+</script>
+</head>
+<body>
+	<div class="viewport-adaptive">
+	   <div class="bg1">
+	   
+	   	 <img class="none" src="%bind(:3)/m/active_success.png" style="margin:30% auto 5%;">
+	   	 <p class="none_tips" style="width:85%;margin:0 auto;font-size:18px;">账户注册成功，<span id="miao_time" style="color:red">3</span>秒之后会自动跳转到系统登录页</p>
+	   </div>
+	</div>	
+</body>
+</html>

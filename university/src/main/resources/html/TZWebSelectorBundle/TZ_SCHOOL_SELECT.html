@@ -1,0 +1,336 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+	<title></title>
+	<script type="text/javascript">
+		var TzUniversityContextPath = "%bind(:2)";
+		var source = [];
+	</script>
+	
+	<script type="text/javascript" src="%bind(:2)/statics/js/lib/jquery/jquery.min.js"></script>
+	<link href="%bind(:2)/statics/js/lib/jqueryui/jquery-ui.min.css" rel="stylesheet" type="text/css" />
+	<script type="text/javascript" src="%bind(:2)/statics/js/lib/jqueryui/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="%bind(:2)/statics/js/tranzvision/extjs/app/view/website/set/js/pagefunc.js"></script>
+	<link rel="stylesheet" href="%bind(:2)/statics/css/website/css.css" />
+	<script type="text/javascript">
+		$(document).ready(function() {
+			var linkList = window.parent.document.getElementsByTagName("link"); //获取父窗口link标签对象列表
+			var head = document.getElementsByTagName("head").item(0);
+			//在子窗口中添加父窗口的外联样式
+			for (var i = 0; i < linkList.length; i++) {
+				var l = document.createElement("link");
+				l.rel = 'stylesheet';
+				l.type = 'text/css';
+				l.href = linkList[i].href;
+				head.appendChild(l);
+			}
+		});
+		//屏蔽浏览器按backspace键返回上一页
+		$(document).keydown(function(e) {
+			var target = e.target;
+			var tag = e.target.tagName.toUpperCase();
+			if (e.keyCode == 8) {
+				if ((tag == 'INPUT' && !$(target).attr("readonly")) || (tag == 'TEXTAREA' && !$(target).attr("readonly"))) {
+					if ((target.type.toUpperCase() == "RADIO") || (target.type.toUpperCase() == "CHECKBOX")) {
+						return false;
+					} else {
+						return true;
+					}
+				} else {
+					return false;
+				}
+			}
+		});
+	</script>
+	<script type="text/javascript">
+        var tzGeneralURL = "%bind(:1)";
+     	function setTab(n){
+			var menu=document.getElementById("chose").getElementsByTagName("a");  
+			for(i=0;i<menu.length;i++){
+		   		menu[i].className=i==n?"now2":""; 
+			}
+			var province = $(menu[n]).attr("title");
+			if(province == undefined || province == null){
+				province = ""; 
+			}
+			//yuds 不使用国籍作为院校选择器国家选择搜索条件
+			//var $CountryCode = $("#CountryCode", window.parent.document).val();
+			//var title = $("#" + $CountryCode, window.parent.document).attr("ccode"); 
+			
+			var type = "%bind(:4)";
+			
+			var tzByStateParams ='';
+			
+			
+			if (type == "A") {
+				var $CountryCode = $("#TZ_SCH_CNAME_Country",window.parent.document).attr("ccode");
+				var title = $("#TZ_SCH_CNAME_Country",window.parent.document).val();
+				if($CountryCode==undefined||$CountryCode==null){
+					$CountryCode = ""; 
+				}
+				if(n > 30){
+					tzByStateParams = '{"ComID":"TZ_COMMON_COM","PageID":"TZ_SCHOOL_STD","OperateType":"EJSON","comParams":{"OType":"BYSCHOOL","search-text":"' + $CountryCode + '"}}';
+				}else{
+					tzByStateParams = '{"ComID":"TZ_COMMON_COM","PageID":"TZ_SCHOOL_STD","OperateType":"EJSON","comParams":{"OType":"BYPROVINCE","search-text":"' + $CountryCode + '","province":"' + province + '"}}';
+				}
+			}
+			if (type == "B") {
+				var $CountryCode = $("#CountryCode", window.parent.document).val();
+				var title = $("#" + $CountryCode, window.parent.document).attr("ccode"); 
+				if(title==undefined||title==null){
+					title = ""; 
+				}
+				if(n > 30){
+					tzByStateParams = '{"ComID":"TZ_COMMON_COM","PageID":"TZ_SCHOOL_STD","OperateType":"EJSON","comParams":{"OType":"BYSCHOOL","search-text":"' + title + '"}}';
+				}else{
+					tzByStateParams = '{"ComID":"TZ_COMMON_COM","PageID":"TZ_SCHOOL_STD","OperateType":"EJSON","comParams":{"OType":"BYPROVINCE","search-text":"' + title + '","province":"' + province + '"}}';
+				}
+			}
+			
+			$.ajax({
+				'url':tzGeneralURL, //服务器的地址
+				'data':{tzParams:tzByStateParams}, //参数
+				'dataType':'json', //返回数据类型
+				'type':'POST', //请求类型
+				'success':function(f){
+							var data = [];
+							if(f.state.errcode == "0"){
+								data = f.comContent;
+							}
+							var $selectorList = $("#selectorList");
+							if(data.length){
+								$selectorList.empty();
+								$.each(data, function(index,term) {
+                                 
+									$('<div class="city_main_city2"><label for="radio" style="cursor:pointer;" onclick="setFanhui4(this);"><input type="radio" name="radio" value="'+ term.schoolName +'" onclick="setFanhui(this);" />'+term.schoolName+'</label></div>').appendTo($selectorList);
+								});
+							}else{
+								$selectorList.empty();
+							}
+			  	}
+			});
+		}
+		function setTab2(m,n){
+			var menu=document.getElementById("tab"+m).getElementsByTagName("li");  
+			var showdiv=$("#content"+m+" .tab1"); 
+			for(i=0;i<menu.length;i++)
+			{
+			   menu[i].className=i==n?"now":""; 
+			   showdiv[i].style.display=i==n?"block":"none"; 
+			}
+			layerChange();
+		}
+
+		function findData() {        	
+			$.ajax({
+				'url': tzGeneralURL,//服务器的地址
+				'data': {'search-text': $("#search-text").val()},//参数
+				'dataType': 'json',//返回数据类型
+				'type': 'POST',//请求类型
+				'success': function(data) {
+					var $selectorList = $("#selectorList");
+					if (data.length) {
+						$selectorList.empty();
+						$.each(data,
+						function(index, term) {
+							$('<div class="city_main_city2"><label for="radio" style="cursor:pointer;" onclick="setFanhui4(this);"><input type="radio" name="radio" value=' + term.schoolName + ' onclick="setFanhui(this);" />' + term.schoolName + '</label></div>').appendTo($selectorList);
+						});
+					} else {
+						$selectorList.empty();
+					}
+				}
+			});
+			setTab2(1, 0)
+		}
+        
+		function setFanhuiLi(obj){
+			$("#FanhuiType").val("C");
+			$("#FanhuiValue").val(obj.value);
+			setScholl();
+		}
+		function setFanhui(obj){
+		 	$("#FanhuiType").val("C");
+			$("#FanhuiValue").val($(obj).val());
+		}
+		function setFanhui2(obj){
+			$("#FanhuiType").val("S");
+			$("#FanhuiValue").val($(obj).val());
+		}
+		function setFanhui3(obj){
+			$("#FanhuiType").val("O");
+			$("#FanhuiValue").val($(obj).val());
+		}
+		function setFanhui4(obj){
+			$(obj).find("input").attr('checked','checked');
+			$("#FanhuiType").val("C");
+			$("#FanhuiValue").val($(obj).text());	
+		}
+		function setScholl(){
+			//var $type= $("#FanhuiType").val();
+			var $value = $("#FanhuiValue").val();
+			//var $ParamType = $("#ParamType",window.parent.document).val();
+			var $ParamValue = $("#ParamValue",window.parent.document).val();
+
+			$("#"+$ParamValue,window.parent.document).val($value);
+			$("#"+$ParamValue,window.parent.document).focus();
+			closeThis();
+		}
+</script>
+
+</head>
+
+<body>
+<style type="text/css">
+	.search_left{float:left;height:39px;width:760px}
+	.city_main_city2{width:660px;line-height:18px}
+	.city_main_title3{margin-top: 0px;margin-bottom: 0px;}
+	.city_main_title2{width:760px}
+	.float_left {margin: 0px}
+	.clickable{cursor:default}
+	.float_left li.now{background:#b1193b  none repeat scroll 0 0;color:#fff}
+	.float_left li{background-color:#eceff3;border-radius:5px;color:#000;cursor:pointer;float:left;font-size:15px;height:34px;line-height:34px;margin-right:1px;padding:0 30px;text-align:center}
+	.highlight{background-color:#8f8f8f;cursor:pointer}
+	.ui-autocomplete{width:240px;min-height:40px;max-height:300px;overflow-y:scroll;overflow-x:hidden;position:absolute;left:71.7344px;top:93px}
+	.ui-menu-item{font-size:16px;font-weight:normal;color:#046dba;list-style-type:none;padding-left:3px;line-height:40px}
+	.ui-state-hover,.ui-widget-content .ui-state-hover,.ui-widget-header .ui-state-hover,.ui-state-focus,.ui-widget-content .ui-state-focus,.ui-widget-header .ui-state-focus{border:0px solid #8f8f8f;background:#8f8f8f url("images/ui-bg_glass_100_fdf5ce_1x400.png") 50% 50% repeat-x;font-weight:normal;color:#046dba}
+</style>
+<div class="city_top3">
+  <div class="city_close"  onclick="closeThis();"><img src="%bind(:3)/del.png" width="15" height="15" /></div> 
+  选择学校
+</div>
+<div class="city_main2">
+   <div class="city_main_title2" id="search_img" style="width:800px">
+  <div class="search_left"><span class="font_gray_16px_s">搜索 </span>
+    <input name="search-text" type="text" class="input_251px" id="search-text"/></div>
+ <!--  <div class="search_right">
+	 <a href="#" id="search" class="alpha" onclick="findData();" > <img src="%bind(:3)/search_bt.png" width="40" height="39"/></a></div>
+ </div> -->
+<div class="city_main_title2"><span class="font_gray_16px_s">如果搜索不到相应学校，请点击其他学校输入对应的学校</span></div>
+  <div class="city_main_title3" id="tab1">
+      <div class="float_left">
+      <ul>
+        <li class="now" onclick="setTab2(1,0)" >全部</li>
+        <li onclick="setTab2(1,1)">其他学校</li>
+        <!--  <li onclick="setTab2(1,2)">境外学校</li> -->
+      </ul>
+      </div>
+    </div>
+    <div  id="content1">
+    <div class="tab1 block">
+  <div class="city_main_line2" id="chose" style="display:none;">
+    <div class="city_main_city"><a title="北京" href="javascript:;" onclick="setTab(0);layerChange();">北京</a></div>
+    <div class="city_main_city"><a title="天津" href="javascript:;" onclick="setTab(1);layerChange();">天津</a></div>
+    <div class="city_main_city"><a title="河北" href="javascript:;" onclick="setTab(2);layerChange();">河北</a></div>
+    <div class="city_main_city"><a title="山西" href="javascript:;" onclick="setTab(3);layerChange();">山西</a></div>
+    <div class="city_main_city"><a title="内蒙古" href="javascript:;" onclick="setTab(4);layerChange();">内蒙古</a></div>
+    <div class="city_main_city"><a title="辽宁" href="javascript:;" onclick="setTab(5);layerChange();">辽宁</a></div>
+    <div class="city_main_city"><a title="吉林" href="javascript:;" onclick="setTab(6);layerChange();">吉林</a></div>
+    <div class="city_main_city"><a title="黑龙江" href="javascript:;" onclick="setTab(7);layerChange();">黑龙江</a></div>
+    <div class="city_main_city"><a title="江苏" href="javascript:;" onclick="setTab(8);layerChange();">江苏</a></div>
+    <div class="city_main_city"><a title="安徽" href="javascript:;" onclick="setTab(9);layerChange();">安徽</a></div>
+    <div class="city_main_city"><a title="山东" href="javascript:;" onclick="setTab(10);layerChange();">山东</a></div>
+    <div class="city_main_city"><a title="上海" href="javascript:;" onclick="setTab(11);layerChange();">上海</a></div>
+    <div class="city_main_city"><a title="浙江" href="javascript:;" onclick="setTab(12);layerChange();">浙江</a></div>
+    <div class="city_main_city"><a title="江西" href="javascript:;" onclick="setTab(13);layerChange();">江西</a></div>
+    <div class="city_main_city"><a title="福建" href="javascript:;" onclick="setTab(14);layerChange();">福建</a></div>
+    <div class="city_main_city"><a title="湖北" href="javascript:;" onclick="setTab(15);layerChange();">湖北</a></div>
+    <div class="city_main_city"><a title="河南" href="javascript:;" onclick="setTab(16);layerChange();">河南</a></div>
+    <div class="city_main_city"><a title="湖南" href="javascript:;" onclick="setTab(17);layerChange();">湖南</a></div>
+    <div class="city_main_city"><a title="广东" href="javascript:;" onclick="setTab(18);layerChange();">广东</a></div>
+    <div class="city_main_city"><a title="广西" href="javascript:;" onclick="setTab(19);layerChange();">广西</a></div>
+    <div class="city_main_city"><a title="海南" href="javascript:;" onclick="setTab(20);layerChange();">海南</a></div>
+    <div class="city_main_city"><a title="重庆" href="javascript:;" onclick="setTab(21);layerChange();">重庆</a></div>
+    <div class="city_main_city"><a title="四川" href="javascript:;" onclick="setTab(22);layerChange();">四川</a></div>
+    <div class="city_main_city"><a title="贵州" href="javascript:;" onclick="setTab(23);layerChange();">贵州</a></div>
+    <div class="city_main_city"><a title="云南" href="javascript:;" onclick="setTab(24);layerChange();">云南</a></div>
+    <div class="city_main_city"><a title="西藏" href="javascript:;" onclick="setTab(25);layerChange();">西藏</a></div>
+    <div class="city_main_city"><a title="陕西" href="javascript:;" onclick="setTab(26);layerChange();">陕西</a></div>
+    <div class="city_main_city"><a title="甘肃" href="javascript:;" onclick="setTab(27);layerChange();">甘肃</a></div>
+	<div class="city_main_city"><a title="宁夏" href="javascript:;" onclick="setTab(28);layerChange();">宁夏</a></div>
+	<div class="city_main_city"><a title="青海" href="javascript:;" onclick="setTab(29);layerChange();">青海</a></div>
+	<div class="city_main_city"><a title="新疆" href="javascript:;" onclick="setTab(30);layerChange();">新疆</a></div>
+	
+  </div>
+  <div class="city_main_line3" id="selectorList"></div>
+  </div>
+  <div class="tab1">
+   <div  class="other">其他学校 ： 
+    <input name="2" type="text" class="input_251px" id="2" onchange="setFanhui3(this);"/>
+  </div>
+  </div>
+  
+  <!--  <div class="tab1">
+   <div  class="other">境外学校 ： 
+    <input name="2" type="text" class="input_251px" id="2" onchange="setFanhui2(this);"/>
+  </div>
+  </div> -->
+  </div>
+  <div class="main_full_lines_400px"></div>
+  <div class="center_bt">
+    <div class="bt_blue" onclick='setScholl()' style="margin-bottom:19px;">确 认</div>
+  </div>
+</div>
+<div>
+	<input id="FanhuiType" type="hidden"/>
+	<input id="FanhuiValue" type="hidden"/>
+	<input id="language" type="hidden" value="ENG" />
+	<input id="country" type="hidden" value="" />
+</div>
+
+<script type="text/javascript">
+	var index = parent.layer.getFrameIndex(window.name);
+	function closeThis(){
+	parent.layer.close(index);
+	}
+	function layerChange(){
+		//parent.layer.close(index);
+		parent.layer.iframeAuto(index);
+	}
+	$(document).ready(function(){
+		var type = "%bind(:4)";
+		var $CountryCode="";
+    	if(type=="A"){
+    		$CountryCode = $("#TZ_SCH_CNAME_Country",window.parent.document).attr("ccode");	    			    		
+    	}else if(type=="B"){
+    		$CountryCode = $("#CountryCode", window.parent.document).val();
+    		$CountryCode = $("#" + $CountryCode, window.parent.document).attr("ccode"); 
+    	}
+    	var tzByStateParams = '{"ComID":"TZ_COMMON_COM","PageID":"TZ_SCHOOL_STD","OperateType":"EJSON","comParams":{"OType":"BYCOUNTRY","search-text":"' + $CountryCode + '"}}';
+    	$.ajax({
+			'url':tzGeneralURL, //服务器的地址
+			'data':{tzParams:tzByStateParams}, //参数
+			'dataType':'json', //返回数据类型
+			'type':'POST', //请求类型
+			'success':function(f){
+				if(f.state.errcode == "0"){
+					j = 0;
+			        for (var i in f.comContent) {
+			            source[j] = f.comContent[i]["schoolName"];
+			            j++;
+			        }
+				}
+		  	}
+		});
+		//取得div层
+		var $search = $('.city_main2');
+		//取得输入框JQuery对象
+		var $searchInput = $search.find('#search-text');
+		$searchInput.autocomplete({source: source});
+		$searchInput.autocomplete({
+			  select: function(event,ui) {
+				  setFanhuiLi(ui.item);
+			  }
+			});
+
+    	if($CountryCode == 'CHN'){
+    		$("#chose").show();
+    		setTab(0);
+    	}else{
+    		setTab(90);
+    	}
+		layerChange();
+    });
+	</script>
+</body>
+</html>

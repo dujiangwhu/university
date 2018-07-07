@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+
+<script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/appwidget/jquery.form.js"></script>
+<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/util/layer.js"></script>
+
+<style type="text/css">
+	.main{width:98%;height:auto;margin:5px auto;}
+	.Notice_Title{text-align:left;color:#333;font-weight:bold;font-size:16px;}
+	.Notice_Content{line-height:24px; font-size:14px; font-family:"楷体_GB2312"; text-align:left; color:#000000; margin:5px auto;}
+	.Notice_Table{width:100%;border:1px solid #000;border-collapse:collapse;}
+	.Notice_Table td{border:1px solid #000;font-size:14px;text-align:left;padding:10px 5px;}
+	.notice_foot{text-align:right;line-height:24px; font-size:14px; font-family:"楷体_GB2312"; color:#000000; margin:5px auto;}
+	.notice_span{color:#FF0000;line-height:25px; font-size:14px; font-family:"宋体"; text-align:left;margin:5px auto; font-weight:bold;float:left;}
+	.notice_select{border:1px solid #ddd;width:100px;background:transparent;line-height:24px;border-radius:0px;height:24px;}
+	.notice_save{width:75px;text-align: center;padding:5px;background-color:#1f9bd4;color:#fff;border-radius:5px;border:none;margin:5px auto;}
+	.filebtn{	
+		position:relative;
+		width:80px;
+		opacity: 1;
+	}
+	.filebtn-org{
+	    width: 100%;
+		text-align:center;
+	    color: #fff;
+	   /* background:#ff7b05;*/
+		border-radius:5px;
+		cursor:pointer;
+		font-size:14px;
+		font-family:"楷体_GB2312";
+	}
+	.filebtn-orgtext{
+	    width: 80px;
+	    position: absolute;
+	    left: 0px;
+		top:0px;
+	    opacity:0;
+	    filter: alpha(opacity=0);
+	    -moz-opacity: 0;
+	    cursor: pointer;
+	}
+	.input-list-upload-con{
+		width: 100%;
+	}
+	.input-list-uploadcon-list-a{
+		color:blue;
+		cursor:pointer;
+		display: block;
+	    float: left;
+	    font-size: 14px;
+	}
+	.input-list-uploadcon-listr{
+		display: inline-block;
+		font-size: 14px;
+		width:80px;
+	}
+	.left{
+		float:left;
+	}
+	.clear{
+		clear:both;
+	}
+	@media only screen and (min-width:750px) {
+    	.Notice_Table{width:700px;}
+    	.notice_foot{text-align:left;padding-left:450px;}
+    	.main{width:700px;margin:5px}
+    	.notice_span{margin:5px 5px 0px;float:none;}
+    }
+</style>
+<title>面试结果通知</title>
+<script type="text/javascript">
+var TzUniversityContextPath = "%bind(:1)";
+$(document).ready(function(){
+	var filePath = "%bind(:24)";
+	var fileSysFileName = "%bind(:25)";
+	var fileUserFileName = "%bind(:26)";
+	if(filePath!=""&&fileSysFileName!=""&&fileUserFileName!=""){
+		$("#letterFile").show();
+		$("#uploadLetter").show();
+		$("#upload").css("color","#999"); 
+		$("#letter").attr("disabled","disabled");
+		$(".input-list-uploadcon-list-a").attr("href",filePath + fileSysFileName);
+		$(".input-list-uploadcon-list-a").html(fileUserFileName);
+	}else{
+		$("#letterFile").hide();
+		$("#uploadLetter").show();
+		$(".input-list-uploadcon-list-a").attr("href","javascript:void(0);");
+		$(".input-list-uploadcon-list-a").html();
+	}
+});
+
+//上传进度条
+function loading() {
+	var loadi = layer.load("上传中…");
+	layer.area(loadi, "top:200px");
+}
+<!-- 保存数据 -->
+function subprtSave() {
+
+	var s_select = document.getElementById("Select1").value;
+
+		if (s_select != null && s_select != "" ) {
+			var tzSubmitParams = '{"ComID":"TZ_BMGL_BMBSH_COM","PageID":"TZ_VIEW_MSJG_STD","OperateType":"SAVE","comParams":{"OPRID":"%bind(:3)","TZ_CLASS_ID":"%bind(:4)","TZ_MSH_ID":"%bind(:5)","TZ_APP_INS_ID":"%bind(:6)","ReceiveWay":"'+s_select+'"}}';
+			$.ajax({
+	            type: "post",   
+	            url: '%bind(:2)',
+	            data: {tzParams: tzSubmitParams},       
+	            dataType: 'json',  
+	            success: function(result) {
+					if(result.comContent.resultFlg =="success"){
+						alert("保存成功。");
+					}else{
+						alert(result.comContent.errorDescr);
+					}
+	            }
+			 } );
+
+		}else{
+			alert("请选择“预录取通知书接收方式”");
+		}
+}
+
+<!-- 下拉框赋值 -->
+function receive(){
+
+var v_select = document.getElementsByName("Select1")[0];
+	if (v_select != null) {
+		var isExit = false;
+		for(var i=0;i<v_select.options.length;i++)
+		{
+			if(v_select.options[i].value == "A")
+			{
+			isExit = true;
+			break;
+			}
+		} 
+		if(isExit == false) {
+			v_select.options.add(new Option("邮寄","A"));
+		}
+	}
+
+	if (v_select != null) {
+		var isExit = false;
+		for(var i=0;i<v_select.options.length;i++)
+		{
+			if(v_select.options[i].value == "B")
+			{
+			isExit = true;
+			break;
+			}
+		} 
+		if(isExit == false) {
+			v_select.options.add(new Option("自取","B"));
+		}
+	}
+}
+
+function uploadLetter(){
+	loading();
+	var $form = document.getElementById("main");
+	$form.encoding = "multipart/form-data";
+	var tzParam = "?filePath=letterAttachment&keyName=" + $("#letter").attr("name") + "&" + Math.random();
+	$form.action = TzUniversityContextPath + "/SingleUpdWebServlet" + tzParam;
+	$("#main").ajaxSubmit({
+		dataType:'json',
+		type:'POST',
+		url:TzUniversityContextPath + "/SingleUpdWebServlet" + tzParam,
+		success: function(obj) {
+			if(obj.success == true){
+				var filePath = "";
+				var fileSysFileName = "";
+				var fileUserFileName = "";
+				filePath = obj.msg.accessPath;
+				fileSysFileName = obj.msg.sysFileName;
+				fileUserFileName = obj.msg.filename;
+				var tzSubmitParams = '{"ComID":"TZ_BMGL_BMBSH_COM","PageID":"TZ_VIEW_MSJG_STD","OperateType":"UPLOAD","comParams":{"OPRID":"%bind(:3)","TZ_CLASS_ID":"%bind(:4)","TZ_MSH_ID":"%bind(:5)","TZ_APP_INS_ID":"%bind(:6)","filePath":"'+filePath+'","fileSysFileName":"'+fileSysFileName+'","fileUserFileName":"'+fileUserFileName+'"}}';
+				$.ajax({
+		            type: "post",   
+		            url: '%bind(:2)',
+		            data: {tzParams: tzSubmitParams},       
+		            dataType: 'json',  
+		            success: function(result) {
+						if(result.comContent.resultFlg =="success"){
+							$("#uploadLetter").show();
+							$("#letterFile").show();
+							$("#upload").css("color","#999"); 
+							$("#letter").attr("disabled","disabled");
+							$(".input-list-uploadcon-list-a").attr("href",TzUniversityContextPath + filePath + fileSysFileName);
+							$(".input-list-uploadcon-list-a").html(fileUserFileName);
+							layer.close(layer.index);/*关闭上传进度条*/
+						}else{
+							layer.close(layer.index);/*关闭上传进度条*/
+							alert(result.comContent.errorDescr);
+						}
+		            }
+				 } );
+			}else{
+				layer.close(layer.index);/*关闭上传进度条*/
+				alert(obj.msg);
+			}
+		}
+	})
+}
+
+function deleteLetter(){
+	var tzSubmitParams = '{"ComID":"TZ_BMGL_BMBSH_COM","PageID":"TZ_VIEW_MSJG_STD","OperateType":"DELETE","comParams":{"OPRID":"%bind(:3)","TZ_CLASS_ID":"%bind(:4)","TZ_MSH_ID":"%bind(:5)","TZ_APP_INS_ID":"%bind(:6)"}}';
+	$.ajax({
+        type: "post",   
+        url: '%bind(:2)',
+        data: {tzParams: tzSubmitParams},       
+        dataType: 'json',  
+        success: function(result) {
+			if(result.comContent.resultFlg =="success"){
+				$("#letterFile").hide();
+				$("#uploadLetter").show();
+				$(".input-list-uploadcon-list-a").attr("href","javascript:void(0);");
+				$(".input-list-uploadcon-list-a").html();
+				alert("承诺书删除成功。");
+			}else{
+				alert(result.comContent.errorDescr);
+			}
+        }
+	 } );
+}
+
+</script>
+</head>
+
+<body>
+<form id="main">
+<div class="main">
+
+<div class="Notice_Title">%bind(:7)（%bind(:5)）同学，您好！</div>
+<br/>
+<div  class="Notice_Content">
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span style="font-weight:bold">祝贺您获得北京大学光华管理学院%bind(:9)MBA预录取资格。</span><br />
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;同时，感谢您对北大光华MBA项目的支持和信任，我们将不断努力，希望未来和您共同打造世界一流MBA项目。<a href="%bind(:23)" target="_blank" style="color:blue">项目详情请浏览官方网站。</a><br /><br />
+<div>
+<div style="padding-left:23px;">
+	<div style="float:left;">◆</div><div style="padding-left:15px;">综合素质面试结果：通过</div>
+	<div style="float:left;">◆</div><div style="font-weight:bold;padding-left:15px;">您申请的项目为：%bind(:8)</div>
+	<div style="float:left;">◆</div><div style="padding-left:15px;">如果您接受本次预录取，请下载以下承诺书亲笔签名后，于%bind(:10)之前上传至系统。</div>
+	<div style="float:left;">◆</div><div style="padding-left:15px;"><a href="%bind(:11)" target="_blank" style="color:#0072E3">下载承诺书</a></div>
+	<div style="float:left;">◆</div>
+	<div id="uploadLetter" class="filebtn left">			
+		<div class="filebtn-org"><a href="javascript:void(0)" id="upload" style="color:#0072E3">上传承诺书</a></div>			
+		<input type="file" class="filebtn-orgtext" id="letter" title="上传承诺书" name="letter" onchange="uploadLetter();">		
+	</div>
+	 
+	<div class="input-list-upload-con" id="letterFile" style="display:none" >		
+		<div class="left">		
+			<a class="input-list-uploadcon-list-a" href="javascript:void(0)" target="_blank"></a>	
+		</div>
+		<div class="clear"></div>
+	</div>
+	<div class="clear"></div>
+<div>
+
+<br/>
+	<div  class="Notice_Content">
+		任何问题请联系MBA招生部：%bind(:27)； %bind(:22)。
+	</div>
+
+	<div class="notice_foot">北京大学光华管理学院MBA项目</div>
+  </div>
+  </form>
+</body>
+</html>

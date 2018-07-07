@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="renderer" content="webkit">
+    <title>北京大学光华管理学院MPAcc材料评审系统</title>
+    <link rel="stylesheet" type="text/css" href="%bind(:1)/statics/css/evaluation/style.css" />
+    <script type="text/javascript">
+        var ContextPath = "%bind(:1)";
+        var OrgCode = "%bind(:2)";
+    </script>
+    <script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/jquery.min.js"></script>
+    <script type="text/javascript" src="%bind(:1)/statics/js/lib/layer/layer.js"></script>
+    <script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/util/checkLoginExplorer.js"></script>
+    <script type="text/javascript" src="%bind(:1)/statics/js/evaluation/material/login.js"></script>
+
+</head>
+<body style="background:#fff">
+<!-- content start -->
+<div class="main">
+    <form action="" method="post" enctype="multipart/form-data" name="Loginform" id="Loginform">
+        <div class="login_bg">
+            <div class="login_body_mpacc">
+                <img src="%bind(:1)/statics/images/login/mpacc_login_bg.jpg">
+                <div class="main_body_mpacc">
+                    <div class="main_login">
+                        <p style="color:#4e5c8c;">MPAcc材料评审系统</p>
+                        <div class="login_number">
+                            <span class="text_in">账 &nbsp;&nbsp;号：</span>
+                            <input id="userName" name="userName" class="number_input" type="text">
+                        </div>
+                        <div class="login_number">
+                            <span class="text_in">密 &nbsp;&nbsp;码：</span>
+                            <input id="password" name="password" class="number_input" type="password">
+                        </div>
+                        <div class="login_number">
+                            <span class="text_in">验证码：</span>
+                            <input id="yzm" name="yzm" class="confirm_input" type="text">
+                            <img class="confirm_img" id="yzmImg" style="width:60px;height:33px;" src="">
+                            <a href="javascript:void(0)" class="update">看不清楚？</a>
+                        </div>
+                        <input id="TZ_IS_SUBMIT" name="TZ_IS_SUBMIT" value="Y1" type="hidden"/>
+                        <div id="errormsg" style="display:none;" class="tips_error"><span></span></div>
+                        <a href="javascript:void(0)" class="login_btn" id="submitbtn">登录</a>
+                        <div style="font-size:13px;color:#333;margin:8px;">
+                            欢迎您访问光华MPAcc材料评审系统! 如遇问题请联系光华管理学院MPAcc招生部
+                            <br/>Tel：010-62747117
+                            <br/>Email：mpacc@gsm.pku.edu.cn
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+<!-- content end -->
+<div id="footarea" class="footer assdiv">
+    <p>Copyright © 北京大学光华管理学院 中国北京海淀区颐和园路5号, 邮编: 100871 邮箱: mpacc@gsm.pku.edu.cn</p>
+</div>
+</body>
+</html>

@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZAutoTagsBundle.dao.PsTzZdbqDfnTblMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZAutoTagsBundle.model.PsTzZdbqDfnTbl" >
+    <id column="TZ_ZDBQ_ID" property="tzZdbqId" jdbcType="VARCHAR" />
+    <result column="TZ_ZDBQ_NAME" property="tzZdbqName" jdbcType="VARCHAR" />
+    <result column="TZ_DESCR" property="tzDescr" jdbcType="VARCHAR" />
+    <result column="TZ_ISVALID" property="tzIsvalid" jdbcType="VARCHAR" />
+    <result column="TZ_JAVA_CLASS" property="tzJavaClass" jdbcType="VARCHAR" />
+    <result column="TZ_VIEW_CLPWD" property="tzViewClpwd" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TZ_ZDBQ_ID, TZ_ZDBQ_NAME, TZ_DESCR, TZ_ISVALID, TZ_JAVA_CLASS, TZ_VIEW_CLPWD
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from PS_TZ_ZDBQ_DFN_TBL
+    where TZ_ZDBQ_ID = #{tzZdbqId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PS_TZ_ZDBQ_DFN_TBL
+    where TZ_ZDBQ_ID = #{tzZdbqId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZAutoTagsBundle.model.PsTzZdbqDfnTbl" >
+    insert into PS_TZ_ZDBQ_DFN_TBL (TZ_ZDBQ_ID, TZ_ZDBQ_NAME, TZ_DESCR, 
+      TZ_ISVALID, TZ_JAVA_CLASS, TZ_VIEW_CLPWD
+      )
+    values (#{tzZdbqId,jdbcType=VARCHAR}, #{tzZdbqName,jdbcType=VARCHAR}, #{tzDescr,jdbcType=VARCHAR}, 
+      #{tzIsvalid,jdbcType=VARCHAR}, #{tzJavaClass,jdbcType=VARCHAR}, #{tzViewClpwd,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZAutoTagsBundle.model.PsTzZdbqDfnTbl" >
+    insert into PS_TZ_ZDBQ_DFN_TBL
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tzZdbqId != null" >
+        TZ_ZDBQ_ID,
+      </if>
+      <if test="tzZdbqName != null" >
+        TZ_ZDBQ_NAME,
+      </if>
+      <if test="tzDescr != null" >
+        TZ_DESCR,
+      </if>
+      <if test="tzIsvalid != null" >
+        TZ_ISVALID,
+      </if>
+      <if test="tzJavaClass != null" >
+        TZ_JAVA_CLASS,
+      </if>
+      <if test="tzViewClpwd != null" >
+        TZ_VIEW_CLPWD,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tzZdbqId != null" >
+        #{tzZdbqId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzZdbqName != null" >
+        #{tzZdbqName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzDescr != null" >
+        #{tzDescr,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIsvalid != null" >
+        #{tzIsvalid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzJavaClass != null" >
+        #{tzJavaClass,jdbcType=VARCHAR},
+      </if>
+      <if test="tzViewClpwd != null" >
+        #{tzViewClpwd,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZAutoTagsBundle.model.PsTzZdbqDfnTbl" >
+    update PS_TZ_ZDBQ_DFN_TBL
+    <set >
+      <if test="tzZdbqName != null" >
+        TZ_ZDBQ_NAME = #{tzZdbqName,jdbcType=VARCHAR},
+      </if>
+      <if test="tzDescr != null" >
+        TZ_DESCR = #{tzDescr,jdbcType=VARCHAR},
+      </if>
+      <if test="tzIsvalid != null" >
+        TZ_ISVALID = #{tzIsvalid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzJavaClass != null" >
+        TZ_JAVA_CLASS = #{tzJavaClass,jdbcType=VARCHAR},
+      </if>
+      <if test="tzViewClpwd != null" >
+        TZ_VIEW_CLPWD = #{tzViewClpwd,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TZ_ZDBQ_ID = #{tzZdbqId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZAutoTagsBundle.model.PsTzZdbqDfnTbl" >
+    update PS_TZ_ZDBQ_DFN_TBL
+    set TZ_ZDBQ_NAME = #{tzZdbqName,jdbcType=VARCHAR},
+      TZ_DESCR = #{tzDescr,jdbcType=VARCHAR},
+      TZ_ISVALID = #{tzIsvalid,jdbcType=VARCHAR},
+      TZ_JAVA_CLASS = #{tzJavaClass,jdbcType=VARCHAR},
+      TZ_VIEW_CLPWD = #{tzViewClpwd,jdbcType=VARCHAR}
+    where TZ_ZDBQ_ID = #{tzZdbqId,jdbcType=VARCHAR}
+  </update>
+</mapper>

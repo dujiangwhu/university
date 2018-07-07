@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:util="http://www.springframework.org/schema/util"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+    http://www.springframework.org/schema/context
+    http://www.springframework.org/schema/context/spring-context-4.2.xsd
+    http://www.springframework.org/schema/tx
+    http://www.springframework.org/schema/tx/spring-tx-4.2.xsd
+    http://www.springframework.org/schema/aop
+    http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+    http://www.springframework.org/schema/util
+    http://www.springframework.org/schema/util/spring-util-4.2.xsd">
+
+	<bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<property name="driverClassName">
+			<value>${jdbc_driverClassName}</value>
+		</property>
+		<property name="url">
+			<value>${jdbc_url}</value>
+		</property>
+		<property name="username">
+			<value>${jdbc_username}</value>
+		</property>
+		<property name="password">
+			<value>${jdbc_password}</value>
+		</property>
+		<!-- 连接池最大使用连接数 -->
+		<property name="maxActive">
+			<value>${druid_maxActive}</value>
+		</property>
+		<!-- 初始化连接大小 -->
+		<property name="initialSize">
+			<value>${druid_initialSize}</value>
+		</property>
+		<!-- 获取连接最大等待时间 -->
+		<property name="maxWait">
+			<value>${druid_maxWait}</value>
+		</property>
+		<!-- 连接池最大空闲（无效） -->
+		<!-- 
+		<property name="maxIdle">
+			<value>${druid_maxIdle}</value>
+		</property>
+		-->
+		<!-- 连接池最小空闲 -->
+		<property name="minIdle">
+			<value>${druid_minIdle}</value>
+		</property>
+		<!-- 自动清除无用连接 -->
+		<property name="removeAbandoned">
+			<value>${druid_removeAbandoned}</value>
+		</property>
+		<!-- 清除无用连接的等待时间 -->
+		<property name="removeAbandonedTimeout">
+			<value>${druid_removeAbandonedTimeout}</value>
+		</property>
+		<!-- 连接属性 -->
+		<property name="connectionProperties">
+			<value>${druid_connectionProperties}</value>
+		</property>
+	</bean>
+
+	<!-- 对数据源进行事务管理 -->
+	<tx:annotation-driven transaction-manager="transactionManager" />
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager"
+		p:dataSource-ref="dataSource" />
+	<aop:aspectj-autoproxy proxy-target-class="true"/>
+	
+	<!-- mybatis文件配置，扫描所有mapper文件 -->
+	<bean class="org.mybatis.spring.SqlSessionFactoryBean" id="sqlSessionFactory"
+		p:dataSource-ref="dataSource" />
+	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+		p:sqlSessionFactoryBeanName="sqlSessionFactory" p:basePackage="com.tranzvision.gd.*.dao" />
+	
+	<!-- spring jdbc 执行自定义SQL -->
+	<bean id="jdbcTemplate" class="org.springframework.jdbc.core.JdbcTemplate"
+		p:dataSource-ref="dataSource" />
+
+	<!-- spring application context 工具类 -->
+	<bean id="springApplicationContext" class="com.tranzvision.gd.util.base.SpringApplicationContext" />
+
+	<!-- 初始化SrpingBean缓存 -->
+	<bean id="springAutoWiredBeanFactory" class="com.tranzvision.gd.util.base.GetAutowiredSpringBean"
+		init-method="init" />
+
+    <!-- 文件上传功能 -->
+    <!-- 配置文件上传，如果没有使用文件上传可以不用配置，当然如果不配，那么配置文件中也不必引入上传组件包 -->  
+	<bean id="multipartResolver"
+		class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+
+		<!-- setting maximum upload size -->
+		<!-- <property name="maxUploadSize" value="102400" /> -->
+
+	</bean>
+	
+	<!-- 邮件发送bean -->
+	<bean id="sendSmsOrMalServiceImpl" class="com.tranzvision.gd.TZEmailSmsSendBundle.service.impl.SendSmsOrMalServiceImpl" />
+	
+	<!-- 邮件发送bean -->
+	<bean id="sendSmsOrMalQfServiceImpl" class="com.tranzvision.gd.TZEmailSmsQFBundle.service.impl.SendSmsOrMalQfServiceImpl" />
+	
+	<!-- 邮件退信bean -->
+	<bean id="analysisBounceServiceImpl" class="com.tranzvision.gd.TZEmailSmsQFBundle.service.impl.analysisBounceServiceImpl" />
+	
+</beans>

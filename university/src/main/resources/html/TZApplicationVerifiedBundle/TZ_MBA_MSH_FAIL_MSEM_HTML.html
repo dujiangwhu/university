@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+
+<style type="text/css">
+	.main{width:98%;height:auto;margin:5px auto;}
+	.Notice_Title{text-align:left;color:#333;font-weight:bold;font-size:14px;}
+	.Notice_Content{line-height:24px; font-size:14px; font-family:"楷体_GB2312"; text-align:left; color:#000000; margin:5px auto;}
+	.Notice_Table{width:100%;border:1px solid #000;border-collapse:collapse;}
+	.Notice_Table td{border:1px solid #000;font-size:14px;text-align:left;padding:10px 5px;}
+	.notice_foot{text-align:right;line-height:24px; font-size:14px; font-family:"楷体_GB2312"; color:#000000; margin:5px auto;}
+	@media only screen and (min-width:750px) {
+    	.Notice_Table{width:700px;}
+    	.notice_foot{text-align:left;padding-left:600px;}
+    	.main{width:860px;margin:5px}
+    }
+</style>
+<title>面试通知</title>
+</head>
+<body>
+<div class="main">
+  <div class="Notice_Title">%bind(:1)（%bind(:2)）同学</div>
+  <div class="Notice_Content" style="text-indent:2em"> 
+  <strong>感谢您申请北京大学光华管理学院%bind(:3)！</strong>
+  <p style="text-indent:2em">经过评审专家对您申请材料的综合评阅，没有给予您北京大学光华管理学院%bind(:3)面试机会；面对众多优秀人才，我们经常难以抉择，虽然您未取得本年度面试机会，并不代表您不够优秀，主要是因为申请北大光华MSEM的人数众多，我们的面试容量有限，希望您能继续关注我们，也欢迎您明年再次申请北大光华MSEM。</p>
+  <p style="text-indent:2em">如您需要得到其他有关申请和报考方面的信息或帮助，请浏览项目网站：<a href="http://www.gsm.pku.edu.cn/msem/index.html" target="_blank">http://www.gsm.pku.edu.cn/msem/index.html</a><br/><span style="padding-left:27px;">或请随时与我们联系：<a href="mailto:%bind(:4)">%bind(:4)</a></span></p>
+  </div>
+   <br />
+ <br />
+  <div class="Notice_Content"  style="text-align:right">北京大学光华管理学院MSEM项目</div>
+</div>
+</body>
+</html>

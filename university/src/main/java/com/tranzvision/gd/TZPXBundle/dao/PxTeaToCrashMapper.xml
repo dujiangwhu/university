@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxTeaToCrashMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash" >
+    <id column="TEA_OPRID" property="teaOprid" jdbcType="VARCHAR" />
+    <id column="OPERATE_TIME" property="operateTime" jdbcType="TIMESTAMP" />
+    <result column="SCORE" property="score" jdbcType="INTEGER" />
+    <result column="OPERATE_OPRID" property="operateOprid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TEA_OPRID, OPERATE_TIME, SCORE, OPERATE_OPRID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaToCrashKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from PX_TEA_TO_CRASH_T
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaToCrashKey" >
+    delete from PX_TEA_TO_CRASH_T
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash" >
+    insert into PX_TEA_TO_CRASH_T (TEA_OPRID, OPERATE_TIME, SCORE, 
+      OPERATE_OPRID)
+    values (#{teaOprid,jdbcType=VARCHAR}, #{operateTime,jdbcType=TIMESTAMP}, #{score,jdbcType=INTEGER}, 
+      #{operateOprid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash" >
+    insert into PX_TEA_TO_CRASH_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="teaOprid != null" >
+        TEA_OPRID,
+      </if>
+      <if test="operateTime != null" >
+        OPERATE_TIME,
+      </if>
+      <if test="score != null" >
+        SCORE,
+      </if>
+      <if test="operateOprid != null" >
+        OPERATE_OPRID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="teaOprid != null" >
+        #{teaOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="operateTime != null" >
+        #{operateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="score != null" >
+        #{score,jdbcType=INTEGER},
+      </if>
+      <if test="operateOprid != null" >
+        #{operateOprid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash" >
+    update PX_TEA_TO_CRASH_T
+    <set >
+      <if test="score != null" >
+        SCORE = #{score,jdbcType=INTEGER},
+      </if>
+      <if test="operateOprid != null" >
+        OPERATE_OPRID = #{operateOprid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash" >
+    update PX_TEA_TO_CRASH_T
+    set SCORE = #{score,jdbcType=INTEGER},
+      OPERATE_OPRID = #{operateOprid,jdbcType=VARCHAR}
+    where TEA_OPRID = #{teaOprid,jdbcType=VARCHAR}
+      and OPERATE_TIME = #{operateTime,jdbcType=TIMESTAMP}
+  </update>
+</mapper>

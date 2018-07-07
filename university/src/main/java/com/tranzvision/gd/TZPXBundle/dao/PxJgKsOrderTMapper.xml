@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxJgKsOrderTMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
+    <id column="TZ_JG_ID" property="tzJgId" jdbcType="VARCHAR" />
+    <id column="TZ_ORDER_ID" property="tzOrderId" jdbcType="VARCHAR" />
+    <result column="TZ_TIMECARD_BEFORE" property="tzTimecardBefore" jdbcType="INTEGER" />
+    <result column="TZ_TIMECARD_AFTER" property="tzTimecardAfter" jdbcType="INTEGER" />
+    <result column="TZ_TIMECARD_ADD" property="tzTimecardAdd" jdbcType="INTEGER" />
+    <result column="TZ_TIMECARD_MONEY" property="tzTimecardMoney" jdbcType="INTEGER" />
+    <result column="ROW_LASTMANT_DTTM" property="rowLastmantDttm" jdbcType="TIMESTAMP" />
+    <result column="ROW_LASTMANT_OPRID" property="rowLastmantOprid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TZ_JG_ID, TZ_ORDER_ID, TZ_TIMECARD_BEFORE, TZ_TIMECARD_AFTER, TZ_TIMECARD_ADD, TZ_TIMECARD_MONEY, 
+    ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderTKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from px_jg_ks_order_t
+    where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
+      and TZ_ORDER_ID = #{tzOrderId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderTKey" >
+    delete from px_jg_ks_order_t
+    where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
+      and TZ_ORDER_ID = #{tzOrderId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
+    insert into px_jg_ks_order_t (TZ_JG_ID, TZ_ORDER_ID, TZ_TIMECARD_BEFORE, 
+      TZ_TIMECARD_AFTER, TZ_TIMECARD_ADD, TZ_TIMECARD_MONEY, 
+      ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID)
+    values (#{tzJgId,jdbcType=VARCHAR}, #{tzOrderId,jdbcType=VARCHAR}, #{tzTimecardBefore,jdbcType=INTEGER}, 
+      #{tzTimecardAfter,jdbcType=INTEGER}, #{tzTimecardAdd,jdbcType=INTEGER}, #{tzTimecardMoney,jdbcType=INTEGER}, 
+      #{rowLastmantDttm,jdbcType=TIMESTAMP}, #{rowLastmantOprid,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
+    insert into px_jg_ks_order_t
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tzJgId != null" >
+        TZ_JG_ID,
+      </if>
+      <if test="tzOrderId != null" >
+        TZ_ORDER_ID,
+      </if>
+      <if test="tzTimecardBefore != null" >
+        TZ_TIMECARD_BEFORE,
+      </if>
+      <if test="tzTimecardAfter != null" >
+        TZ_TIMECARD_AFTER,
+      </if>
+      <if test="tzTimecardAdd != null" >
+        TZ_TIMECARD_ADD,
+      </if>
+      <if test="tzTimecardMoney != null" >
+        TZ_TIMECARD_MONEY,
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM,
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tzJgId != null" >
+        #{tzJgId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzOrderId != null" >
+        #{tzOrderId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzTimecardBefore != null" >
+        #{tzTimecardBefore,jdbcType=INTEGER},
+      </if>
+      <if test="tzTimecardAfter != null" >
+        #{tzTimecardAfter,jdbcType=INTEGER},
+      </if>
+      <if test="tzTimecardAdd != null" >
+        #{tzTimecardAdd,jdbcType=INTEGER},
+      </if>
+      <if test="tzTimecardMoney != null" >
+        #{tzTimecardMoney,jdbcType=INTEGER},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
+    update px_jg_ks_order_t
+    <set >
+      <if test="tzTimecardBefore != null" >
+        TZ_TIMECARD_BEFORE = #{tzTimecardBefore,jdbcType=INTEGER},
+      </if>
+      <if test="tzTimecardAfter != null" >
+        TZ_TIMECARD_AFTER = #{tzTimecardAfter,jdbcType=INTEGER},
+      </if>
+      <if test="tzTimecardAdd != null" >
+        TZ_TIMECARD_ADD = #{tzTimecardAdd,jdbcType=INTEGER},
+      </if>
+      <if test="tzTimecardMoney != null" >
+        TZ_TIMECARD_MONEY = #{tzTimecardMoney,jdbcType=INTEGER},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
+      and TZ_ORDER_ID = #{tzOrderId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
+    update px_jg_ks_order_t
+    set TZ_TIMECARD_BEFORE = #{tzTimecardBefore,jdbcType=INTEGER},
+      TZ_TIMECARD_AFTER = #{tzTimecardAfter,jdbcType=INTEGER},
+      TZ_TIMECARD_ADD = #{tzTimecardAdd,jdbcType=INTEGER},
+      TZ_TIMECARD_MONEY = #{tzTimecardMoney,jdbcType=INTEGER},
+      ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR}
+    where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
+      and TZ_ORDER_ID = #{tzOrderId,jdbcType=VARCHAR}
+  </update>
+</mapper>

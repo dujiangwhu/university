@@ -1,0 +1,21 @@
+Ext.define('KitchenSink.view.enrollmentManagement.materialsReview.materialsReviewExamineeWindowModel',{
+	extend: 'Ext.data.Model',
+    field:[
+    	{name:'classId'},
+    	{name:'className'},
+    	{name:'batchId'},
+    	{name:'batchName'},
+    	{name:'name'},
+    	{name:'mssqh'},
+    	{name:'appinsId'},
+    	{name:'sex'},
+    	{name:'sexDesc'},
+		{name:'industryDesc'},
+		{name:'colorType'},
+    	{name:'judgeList'},
+    	{name:'reviewStatusDesc'},
+		{name:'negativeList'},
+		{name:'autoLabel'},
+		{name:'manualLabel'}
+    ]
+});

@@ -1,0 +1,278 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+	<head>
+		<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+		<title>报名表</title>
+
+		<link rel="stylesheet" href="%bind(:1)/statics/js/lib/jqueryui/jquery-ui.min.css" type="text/css" />
+		<link rel="stylesheet" href="%bind(:1)/statics/js/lib/timepicker-addon/jquery-ui-timepicker-addon.css" type="text/css" />
+		<link rel="stylesheet" href="%bind(:1)/statics/css/FortAwesome/css/font-awesome.min.css" type="text/css" />
+		<link rel="stylesheet" href="%bind(:1)/statics/css/website/chosen.css" type="text/css" />
+		<link rel="stylesheet" href="%bind(:1)/statics/js/lib/fancyBox/jquery.fancybox.css" type="text/css" />
+		<link rel="stylesheet" href="%bind(:1)/statics/js/lib/fancyBox/jquery.fancybox-thumbs.css" type="text/css" />
+		<link rel="stylesheet" href="%bind(:1)/statics/css/appeditor/registration-public.css" type="text/css"/>
+		<link rel="stylesheet" href="%bind(:1)/statics/css/appeditor/registration-%bind(:21)page.css" type="text/css"/>
+
+		<script type="text/javascript">
+			var TzUniversityContextPath = "%bind(:1)";
+		</script>
+
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/jquery.min.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/util/layer.js" ></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/extjs/app/view/website/set/js/pagefunc.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/fancyBox/jquery.fancybox.pack.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/fancyBox/jquery.fancybox-thumbs.js"></script>
+
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/appwidget/common.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/flowplayer/flowplayer-3.2.12.min.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/util/swfobject.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/appwidget/Survey.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/appwidget/jquery.form.js"></script> 
+		
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/json.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/appwidget/Answer.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/util/checkExplorer.js" charset="utf-8"></script>
+		
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/jqueryui/jquery-ui.min.js"></script>
+		
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/appwidget/baseComponent.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/tranzvision/appwidget/ValidationRules.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/formvalidator/formValidator.js"></script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/jquery/chosen.jquery.js" ></script>
+		<style>
+			.main_inner_connent_info_left{width: %bind(:19)}
+			.main_inner_content_info_right{width: %bind(:20)}
+		</style>
+		<script type="text/javascript">
+			MsgSet = %bind(:10);
+			var isEdit = "N";							// 是否管理员查看
+			SurveyBuild.BMB_LANG = "%bind(:18)";
+			SurveyBuild.tzGeneralURL = "%bind(:1)/dispatcher";		//统一接口
+			var currentPageId = "";  
+			var componentData = %bind(:2);				//组件列表,报名表数据
+			var templId = "%bind(:3)";					//模板ＩＤ
+			SurveyBuild.appInsId = "%bind(:4)";			//报名表实例ID
+			var data = %bind(:5);						// 模板的data
+
+			if(componentData){
+ 				SurveyBuild["_componentConfig"] = componentData ;				
+				$.each(componentData,function(index,obj){
+					SurveyBuild["_componentIndex"].push(obj.className);
+				});
+			}
+
+			$(document).ready(function(){
+				//点击菜单的动作 如果是顶级层，则不做动作
+				$(".regmain-menu ul li[class!='menu-active-top']").click(function(){
+					
+					
+					var thisid = $(this).attr('id');
+					
+					var pageno = 0;
+					var pagelen = 0;
+					//var index = 0;
+					//重新计算pageno和pagelen  顶层的不算
+					$.each($(".regmain-menu ul li"),function(i,obj){
+						//index = index +1;
+						if ($(obj).attr('class')!="menu-active-top") {	
+							pagelen = pagelen +1;
+							
+							////console.log($(obj).attr('id'));
+							if ($(obj).attr('id')== thisid) {
+								////console.log($(obj).attr('id')+":GO");
+								pageno = pagelen;
+							}
+						}
+					});
+
+					$(".page" + pageno).show();
+					
+					for(var i =1;i<= pagelen ;i++){
+						i != pageno && 	$(".page"+i).hide();
+					}
+					
+					$(this).siblings().removeClass("menu-active");
+					$(this).addClass("menu-active");
+
+					$.each($(".menu-icon.left img"),function(i,obj){
+						var imgPath = $(obj).attr("src");
+						imgPath = imgPath.replace("-white.png", ".png");
+						$(obj).attr("src",imgPath);
+					})
+					$.each($(".menu-gou.right img"),function(i,obj){
+						var imgPath = $(obj).attr("src");
+						imgPath = imgPath.replace("-white.png", ".png");
+						if(imgPath!=""&&imgPath!=undefined){
+							$(obj).attr("src",imgPath);
+							$(obj).show();
+						}else{
+							$(obj).hide();
+						}
+					})
+					
+					var leftPath = $(this).find("img").first().attr("src");
+					var rightPath = $(this).find("img").last().attr("src");
+					if(leftPath){
+						$(this).find("img").first().attr("src",leftPath.replace(".png", "-white.png"));
+					}
+					if(rightPath){
+						$(this).find("img").last().attr("src",rightPath.replace(".png", "-white.png"));
+						$(this).find("img").last().show();
+					}else{
+						$(this).find("img").last().hide();
+					}
+				});
+
+				$("#fancybox-main .fancybox-thumbs").fancybox({
+					prevEffect : "fade",
+					nextEffect : "fade",
+					padding : 10, //内边距
+					margin : 20, //外边距
+					autoSize : false,//是否自适应内容的宽高
+					autoResize : false,//是否自适应窗口变化
+					aspectRatio : true,//是否保持长宽比
+
+					closeBtn  : true, //是否显示关闭图标
+					arrows    : true, //是否显示两侧导航小箭头
+					loop : false,//是否循环播放
+					tpl : {
+						wrap	: '<div class="fancybox-wrap" tabIndex="-1"><div class="fancybox-skin"><div class="fancybox-outer"><div class="fancybox-inner"></div></div><div class="photoButton"><a class="small" title="缩小" onclick=setImageSize(this,"S")></a><a class="big" title="放大"  onclick=setImageSize(this,"B")></a></div></div></div>',	
+					},
+					helpers : {
+						thumbs : {
+							width  : 50,
+							height : 50,
+							position : "bottom"
+						},
+						overlay : {
+							closeClick : true,
+							showEarly  : false, // 立即打开 fancyBox 还是等内容加载完毕再打开
+						},
+						title : {
+							type : "outside" // title 的位置，可选 'float'、 'inside'、'outside' 或 'over'
+						},
+					},
+					afterLoad : function() {
+						this.title = (this.index + 1) + "/" + this.group.length + " " + this.title;
+					}
+				});
+			});
+			//上传进度条
+			function loading(){
+				var loadi = layer.load("%bind(:16)…");
+				layer.area(loadi,"top:200px");
+			}
+			function processing(){								
+				var loadi = layer.load("%bind(:17)…");								
+				layer.area(loadi,"top:200px");
+			}
+		</script>
+	</head>
+	<body>
+		<!--头部内容开始
+		<div class="reg-top">%bind(:11)</div>-->
+		<div id="headarea" class="top assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="H" area-type="YT" area-id=""> 
+    
+		</div> 
+		<!--头部内容结束-->
+		
+		<!--主体内容开始-->
+		<div class="reg-main">
+			<div class="regmain-menu left">
+				<ul>%bind(:6)</ul>
+			</div>
+			<div class="regmain-con right">
+				<form method="post" name="main_list" id="main_list"></form>
+		        <div class="operation-btn">
+		        	<a href="#" style="display:none;"><div class="btn-action"><span class="operation-btn-icon"><img src="%bind(:1)/statics/images/appeditor/new/btn-prev.png" /></span>&nbsp;&nbsp;%bind(:13)</div></a>
+		        	<a href="#" style="display:none;"><div class="btn-save">%bind(:15)&nbsp;&nbsp;<span class="operation-btn-icon"><img src="%bind(:1)/statics/images/appeditor/new/btn-save.png" /></span></div></a>
+		        	<a href="#" style="display:none;"><div class="btn-action">%bind(:14)&nbsp;&nbsp;<span class="operation-btn-icon"><img src="%bind(:1)/statics/images/appeditor/new/btn-next.png" /></span></div></a>
+		            <div class="clear"></div>
+		        </div>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<!--主体内容结束-->
+		
+		<!--底部开始
+		<div class="footer">
+			<div class="footer-main">
+				%bind(:12)
+			</div>
+		</div>-->
+		<div id="footarea" class="foot assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="F" area-type="YW" area-id=""> 
+   
+   </div>
+		<!--底部结束-->
+		<div id="fancybox-main" style="display: none">
+      			<ul></ul>
+		</div>
+		<input id="ParamCon" type="hidden" name="ParamCon"></input>
+		<input id="ParamValue" type="hidden" name="ParamValue"></input>
+		
+		<input id="menuId" type="hidden" name="menuId" value="%bind(:9)"></input>
+		<input id="siteId" type="hidden" name="siteId" value="%bind(:7)"></input>
+ 
+		<script type="text/javascript">
+    		 $(document).ready(function(){
+				
+				LoadHeader("%bind(:8)","%bind(:7)");
+				LoadFooter("%bind(:8)","%bind(:7)");
+				//LoadWelcome("%bind(:8)","%bind(:7)");
+			
+				//checkExplorer($("#lang").val());	
+
+				processing();
+				
+				var script1 = document.createElement("script");
+				script1.setAttribute("src","%bind(:1)/statics/js/tranzvision/appwidget/preLoadSurvey.js?_=" + Math.random());
+				document.getElementsByTagName("head")[0].appendChild(script1);
+				
+				var $flowtips = $("#flowtips");
+				if (navigator.userAgent.indexOf("IE") >= 0) { 
+				//IE下的事件 
+					script1.onreadystatechange = function () { 
+						//IE下的判断，判断是否加载完成 
+						if (script1 && (script1.readyState == "loaded" || script1.readyState == "complete")) { 
+							script1.onreadystatechange = null; 
+
+							$("#main_list div[id*='Tip']").hover(function(){
+									
+									$tipsMsgDiv = $(this).children("div");
+									var offsetXY = $tipsMsgDiv.offset();
+									var tipsMsg = $tipsMsgDiv.attr("tips");
+									if(tipsMsg!="" && $.trim(tipsMsg).length > 0){
+										$flowtips.html(tipsMsg).css({"left":offsetXY.left+20,"top":offsetXY.top+6}).show();
+									}
+								},function(){
+									$flowtips.hide();
+								}
+							);	
+						} 
+					}; 
+				}else { 
+					script1.onload = function () { 
+						script1.onload = null; 
+						
+						$("#main_list div[id*='Tip']").hover(function(){
+								
+								$tipsMsgDiv = $(this).children("div");
+								var offsetXY = $tipsMsgDiv.offset();
+								var tipsMsg = $tipsMsgDiv.attr("tips");
+								//console.log(tipsMsg);
+								if(tipsMsg!="" && $.trim(tipsMsg).length > 0){
+									$flowtips.html(tipsMsg).css({"left":offsetXY.left+20,"top":offsetXY.top+6}).show();
+								}
+							},function(){
+								$flowtips.hide();
+							}
+						);	
+					}; 
+				}
+
+			});
+		</script>
+		<script type="text/javascript" src="%bind(:1)/statics/js/lib/timepicker-addon/jquery-ui-timepicker-addon.js"></script>
+	</body>
+
+</html>

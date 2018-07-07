@@ -1,0 +1,96 @@
+<html>
+<head>
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta charset="utf-8">
+<meta name="format-detection" content="telephone=no">
+<meta name="viewport" content="width=device-width,initial-scale=1.0,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0;"/>
+<title></title>
+<link href="mobilepage_stylecss" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+
+	//防止页面后退
+	history.pushState(null, null, document.URL);
+	window.addEventListener('popstate', function () {
+	    history.pushState(null, null, document.URL);
+	});
+	
+	var TzUniversityContextPath = "%bind(:1)";
+	var TZ_GD_LOGIN_SITEI_ORG_CODE = "%bind(:2)";
+	var TZ_GD_LOGIN_SITEI_ID = "%bind(:3)";
+	var TZ_GD_SITEI_ISD = "";
+	
+	//查看帮助文档
+	function viewHelp(_this){
+		var helpUrl = $(_this).attr("sUrl");
+		if(helpUrl==""||helpUrl==null||helpUrl==undefined){
+			layer.open({
+			   content: '未配置帮助文档，请联系管理员',
+			   skin: 'msg',
+			   time: 2 //2秒后自动关闭
+			});
+		}else{
+			window.location.href = helpUrl;
+		}
+	}
+</script>
+<script>
+	var _hmt = _hmt || [];
+	(function() {
+	  var hm = document.createElement("script");
+	  hm.src = "https://hm.baidu.com/hm.js?cda1b7baee67b76ffc0ec47ced60e717";
+	  var s = document.getElementsByTagName("script")[0]; 
+	  s.parentNode.insertBefore(hm, s);
+	})();
+</script>
+<script type="text/javascript" src="%bind(:1)/statics/js/website/m/jquery-1.8.3.min.js"></script>
+<script type="text/javascript" src="%bind(:1)/statics/js/website/m/rem.js"></script>
+<script type="text/javascript" src="%bind(:1)/statics/js/website/m/common.js"></script>
+<script type="text/javascript" src="%bind(:1)/statics/js/lib/layer/mobile/layer.js"></script>
+<script type="text/javascript"
+	src="%bind(:1)/statics/js/tranzvision/extjs/app/view/website/set/js/mpagefunc.js"></script>
+
+</head>
+<body>
+     <div class="viewport-adaptive">
+         <div class="bg" id="body_login">
+            <form action="" method="post" enctype="multipart/form-data" name="Loginform" id="Loginform">
+            <div class="login_ab">
+            	<div class="login_account">
+            		<div class="users"></div>
+            		<input class="login_input" type="text" name="userName" id="userName" placeholder="手机/邮箱">
+            	</div>
+            	<div class="login_email">
+            		<div class="login_mm"></div>
+            		<input class="login_input" type="password" name="password" id="password" placeholder="密码">
+            	</div>
+            	<p class="login_tips" id="errormsg" style="display:none;"></p>
+            	<div class="clear"></div>
+            	<a href="javascript:void(0)" class="login_btn" onclick="Login()">登 录</a>
+            	<a href="javascript:void(0)" class="login_new" onclick="goToRegister()">新用户注册</a>
+            	<div class="login_bottom">
+            		<a href="javascript:void(0)" class="login_forget" onclick="forgetPwd()">
+            			<i></i>
+            			<span>忘记密码</span>
+            		</a>
+            		<a id="resetbnt" href="javascript:void(0)" class="account_active" onclick="reactivate()" style="display:none;">
+            			<i></i>
+            			<span>激活</span>
+            		</a>
+            		<a href="javascript:void(0)" class="login_help" sUrl = "%bind(:5)" onclick="viewHelp(this)">
+            			<i></i>
+            			<span>帮助中心</span>
+            		</a>
+            	</div>
+				<div style="font-size:0.54rem;color:#d81e06;padding:10px;margin-top:5px;">因系统升级，登录如遇密码错误，请通过“<a href="javascript:void(0)" onclick="forgetPwd()" style="display: inline;color:#8f5dbf;">重置密码</a>”按钮重置密码后登陆！</div>
+            </div>
+            <input id="pagetype" name="pagetype" value="loginpage" type="hidden">
+            <input id="jgid" name="jgid" type="hidden" value="%bind(:2)">
+            <input id="siteid" name="siteid" type="hidden" value="%bind(:3)">
+            <input id="openid" name="openid" type="hidden" value="%bind(:4)">
+            <input id="lang" name="lang" type="hidden" value="ZHS">
+            <input id="operator" name="operator" value="R" type="hidden"> 
+            </form>
+         </div>
+     </div>
+</body>
+</html>
