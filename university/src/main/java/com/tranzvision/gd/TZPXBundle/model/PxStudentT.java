@@ -1,12 +1,6 @@
 package com.tranzvision.gd.TZPXBundle.model;
 
-import java.util.Date;
-
-public class PxStudentT {
-    private String oprid;
-
-    private String tzJgId;
-
+public class PxStudentT extends PxStudentTKey {
     private String photoSysfilename;
 
     private String tzFilePath;
@@ -15,43 +9,21 @@ public class PxStudentT {
 
     private Integer age;
 
-    private String contact;
+    private String qq;
 
-    private String contactQq;
+    private String phone;
+
+    private String email;
+
+    private String contact;
 
     private String contactPhone;
 
-    private String contactEmail;
-
-    private String emergentContact;
-
-    private String emergentContactPhone;
-
-    private String emergentContactEmail;
+    private String contactAddress;
 
     private Integer timecardRemaind;
 
     private String stuStatus;
-
-    private Date rowLastmantDttm;
-
-    private String rowLastmantOprid;
-
-    public String getOprid() {
-        return oprid;
-    }
-
-    public void setOprid(String oprid) {
-        this.oprid = oprid == null ? null : oprid.trim();
-    }
-
-    public String getTzJgId() {
-        return tzJgId;
-    }
-
-    public void setTzJgId(String tzJgId) {
-        this.tzJgId = tzJgId == null ? null : tzJgId.trim();
-    }
 
     public String getPhotoSysfilename() {
         return photoSysfilename;
@@ -85,20 +57,36 @@ public class PxStudentT {
         this.age = age;
     }
 
+    public String getQq() {
+        return qq;
+    }
+
+    public void setQq(String qq) {
+        this.qq = qq == null ? null : qq.trim();
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone == null ? null : phone.trim();
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email == null ? null : email.trim();
+    }
+
     public String getContact() {
         return contact;
     }
 
     public void setContact(String contact) {
         this.contact = contact == null ? null : contact.trim();
-    }
-
-    public String getContactQq() {
-        return contactQq;
-    }
-
-    public void setContactQq(String contactQq) {
-        this.contactQq = contactQq == null ? null : contactQq.trim();
     }
 
     public String getContactPhone() {
@@ -109,36 +97,12 @@ public class PxStudentT {
         this.contactPhone = contactPhone == null ? null : contactPhone.trim();
     }
 
-    public String getContactEmail() {
-        return contactEmail;
+    public String getContactAddress() {
+        return contactAddress;
     }
 
-    public void setContactEmail(String contactEmail) {
-        this.contactEmail = contactEmail == null ? null : contactEmail.trim();
-    }
-
-    public String getEmergentContact() {
-        return emergentContact;
-    }
-
-    public void setEmergentContact(String emergentContact) {
-        this.emergentContact = emergentContact == null ? null : emergentContact.trim();
-    }
-
-    public String getEmergentContactPhone() {
-        return emergentContactPhone;
-    }
-
-    public void setEmergentContactPhone(String emergentContactPhone) {
-        this.emergentContactPhone = emergentContactPhone == null ? null : emergentContactPhone.trim();
-    }
-
-    public String getEmergentContactEmail() {
-        return emergentContactEmail;
-    }
-
-    public void setEmergentContactEmail(String emergentContactEmail) {
-        this.emergentContactEmail = emergentContactEmail == null ? null : emergentContactEmail.trim();
+    public void setContactAddress(String contactAddress) {
+        this.contactAddress = contactAddress == null ? null : contactAddress.trim();
     }
 
     public Integer getTimecardRemaind() {
@@ -155,21 +119,5 @@ public class PxStudentT {
 
     public void setStuStatus(String stuStatus) {
         this.stuStatus = stuStatus == null ? null : stuStatus.trim();
-    }
-
-    public Date getRowLastmantDttm() {
-        return rowLastmantDttm;
-    }
-
-    public void setRowLastmantDttm(Date rowLastmantDttm) {
-        this.rowLastmantDttm = rowLastmantDttm;
-    }
-
-    public String getRowLastmantOprid() {
-        return rowLastmantOprid;
-    }
-
-    public void setRowLastmantOprid(String rowLastmantOprid) {
-        this.rowLastmantOprid = rowLastmantOprid == null ? null : rowLastmantOprid.trim();
     }
 }

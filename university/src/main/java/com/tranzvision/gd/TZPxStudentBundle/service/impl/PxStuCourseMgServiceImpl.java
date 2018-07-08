@@ -15,8 +15,9 @@ import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxStudentMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxStudent;
+import com.tranzvision.gd.TZPXBundle.dao.PxStudentTMapper;
+import com.tranzvision.gd.TZPXBundle.model.PxStudentT;
+import com.tranzvision.gd.TZPXBundle.model.PxStudentTKey;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
@@ -43,7 +44,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 	private PsTzJgBaseTMapper psTzJgBaseTMapper;
 	
 	@Autowired
-	private PxStudentMapper pxStudentMapper;
+	private PxStudentTMapper pxStudentTMapper;
 	
 	@Autowired
 	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
@@ -111,6 +112,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 
 				// oprid;
 				String str_oprid = jacksonUtil.getString("OPRID");
+				String str_orgid = jacksonUtil.getString("ORGID");
 				// 头像地址;
 				String titleImageUrlSQL = "SELECT B.TZ_ATT_A_URL,A.TZ_ATTACHSYSFILENA FROM PS_TZ_OPR_PHT_GL_T A , PS_TZ_OPR_PHOTO_T B WHERE A.OPRID=? AND A.TZ_ATTACHSYSFILENA = B.TZ_ATTACHSYSFILENA";
 				Map<String, Object> imgMap = jdbcTemplate.queryForMap(titleImageUrlSQL, new Object[] { str_oprid });
@@ -137,8 +139,10 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 				} else {
 					String name = (String) userMap.get("TZ_REALNAME");
 					String phone = (String) userMap.get("TZ_MOBILE");
-					
-					PxStudent pxStudent = pxStudentMapper.selectByPrimaryKey(str_oprid);
+					PxStudentTKey pxStudentTKey = new PxStudentTKey();
+					pxStudentTKey.setOprid(str_oprid);
+					pxStudentTKey.setTzJgId(str_orgid);
+					PxStudentT pxStudent = pxStudentTMapper.selectByPrimaryKey(pxStudentTKey);
 					if (pxStudent == null) {
 						errMsg[0] = "1";
 						errMsg[1] = "不存在该用户！";
@@ -189,12 +193,16 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 				// 类型标志;
 				//Map<String, Object> infoData  = jacksonUtil.getMap("update");
 				String oprid=jacksonUtil.getString("oprid");
+				String orgid=jacksonUtil.getString("orgid");
 				System.out.println(jacksonUtil.getString("sex"));
 				if(oprid==null){
 					errMsg[0] = "1";
 					errMsg[1] = "保存失败";
 				}else{
-					PxStudent pxStudent=pxStudentMapper.selectByPrimaryKey(oprid);
+					PxStudentTKey pxStudentTKey = new PxStudentTKey();
+					pxStudentTKey.setOprid(oprid);
+					pxStudentTKey.setTzJgId(orgid);
+					PxStudentT pxStudent=pxStudentTMapper.selectByPrimaryKey(pxStudentTKey);
 					if(pxStudent==null){
 						errMsg[0] = "1";
 						errMsg[1] = "用户不存在！";
@@ -208,7 +216,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 						pxStudent.setContactAddress(jacksonUtil.getString("contactorAddress"));
 						pxStudent.setStuStatus(jacksonUtil.getString("statu"));
 						
-						pxStudentMapper.updateByPrimaryKey(pxStudent);
+						pxStudentTMapper.updateByPrimaryKey(pxStudent);
 					}					
 				}
 			}
