@@ -81,7 +81,7 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TZ_JG_ID", "OPRID", "TZ_REALNAME","SEX","AGE","QQ","PHONE", "EMAIL","TIMECARD_REMAIND" };
+			String[] resultFldArray = { "TZ_JG_ID", "OPRID", "TZ_REALNAME","SEX","AGE","QQ","PHONE", "EMAIL","TIMECARD_REMAIND" ,"TIMECARD_USED" };
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -103,7 +103,8 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 					mapList.put("stuPhone", rowList[6]);
 					mapList.put("stuEmail", rowList[7]);
 					mapList.put("stuRemaindTimeCard", rowList[8]);
-
+					mapList.put("stuUsedTimeCard", rowList[9]);
+					
 					listData.add(mapList);
 				}
 
@@ -197,7 +198,7 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 
 				if ("ADDTIMECARD".equals(typeFlag)) {
 					// 机构编号;
-					String tzJgId = infoData.get("orgId").toString().toUpperCase();
+					String tzJgId = infoData.get("orgid").toString().toUpperCase();
 					TzFilterIllegalCharacter tzFilterIllegalCharacter = new TzFilterIllegalCharacter();
 					tzJgId = tzFilterIllegalCharacter.filterAllIllegalCharacter(tzJgId);
 					
@@ -252,8 +253,13 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 							pxStudentTKey.setTzJgId(tzJgId);
 							PxStudentT pxStudentT=pxStudentTMapper.selectByPrimaryKey(pxStudentTKey);
 							
-						    int stuTimeCardRemaind = sqlQuery.queryForObject("SELECT TIMECARD_REMAIND FROM PX_STUDENT_T WHERE OPRID = ? AND TZ_JG_ID = ?",
-						    		new Object[] { tzStuId,tzJgId },"Integer");
+
+							Map<String, Object> stuInfo = sqlQuery.queryForMap("SELECT TIMECARD_REMAIND FROM PX_STUDENT_T WHERE OPRID = ? AND TZ_JG_ID = ?", 
+									new Object[] { tzStuId,tzJgId });
+							
+						    		
+						    int stuTimeCardRemaind = stuInfo.get("TIMECARD_REMAIND") ==null?0:Integer.parseInt(String.valueOf(stuInfo.get("TIMECARD_REMAIND")));
+							//int stuTimeCardUsed = stuInfo.get("TIMECARD_USED") ==null?0:Integer.parseInt(String.valueOf(stuInfo.get("TIMECARD_USED")));
 						    
 						    int stuTimeCardRemaindAfter = stuTimeCardRemaind + stuTimeCardNumber;
 						    pxStudentT.setTimecardRemaind(stuTimeCardRemaindAfter);

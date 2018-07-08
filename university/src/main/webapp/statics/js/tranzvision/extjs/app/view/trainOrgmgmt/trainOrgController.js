@@ -533,6 +533,97 @@
             cmp.show();
         }
     },
+	orgStudentInfoClass: function(){
+		var cmp, className, ViewClass, clsProto;
+		var themeName = Ext.themeName;
+    	//是否有访问权限
+		Ext.tzSetCompResourses("TZ_PX_STU_COM");
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_STU_COM"]["TZ_PX_STU_STD"];
+		if( pageResSet == "" || pageResSet == undefined){
+			Ext.MessageBox.alert('提示', '您没有访问或修改数据的权限');
+			return;
+		}
+		//该功能对应的JS类
+		var className = pageResSet["jsClassName"];
+		if(className == "" || className == undefined){
+			Ext.MessageBox.alert('提示', '未找到该功能页面对应的JS类，页面ID为：TZ_PX_STU_STD，请检查配置。');
+			return;
+		}
+        //className = 'KitchenSink.view.trainOrgmgmt.orgInfoPanel';
+        if(!Ext.ClassManager.isCreated(className)){
+			Ext.syncRequire(className);
+		}
+        ViewClass = Ext.ClassManager.get(className);
+
+        clsProto = ViewClass.prototype;
+
+        if (clsProto.themes) {
+            clsProto.themeInfo = clsProto.themes[themeName];
+
+            if (themeName === 'gray') {
+                clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.classic);
+            } else if (themeName !== 'neptune' && themeName !== 'classic') {
+                if (themeName === 'crisp-touch') {
+                    clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes['neptune-touch']);
+                }
+                clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.neptune);
+            }
+            // <debug warn>
+            // Sometimes we forget to include allowances for other themes, so issue a warning as a reminder.
+            if (!clsProto.themeInfo) {
+                Ext.log.warn ( 'Example \'' + className + '\' lacks a theme specification for the selected theme: \'' +
+                    themeName + '\'. Is this intentional?');
+            }
+            // </debug>
+        }
+
+        cmp = new ViewClass();
+
+        return cmp;
+    },
+	orgStudentMg: function(btn) {
+        var grid =btn.up('grid');
+        //选中行
+		   var selList = grid.getSelectionModel().getSelection();
+		   //选中行长度
+		   var checkLen = selList.length;
+		   if(checkLen == 0){
+				Ext.Msg.alert("提示","请选择一条要修改的记录");
+				return;
+		   }else if(checkLen >1){
+			   Ext.Msg.alert("提示","只能选择一条要修改的记录");
+			   return;
+		   }
+
+		   var orgId = selList[0].get("orgId");
+		   /*if(orgId == "ADMIN"){
+				Ext.Msg.alert("提示","平台管理机构为系统预留机构账号，不能修改");
+				return;
+		   }*/
+		   this.orgStudentMgById(orgId);
+    },
+	orgStudentMgById: function(orgId){
+		var contentPanel = Ext.getCmp('tranzvision-framework-content-panel');
+       		contentPanel.body.addCls('kitchensink-example');
+
+            //更新机构信息类
+			var cmp = this.orgStudentInfoClass();
+			//操作标志
+			cmp.actType = "update";
+			
+			cmp.orgId = orgId;
+
+		tab = contentPanel.add(cmp);
+
+		contentPanel.setActiveTab(tab);
+
+		Ext.resumeLayouts(true);
+
+		if (cmp.floating) {
+			cmp.show();
+		}
+	},
+	
     initOrg: function() {
         return;
         var contentPanel = Ext.getCmp('tranzvision-framework-content-panel');

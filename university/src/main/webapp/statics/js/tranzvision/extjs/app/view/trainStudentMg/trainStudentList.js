@@ -97,11 +97,11 @@
 			columns: [{ 
 				text: Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_STD.orgid","机构编号"),
 				dataIndex: 'orgid',
-				hidden: false
+				hidden: true
 			},{ 
 				text: Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_STD.oprid","学员ID"),
 				dataIndex: 'oprid',
-				hidden: false
+				hidden: true
 			},{
 				xtype: 'rownumberer',
 				text: '序号',
@@ -145,6 +145,10 @@
 			},{
 				text: Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_STD.stuRemaindTimeCard","剩余课时"),
 				dataIndex: 'stuRemaindTimeCard',
+				width: 120
+			},{
+				text: Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_STD.stuUsedTimeCard","已使用课时"),
+				dataIndex: 'stuUsedTimeCard',
 				width: 120
 			},
 			{

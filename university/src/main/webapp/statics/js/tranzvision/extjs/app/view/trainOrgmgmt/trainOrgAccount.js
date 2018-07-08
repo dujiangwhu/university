@@ -43,7 +43,8 @@
                     items:[
                         {text:"查询",tooltip:"查询数据",iconCls: "query",handler:'queryOrgAccount'},
                         {text:"新增",tooltip:"新增数据",iconCls:"add",handler:'addOrgAccount'},
-                        {text:"编辑",tooltip:"编辑数据",iconCls:"edit",handler:'editOrgAccount'}/*,{text:"删除",tooltip:"删除数据",iconCls:"remove",handler:'deleteOrgAccount'}*/
+                        {text:"编辑",tooltip:"编辑数据",iconCls:"edit",handler:'editOrgAccount'},
+						{text:"学员管理",tooltip:"学员管理",iconCls:"view",handler:'orgStudentMg'}
                     ]
                 }],
                 columns: [{

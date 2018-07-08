@@ -23,6 +23,8 @@ public class PxStudentT extends PxStudentTKey {
 
     private Integer timecardRemaind;
 
+    private Integer timecardUsed;
+
     private String stuStatus;
 
     public String getPhotoSysfilename() {
@@ -111,6 +113,14 @@ public class PxStudentT extends PxStudentTKey {
 
     public void setTimecardRemaind(Integer timecardRemaind) {
         this.timecardRemaind = timecardRemaind;
+    }
+
+    public Integer getTimecardUsed() {
+        return timecardUsed;
+    }
+
+    public void setTimecardUsed(Integer timecardUsed) {
+        this.timecardUsed = timecardUsed;
     }
 
     public String getStuStatus() {
