@@ -25,7 +25,7 @@ Ext.define('KitchenSink.view.trainStudentMg.trainStuTimeCardAddWindow', {
     },
     items: [{
         xtype: 'form',
-        reference: 'stuAddTimeCardForm',
+        reference: 'stuAddTimeCardForm01',
         layout: {
             type: 'vbox',
             align: 'stretch'
@@ -42,7 +42,7 @@ Ext.define('KitchenSink.view.trainStudentMg.trainStuTimeCardAddWindow', {
         items: [
             {
                 xtype: 'hiddenfield',
-                name: 'orgId',
+                name: 'orgid',
                 allowBlank:false
             },{
                 xtype: 'hiddenfield',

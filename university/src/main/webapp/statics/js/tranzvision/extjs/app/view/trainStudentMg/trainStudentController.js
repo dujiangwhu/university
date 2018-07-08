@@ -12,7 +12,11 @@
 		});	
 	},
 	//编辑项目（列表）
-    addStudentInfo: function(){
+    addStudentInfo: function(btn){
+		
+		var panelList = btn.findParentByType("trainStudentList");
+		var orgid = panelList.orgId;
+		console.log(orgid);
     	
      	//是否有访问权限
     	var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_STU_COM"]["TZ_PX_STU_INFO"];
@@ -76,6 +80,7 @@
 		cmp.on('afterrender', function(panel) {
 			// 组件注册表单信息;
 			var form = panel.child('form').getForm();	
+			form.findField("orgid").setValue(orgid);
 		});
 		
         tab = contentPanel.add(cmp);     
@@ -108,8 +113,6 @@
 		var orgid = selList[0].get("orgid");
 		
      	//显示皮肤设置编辑页面
-		console.log(oprid);
-		console.log(orgid);
      	this.editStudentInfoByOprid(oprid,orgid);
     },
 	editStudentInfoOne: function(view, rowIndex){
@@ -315,7 +318,7 @@
         //拥有的课时卡
         var stuRemaindTimeCard = selList[0].get("stuRemaindTimeCard");
         //已使用的课时卡
-        var stuTimeCardUsed = 0;
+        var stuTimeCardUsed = selList[0].get("stuUsedTimeCard");
 
         var form = win.child("form").getForm();
         var grid = win.child("grid");

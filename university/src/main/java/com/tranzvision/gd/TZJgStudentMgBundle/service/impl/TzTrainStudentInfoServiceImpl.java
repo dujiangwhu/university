@@ -115,12 +115,12 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 				
 				System.out.println(str_orgid);
 				
-				Map<String, Object> userMap = sqlQuery.queryForMap("SELECT TZ_REALNAME,TZ_MOBILE FROM PS_TZ_AQ_YHXX_TBL WHERE OPRID=? AND ORGID = ?",
+				Map<String, Object> userMap = sqlQuery.queryForMap("SELECT TZ_REALNAME,TZ_MOBILE FROM PS_TZ_AQ_YHXX_TBL WHERE OPRID=? AND TZ_JG_ID = ?",
 						new Object[] { str_oprid ,str_orgid});
 
 				if (userMap == null) {
 					errMsg[0] = "1";
-					errMsg[1] = "不存在该用户01！";
+					errMsg[1] = "不存在该用户！";
 				} else {
 					String name = (String) userMap.get("TZ_REALNAME");
 					String phone = (String) userMap.get("TZ_MOBILE");
@@ -137,7 +137,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						Map<String, Object> jsonMap2 = new HashMap<String, Object>();
 						jsonMap2.put("titleImageUrl", titleImageUrl);
 						jsonMap2.put("oprid", pxStudentT.getOprid());
-						jsonMap2.put("tzJgId", pxStudentT.getTzJgId());
+						jsonMap2.put("orgid", pxStudentT.getTzJgId());
 						jsonMap2.put("name", name);
 						jsonMap2.put("phone", phone);
 						jsonMap2.put("sex", pxStudentT.getSex());
@@ -149,6 +149,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						jsonMap2.put("contactorAddress", pxStudentT.getContactAddress());
 						jsonMap2.put("statu", pxStudentT.getStuStatus());
 						jsonMap2.put("timecardRemaind", pxStudentT.getTimecardRemaind());
+						jsonMap2.put("timecardUsed", pxStudentT.getTimecardUsed());
 
 						returnJsonMap.replace("formData", jsonMap2);
 					}
@@ -204,7 +205,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						errMsg[1] = "手机号为" + phone + "的学员已存在。";
 					}else{
 						// 账号密码;
-						String password = phone;
+						String password = "123456";
 						password = DESUtil.encrypt(password, "TZGD_Tranzvision");
 						/*创建用户信息*/
 						String oprID = "";
@@ -272,6 +273,8 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						pxStudentT.setContact(jacksonUtil.getString("contactor"));
 						pxStudentT.setContactPhone(jacksonUtil.getString("contactorPhone"));
 						pxStudentT.setContactAddress(jacksonUtil.getString("contactorAddress"));
+						pxStudentT.setTimecardRemaind(0);
+						pxStudentT.setTimecardUsed(0);
 						pxStudentT.setStuStatus(usStatu);
 						pxStudentTMapper.insert(pxStudentT);
 						

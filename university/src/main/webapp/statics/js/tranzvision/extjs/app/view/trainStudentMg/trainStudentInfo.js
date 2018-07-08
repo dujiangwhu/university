@@ -109,16 +109,29 @@
                     fieldLabel: '紧急联系人地址',
                     name: 'contactorAddress'
                 },{
+					xtype: 'textfield',
+					fieldLabel: '拥有的课时卡',
+					name: 'timecardRemaind',
+					readOnly:true,
+					fieldStyle:'background:#F4F4F4'
+				},{
+					xtype: 'textfield',
+					fieldLabel: '已使用的课时卡',
+					name: 'timecardUsed',
+					readOnly:true,
+					fieldStyle:'background:#F4F4F4'
+				},{
             		xtype: 'combobox',
                     fieldLabel: '状态信息',
                     allowBlank: false,
                     editable:false,
                     emptyText:'请选择',
                     queryMode: 'remote',
-            	    	name: 'statu',
-            	    	valueField: 'TValue',
-                		displayField: 'TSDesc',
-                		store: new KitchenSink.view.common.store.appTransStore("PX_TEACHER_STATU")
+            	    name: 'statu',
+            	    valueField: 'TValue',
+                	displayField: 'TSDesc',
+                	store: new KitchenSink.view.common.store.appTransStore("PX_TEACHER_STATU"),
+					value:'A'
                 },{
                         xtype: 'hiddenfield',
                         name: 'titleImageUrl'
