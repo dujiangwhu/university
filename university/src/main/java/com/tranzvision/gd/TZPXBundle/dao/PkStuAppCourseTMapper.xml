@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PkStuAppCourseTMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PkStuAppCourseT" >
+    <id column="OPRID" property="oprid" jdbcType="VARCHAR" />
+    <id column="TZ_SCHEDULE_ID" property="tzScheduleId" jdbcType="VARCHAR" />
+    <result column="TZ_APP_DATA" property="tzAppData" jdbcType="TIMESTAMP" />
+    <result column="TZ_APP_STATUS" property="tzAppStatus" jdbcType="VARCHAR" />
+    <result column="ROW_LASTMANT_DTTM" property="rowLastmantDttm" jdbcType="TIMESTAMP" />
+    <result column="ROW_LASTMANT_OPRID" property="rowLastmantOprid" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    OPRID, TZ_SCHEDULE_ID, TZ_APP_DATA, TZ_APP_STATUS, ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tranzvision.gd.TZPXBundle.model.PkStuAppCourseTKey" >
+    select 
+    <include refid="Base_Column_List" />
+    from PX_STU_APP_COURSE_T
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PkStuAppCourseTKey" >
+    delete from PX_STU_APP_COURSE_T
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PkStuAppCourseT" >
+    insert into PX_STU_APP_COURSE_T (OPRID, TZ_SCHEDULE_ID, TZ_APP_DATA, 
+      TZ_APP_STATUS, ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID
+      )
+    values (#{oprid,jdbcType=VARCHAR}, #{tzScheduleId,jdbcType=VARCHAR}, #{tzAppData,jdbcType=TIMESTAMP}, 
+      #{tzAppStatus,jdbcType=VARCHAR}, #{rowLastmantDttm,jdbcType=TIMESTAMP}, #{rowLastmantOprid,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PkStuAppCourseT" >
+    insert into PX_STU_APP_COURSE_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        OPRID,
+      </if>
+      <if test="tzScheduleId != null" >
+        TZ_SCHEDULE_ID,
+      </if>
+      <if test="tzAppData != null" >
+        TZ_APP_DATA,
+      </if>
+      <if test="tzAppStatus != null" >
+        TZ_APP_STATUS,
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM,
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        #{oprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzScheduleId != null" >
+        #{tzScheduleId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzAppData != null" >
+        #{tzAppData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tzAppStatus != null" >
+        #{tzAppStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PkStuAppCourseT" >
+    update PX_STU_APP_COURSE_T
+    <set >
+      <if test="tzAppData != null" >
+        TZ_APP_DATA = #{tzAppData,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tzAppStatus != null" >
+        TZ_APP_STATUS = #{tzAppStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PkStuAppCourseT" >
+    update PX_STU_APP_COURSE_T
+    set TZ_APP_DATA = #{tzAppData,jdbcType=TIMESTAMP},
+      TZ_APP_STATUS = #{tzAppStatus,jdbcType=VARCHAR},
+      ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR}
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

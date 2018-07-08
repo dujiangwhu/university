@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxTeaCourseTypeTMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxTeaCourseTypeTKey" >
+    <id column="OPRID" property="oprid" jdbcType="VARCHAR" />
+    <id column="TZ_COURSE_TYPE_ID" property="tzCourseTypeId" jdbcType="VARCHAR" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaCourseTypeTKey" >
+    delete from PX_TEA_COURSE_TYPE_T
+    where OPRID = #{oprid,jdbcType=VARCHAR}
+      and TZ_COURSE_TYPE_ID = #{tzCourseTypeId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaCourseTypeTKey" >
+    insert into PX_TEA_COURSE_TYPE_T (OPRID, TZ_COURSE_TYPE_ID)
+    values (#{oprid,jdbcType=VARCHAR}, #{tzCourseTypeId,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxTeaCourseTypeTKey" >
+    insert into PX_TEA_COURSE_TYPE_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        OPRID,
+      </if>
+      <if test="tzCourseTypeId != null" >
+        TZ_COURSE_TYPE_ID,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="oprid != null" >
+        #{oprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseTypeId != null" >
+        #{tzCourseTypeId,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+</mapper>

@@ -1,0 +1,129 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxScheduleCancelTMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxScheduleCancelT" >
+    <id column="TZ_SCHEDULE_ID" property="tzScheduleId" jdbcType="VARCHAR" />
+    <result column="OPRID" property="oprid" jdbcType="VARCHAR" />
+    <result column="TZ_CANCEL_TIME" property="tzCancelTime" jdbcType="TIMESTAMP" />
+    <result column="TZ_CANCEL_DESC" property="tzCancelDesc" jdbcType="VARCHAR" />
+    <result column="NEW_OPRID" property="newOprid" jdbcType="VARCHAR" />
+    <result column="NEW_TZ_SCHEDULE_ID" property="newTzScheduleId" jdbcType="VARCHAR" />
+    <result column="ROW_LASTMANT_OPRID" property="rowLastmantOprid" jdbcType="VARCHAR" />
+    <result column="ROW_LASTMANT_DTTM" property="rowLastmantDttm" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TZ_SCHEDULE_ID, OPRID, TZ_CANCEL_TIME, TZ_CANCEL_DESC, NEW_OPRID, NEW_TZ_SCHEDULE_ID, 
+    ROW_LASTMANT_OPRID, ROW_LASTMANT_DTTM
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    from PX_SCHEDULE_CANCEL_T
+    where TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PX_SCHEDULE_CANCEL_T
+    where TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScheduleCancelT" >
+    insert into PX_SCHEDULE_CANCEL_T (TZ_SCHEDULE_ID, OPRID, TZ_CANCEL_TIME, 
+      TZ_CANCEL_DESC, NEW_OPRID, NEW_TZ_SCHEDULE_ID, 
+      ROW_LASTMANT_OPRID, ROW_LASTMANT_DTTM)
+    values (#{tzScheduleId,jdbcType=VARCHAR}, #{oprid,jdbcType=VARCHAR}, #{tzCancelTime,jdbcType=TIMESTAMP}, 
+      #{tzCancelDesc,jdbcType=VARCHAR}, #{newOprid,jdbcType=VARCHAR}, #{newTzScheduleId,jdbcType=VARCHAR}, 
+      #{rowLastmantOprid,jdbcType=VARCHAR}, #{rowLastmantDttm,jdbcType=TIMESTAMP})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScheduleCancelT" >
+    insert into PX_SCHEDULE_CANCEL_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tzScheduleId != null" >
+        TZ_SCHEDULE_ID,
+      </if>
+      <if test="oprid != null" >
+        OPRID,
+      </if>
+      <if test="tzCancelTime != null" >
+        TZ_CANCEL_TIME,
+      </if>
+      <if test="tzCancelDesc != null" >
+        TZ_CANCEL_DESC,
+      </if>
+      <if test="newOprid != null" >
+        NEW_OPRID,
+      </if>
+      <if test="newTzScheduleId != null" >
+        NEW_TZ_SCHEDULE_ID,
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID,
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tzScheduleId != null" >
+        #{tzScheduleId,jdbcType=VARCHAR},
+      </if>
+      <if test="oprid != null" >
+        #{oprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCancelTime != null" >
+        #{tzCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tzCancelDesc != null" >
+        #{tzCancelDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="newOprid != null" >
+        #{newOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="newTzScheduleId != null" >
+        #{newTzScheduleId,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScheduleCancelT" >
+    update PX_SCHEDULE_CANCEL_T
+    <set >
+      <if test="oprid != null" >
+        OPRID = #{oprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCancelTime != null" >
+        TZ_CANCEL_TIME = #{tzCancelTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="tzCancelDesc != null" >
+        TZ_CANCEL_DESC = #{tzCancelDesc,jdbcType=VARCHAR},
+      </if>
+      <if test="newOprid != null" >
+        NEW_OPRID = #{newOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="newTzScheduleId != null" >
+        NEW_TZ_SCHEDULE_ID = #{newTzScheduleId,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxScheduleCancelT" >
+    update PX_SCHEDULE_CANCEL_T
+    set OPRID = #{oprid,jdbcType=VARCHAR},
+      TZ_CANCEL_TIME = #{tzCancelTime,jdbcType=TIMESTAMP},
+      TZ_CANCEL_DESC = #{tzCancelDesc,jdbcType=VARCHAR},
+      NEW_OPRID = #{newOprid,jdbcType=VARCHAR},
+      NEW_TZ_SCHEDULE_ID = #{newTzScheduleId,jdbcType=VARCHAR},
+      ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR},
+      ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP}
+    where TZ_SCHEDULE_ID = #{tzScheduleId,jdbcType=VARCHAR}
+  </update>
+</mapper>

@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxCourseTMapper" >
+  <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxCourseT" >
+    <id column="TZ_COURSE_ID" property="tzCourseId" jdbcType="VARCHAR" />
+    <result column="TZ_COURSE_TYPE_ID" property="tzCourseTypeId" jdbcType="VARCHAR" />
+    <result column="TZ_COURSE_NUMBER" property="tzCourseNumber" jdbcType="VARCHAR" />
+    <result column="TZ_COURSE_NAME" property="tzCourseName" jdbcType="VARCHAR" />
+    <result column="ROW_LASTMANT_DTTM" property="rowLastmantDttm" jdbcType="TIMESTAMP" />
+    <result column="ROW_LASTMANT_OPRID" property="rowLastmantOprid" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.tranzvision.gd.TZPXBundle.model.PxCourseT" extends="BaseResultMap" >
+    <result column="TZ_COURSE_DESC" property="tzCourseDesc" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    TZ_COURSE_ID, TZ_COURSE_TYPE_ID, TZ_COURSE_NUMBER, TZ_COURSE_NAME, ROW_LASTMANT_DTTM, 
+    ROW_LASTMANT_OPRID
+  </sql>
+  <sql id="Blob_Column_List" >
+    TZ_COURSE_DESC
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.String" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from PX_COURSE_T
+    where TZ_COURSE_ID = #{tzCourseId,jdbcType=VARCHAR}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PX_COURSE_T
+    where TZ_COURSE_ID = #{tzCourseId,jdbcType=VARCHAR}
+  </delete>
+  <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxCourseT" >
+    insert into PX_COURSE_T (TZ_COURSE_ID, TZ_COURSE_TYPE_ID, TZ_COURSE_NUMBER, 
+      TZ_COURSE_NAME, ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID, 
+      TZ_COURSE_DESC)
+    values (#{tzCourseId,jdbcType=VARCHAR}, #{tzCourseTypeId,jdbcType=VARCHAR}, #{tzCourseNumber,jdbcType=VARCHAR}, 
+      #{tzCourseName,jdbcType=VARCHAR}, #{rowLastmantDttm,jdbcType=TIMESTAMP}, #{rowLastmantOprid,jdbcType=VARCHAR}, 
+      #{tzCourseDesc,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxCourseT" >
+    insert into PX_COURSE_T
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="tzCourseId != null" >
+        TZ_COURSE_ID,
+      </if>
+      <if test="tzCourseTypeId != null" >
+        TZ_COURSE_TYPE_ID,
+      </if>
+      <if test="tzCourseNumber != null" >
+        TZ_COURSE_NUMBER,
+      </if>
+      <if test="tzCourseName != null" >
+        TZ_COURSE_NAME,
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM,
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID,
+      </if>
+      <if test="tzCourseDesc != null" >
+        TZ_COURSE_DESC,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="tzCourseId != null" >
+        #{tzCourseId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseTypeId != null" >
+        #{tzCourseTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseNumber != null" >
+        #{tzCourseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseName != null" >
+        #{tzCourseName,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseDesc != null" >
+        #{tzCourseDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxCourseT" >
+    update PX_COURSE_T
+    <set >
+      <if test="tzCourseTypeId != null" >
+        TZ_COURSE_TYPE_ID = #{tzCourseTypeId,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseNumber != null" >
+        TZ_COURSE_NUMBER = #{tzCourseNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseName != null" >
+        TZ_COURSE_NAME = #{tzCourseName,jdbcType=VARCHAR},
+      </if>
+      <if test="rowLastmantDttm != null" >
+        ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      </if>
+      <if test="rowLastmantOprid != null" >
+        ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR},
+      </if>
+      <if test="tzCourseDesc != null" >
+        TZ_COURSE_DESC = #{tzCourseDesc,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where TZ_COURSE_ID = #{tzCourseId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tranzvision.gd.TZPXBundle.model.PxCourseT" >
+    update PX_COURSE_T
+    set TZ_COURSE_TYPE_ID = #{tzCourseTypeId,jdbcType=VARCHAR},
+      TZ_COURSE_NUMBER = #{tzCourseNumber,jdbcType=VARCHAR},
+      TZ_COURSE_NAME = #{tzCourseName,jdbcType=VARCHAR},
+      ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR},
+      TZ_COURSE_DESC = #{tzCourseDesc,jdbcType=LONGVARCHAR}
+    where TZ_COURSE_ID = #{tzCourseId,jdbcType=VARCHAR}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxCourseT" >
+    update PX_COURSE_T
+    set TZ_COURSE_TYPE_ID = #{tzCourseTypeId,jdbcType=VARCHAR},
+      TZ_COURSE_NUMBER = #{tzCourseNumber,jdbcType=VARCHAR},
+      TZ_COURSE_NAME = #{tzCourseName,jdbcType=VARCHAR},
+      ROW_LASTMANT_DTTM = #{rowLastmantDttm,jdbcType=TIMESTAMP},
+      ROW_LASTMANT_OPRID = #{rowLastmantOprid,jdbcType=VARCHAR}
+    where TZ_COURSE_ID = #{tzCourseId,jdbcType=VARCHAR}
+  </update>
+</mapper>

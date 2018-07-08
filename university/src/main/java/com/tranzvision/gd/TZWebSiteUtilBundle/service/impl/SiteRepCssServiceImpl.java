@@ -91,8 +91,14 @@ public class SiteRepCssServiceImpl {
 		String ctxPath = request.getContextPath();
 		orgid = orgid.toUpperCase();
 		try {
-			String gblScripts = tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzScriptsGlobalVar", ctxPath, orgid,
-					siteid, isDecorate);
+			String gblScripts = "";
+			if (siteid.equals("45")) {
+				gblScripts = tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzScriptsGlobalVar", ctxPath, orgid, siteid,
+						isDecorate, "STU");
+			} else {
+				gblScripts = tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzScriptsGlobalVar", ctxPath, orgid, siteid,
+						isDecorate, "TEA");
+			}
 			strContent = strContent.replace("<!--#{javascripts}#-->", gblScripts + strScripts);
 		} catch (TzSystemException e) {
 			e.printStackTrace();
@@ -173,7 +179,7 @@ public class SiteRepCssServiceImpl {
 						+ "/";
 			}
 
-			String strRandom = String.valueOf(10*Math.random());
+			String strRandom = String.valueOf(10 * Math.random());
 			if (strJgId != null && !"".equals(strJgId)) {
 				strConent = strConent.replace("page_stylecss",
 						strCssDir + "style_" + strJgId.toLowerCase() + ".css?v=" + strRandom);
@@ -185,7 +191,7 @@ public class SiteRepCssServiceImpl {
 
 		return strConent;
 	}
-	
+
 	// 移动版替换css; PS类：TZ_SITE_REP_CSS.repCss;
 	public String repPhoneCss(String strConent, String strSiteId) {
 		if (strSiteId == null || "".equals(strSiteId) || strConent == null || "".equals(strConent)) {
@@ -205,16 +211,18 @@ public class SiteRepCssServiceImpl {
 						+ "/";
 			}
 
-			String strRandom = String.valueOf(10*Math.random());
+			String strRandom = String.valueOf(10 * Math.random());
 			if (strJgId != null && !"".equals(strJgId)) {
-				strConent = strConent.replace("mobilepage_stylecss",strCssDir + "mobileStyle_" + strJgId.toLowerCase() + ".css?v=" + strRandom);
+				strConent = strConent.replace("mobilepage_stylecss",
+						strCssDir + "mobileStyle_" + strJgId.toLowerCase() + ".css?v=" + strRandom);
 			} else {
 				strConent = strConent.replace("mobilepage_stylecss", strCssDir + "mobileStyle.css?v=" + strRandom);
 			}
 		}
 
 		return strConent;
-	}		
+	}
+
 	// 替换css; PS类：TZ_SITE_REP_CSS.repCssByJg;
 	public String repCssByJg(String strConent, String strJgId) {
 
@@ -234,7 +242,7 @@ public class SiteRepCssServiceImpl {
 				strCssDir = strCssDir + websitePath + "/" + strJgId + "/" + strSiteId + "/" + skinstor + "/";
 			}
 
-			String strRandom = String.valueOf(10*Math.random());
+			String strRandom = String.valueOf(10 * Math.random());
 			if (strJgId != null && !"".equals(strJgId)) {
 				strConent = strConent.replace("page_stylecss",
 						strCssDir + "style_" + strJgId.toLowerCase() + ".css?v=" + strRandom);

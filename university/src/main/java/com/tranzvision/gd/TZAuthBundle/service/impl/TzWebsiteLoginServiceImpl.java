@@ -166,13 +166,13 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 				return false;
 			}
 
-			sql = "select TZ_SITEI_ENABLE from PS_TZ_SITEI_DEFN_T where TZ_JG_ID=? and TZ_SITEI_ID=?";
-			String tzSiteEffStu = sqlQuery.queryForObject(sql, new Object[] { orgid, siteid }, "String");
-			if (!"Y".equals(tzSiteEffStu)) {
-				errorMsg.add("2");
-				errorMsg.add("登录失败，无效的站点。");
-				return false;
-			}
+			//sql = "select TZ_SITEI_ENABLE from PS_TZ_SITEI_DEFN_T where TZ_JG_ID=? and TZ_SITEI_ID=?";
+			//String tzSiteEffStu = sqlQuery.queryForObject(sql, new Object[] { orgid, siteid }, "String");
+			//if (!"Y".equals(tzSiteEffStu)) {
+			//	errorMsg.add("2");
+			//	errorMsg.add("登录失败，无效的站点。");
+			//	return false;
+			//}
 
 			Map<String, Object> dataMap;
 			// 校验用户名

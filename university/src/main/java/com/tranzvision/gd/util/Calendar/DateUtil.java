@@ -1,11 +1,13 @@
 package com.tranzvision.gd.util.Calendar;
 
+import java.util.Date;
 import java.text.FieldPosition;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
 /**
  * 时间的格式转换
+ * 
  * @author CAOY
  *
  */
@@ -13,6 +15,83 @@ public class DateUtil {
 
 	public DateUtil() {
 
+	}
+
+	public static Date geLastWeekMonday(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(getThisWeekMonday(date));
+		cal.add(Calendar.DATE, -7);
+		return cal.getTime();
+	}
+
+	public static String getWeekStartTime(String formatString) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+		Calendar cal = Calendar.getInstance();
+		int day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if (day_of_week == 0) {
+			day_of_week = 7;
+		}
+		cal.add(Calendar.DATE, -day_of_week + 1);
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		return simpleDateFormat.format(cal.getTime());
+	}
+
+	/**
+	 * end 本周结束时间戳 - 以星期一为本周的第一天
+	 */
+	public static String getWeekEndTime(String formatString) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+		Calendar cal = Calendar.getInstance();
+		int day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if (day_of_week == 0) {
+			day_of_week = 7;
+		}
+		cal.add(Calendar.DATE, -day_of_week + 7);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		return simpleDateFormat.format(cal.getTime());
+	}
+	
+	public static Date  getNextWeekEndTime() {
+		//SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+		Calendar cal = Calendar.getInstance();
+		int day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
+		if (day_of_week == 0) {
+			day_of_week = 7;
+		}
+		cal.add(Calendar.DATE, -day_of_week + 7);
+		cal.add(Calendar.DATE, 7);
+		cal.set(Calendar.HOUR_OF_DAY, 23);
+		cal.set(Calendar.MINUTE, 59);
+		cal.set(Calendar.SECOND, 59);
+		return cal.getTime();
+	}
+
+	public static Date getThisWeekMonday(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(date);
+		// 获得当前日期是一个星期的第几天
+		int dayWeek = cal.get(Calendar.DAY_OF_WEEK);
+		if (1 == dayWeek) {
+			cal.add(Calendar.DAY_OF_MONTH, -1);
+		}
+		// 设置一个星期的第一天，按中国的习惯一个星期的第一天是星期一
+		cal.setFirstDayOfWeek(Calendar.MONDAY);
+		// 获得当前日期是一个星期的第几天
+		int day = cal.get(Calendar.DAY_OF_WEEK);
+		// 根据日历的规则，给当前日期减去星期几与一个星期第一天的差值
+		cal.add(Calendar.DATE, cal.getFirstDayOfWeek() - day);
+		return cal.getTime();
+	}
+
+	public static Date getNextWeekMonday(Date date) {
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(getThisWeekMonday(date));
+		cal.add(Calendar.DATE, 7);
+		return cal.getTime();
 	}
 
 	/**
@@ -157,9 +236,38 @@ public class DateUtil {
 		// }
 		System.out.println("----end----");
 
-		System.out.println(formatLongDate(parseTimeStamp("2002-10-11 12:13:14")));
-		System.out.println(System.currentTimeMillis());
-		System.out.println(formatLongDate(new java.util.Date(System.currentTimeMillis())));
+		System.out.println(getNextWeekEndTime());
+		
+		StringBuffer selectDate = new StringBuffer();
+		// 首先计算结束日
+		Calendar cd = Calendar.getInstance();
+		Date lastDate = DateUtil.getNextWeekEndTime();
+		cd.setTime(lastDate);
+		int year = cd.get(Calendar.YEAR);
+		int month = cd.get(Calendar.MONTH);
+		int day = cd.get(Calendar.DAY_OF_MONTH);
+
+		int _year = 0;
+		int _month = 0;
+		int _day = 0;
+
+		Date now = new Date();
+		String strDate = "";
+		do {
+			cd.setTime(now);
+			cd.add(Calendar.DATE, 1);
+			_year = cd.get(Calendar.YEAR);
+			_month = cd.get(Calendar.MONTH);
+			_day = cd.get(Calendar.DAY_OF_MONTH);
+			now = cd.getTime();
+			strDate = DateUtil.ISOSECDateString(now);
+			selectDate.append("<option value =\"" + strDate + "\">" + strDate + "</option>");
+			selectDate.append("\n");
+		} while (!(_year == year && _month == month && day == _day));
+		System.out.println(selectDate.toString());
+		//System.out.println(getWeekStartTime(a));
+		// System.out.println(formatLongDate(new
+		// java.util.Date(System.currentTimeMillis())));
 		// System.out.println(Date.parse("2002-10-10"));
 		// System.out.println(Date.parse("2002.11.12"));
 		// System.out.println(Date.parse("2003/12/12"));

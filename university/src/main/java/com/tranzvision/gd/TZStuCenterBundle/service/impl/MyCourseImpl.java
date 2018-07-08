@@ -59,6 +59,7 @@ public class MyCourseImpl extends FrameworkImpl {
 		String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 
 		jacksonUtil.json2Map(strParams);
+		
 
 		// 查询类型：0所有查询 1预约课程 2正在上课 3上完课程 4即将开课 5取消课程
 		String opType = "";
