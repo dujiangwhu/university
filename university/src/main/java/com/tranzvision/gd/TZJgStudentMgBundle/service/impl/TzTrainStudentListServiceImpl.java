@@ -270,7 +270,7 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 							PkStuCourseChangeT pkStuCourseChangeT = new PkStuCourseChangeT();
 							pkStuCourseChangeT.setTzChangeId(strChangeID);
 							pkStuCourseChangeT.setOprid(tzStuId);
-							pkStuCourseChangeT.setTzChangeType("C");
+							pkStuCourseChangeT.setTzChangeType("3");
 							pkStuCourseChangeT.setTzBeforeChange(stuTimeCardRemaind);
 							pkStuCourseChangeT.setTzAfterChange(stuTimeCardRemaindAfter);
 							pkStuCourseChangeT.setTzChange(stuTimeCardNumber);

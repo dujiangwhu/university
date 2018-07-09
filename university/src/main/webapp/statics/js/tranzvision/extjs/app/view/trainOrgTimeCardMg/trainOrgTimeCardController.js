@@ -33,7 +33,8 @@
 		var cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
     	//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_KSGL_COM"]["TZ_KS_ADD_HIS_STD"];
+		Ext.tzSetCompResourses("TZ_PX_KS_DGCX_COM");
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_KS_DGCX_COM"]["TZ_KS_ADD_HIS_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有访问或修改数据的权限');
 			return;
@@ -82,7 +83,102 @@
 			//页面注册信息列表
 			var grid = panel.child('grid');
 			panel.orgId = orgId;
-			var tzStoreParams = '{"cfgSrhId":"TZ_PX_KSGL_COM.TZ_KS_ADD_HIS_STD.PX_JG_KS_ORDER_VW","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+ orgId+'"}}';
+			var tzStoreParams = '{"cfgSrhId":"TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.PX_JG_KS_ORDER_VW","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+ orgId+'"}}';
+			grid.store.tzStoreParams = tzStoreParams;
+			grid.store.load();
+
+		});
+
+		tab = contentPanel.add(cmp);
+
+		contentPanel.setActiveTab(tab);
+
+		Ext.resumeLayouts(true);
+
+		if (cmp.floating) {
+			cmp.show();
+		}
+	},
+	queryOrgAssignHis: function(btn) {
+        var grid = btn.up('grid');
+        //选中行
+		   var selList = grid.getSelectionModel().getSelection();
+		   //选中行长度
+		   var checkLen = selList.length;
+		   if(checkLen == 0){
+				Ext.Msg.alert("提示","请选择一个机构。");
+				return;
+		   }else if(checkLen >1){
+			   Ext.Msg.alert("提示","只能选择一个机构。");
+			   return;
+		   }
+
+		   var orgId = selList[0].get("orgId");
+		   /*if(orgId == "ADMIN"){
+				Ext.Msg.alert("提示","平台管理机构为系统预留机构账号，不能修改");
+				return;
+		   }*/
+		   this.queryOrgAssignHisByOrgId(orgId);
+    },
+	queryOrgAssignHisByOrgId: function(orgId){
+		var contentPanel = Ext.getCmp('tranzvision-framework-content-panel');
+       		contentPanel.body.addCls('kitchensink-example');
+
+            //更新机构信息类
+		var cmp, className, ViewClass, clsProto;
+		var themeName = Ext.themeName;
+    	//是否有访问权限
+		Ext.tzSetCompResourses("TZ_PX_KS_FPCX_COM");
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_KS_FPCX_COM"]["TZ_KS_ASGN_HIS_STD"];
+		if( pageResSet == "" || pageResSet == undefined){
+			Ext.MessageBox.alert('提示', '您没有访问或修改数据的权限');
+			return;
+		}
+		//该功能对应的JS类
+		var className = pageResSet["jsClassName"];
+		if(className == "" || className == undefined){
+			Ext.MessageBox.alert('提示', '未找到该功能页面对应的JS类，页面ID为：TZ_KS_ASGN_HIS_STD，请检查配置。');
+			return;
+		}
+
+        //className = 'KitchenSink.view.trainOrgmgmt.orgInfoPanel';
+        if(!Ext.ClassManager.isCreated(className)){
+			Ext.syncRequire(className);
+		}
+        ViewClass = Ext.ClassManager.get(className);
+
+        clsProto = ViewClass.prototype;
+
+        if (clsProto.themes) {
+            clsProto.themeInfo = clsProto.themes[themeName];
+
+            if (themeName === 'gray') {
+                clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.classic);
+            } else if (themeName !== 'neptune' && themeName !== 'classic') {
+                if (themeName === 'crisp-touch') {
+                    clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes['neptune-touch']);
+                }
+                clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.neptune);
+            }
+            // <debug warn>
+            // Sometimes we forget to include allowances for other themes, so issue a warning as a reminder.
+            if (!clsProto.themeInfo) {
+                Ext.log.warn ( 'Example \'' + className + '\' lacks a theme specification for the selected theme: \'' +
+                    themeName + '\'. Is this intentional?');
+            }
+            // </debug>
+        }
+
+        cmp = new ViewClass();
+			//操作标志
+		cmp.actType = "update";
+		
+		cmp.on('afterrender',function(panel){
+			//组件注册表单信息;
+			//页面注册信息列表
+			var grid = panel.child('grid');
+			panel.orgId = orgId;
+			var tzStoreParams = '{"cfgSrhId":"TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_STU_KS_CHG_V","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+ orgId+'"}}';
 			grid.store.tzStoreParams = tzStoreParams;
 			grid.store.load();
 
@@ -207,6 +303,24 @@
             ]
         );
         win.show();
+    },
+	/*查看培训机构分配记录-按机构*/
+    queryTimeCardAssignHis: function(btn){     //searchComList为各自搜索按钮的handler event;
+		var panel = btn.findParentByType("trainOrgTimeCardAssignList");
+		//console.log(panel);
+		//console.log(panel.orgId);
+        Ext.tzShowCFGSearch({
+           cfgSrhId: 'TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_STU_KS_CHG_V',
+           condition:
+            {
+                "TZ_JG_ID": panel.orgId   //设置搜索字段的默认值，没有可以不设置condition;
+            },
+            callback: function(seachCfg){
+                var store = btn.findParentByType("grid").store;
+                store.tzStoreParams = seachCfg;
+                store.load();
+            }
+        });
     },
 	/*查看培训机构订购记录-按机构*/
     queryTimeCardAddHis: function(btn){     //searchComList为各自搜索按钮的handler event;

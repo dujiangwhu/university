@@ -18,17 +18,17 @@
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderTKey" >
     select 
     <include refid="Base_Column_List" />
-    from px_jg_ks_order_t
+    from PX_JG_KS_ORDER_T
     where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
       and TZ_ORDER_ID = #{tzOrderId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderTKey" >
-    delete from px_jg_ks_order_t
+    delete from PX_JG_KS_ORDER_T
     where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
       and TZ_ORDER_ID = #{tzOrderId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
-    insert into px_jg_ks_order_t (TZ_JG_ID, TZ_ORDER_ID, TZ_TIMECARD_BEFORE, 
+    insert into PX_JG_KS_ORDER_T (TZ_JG_ID, TZ_ORDER_ID, TZ_TIMECARD_BEFORE, 
       TZ_TIMECARD_AFTER, TZ_TIMECARD_ADD, TZ_TIMECARD_MONEY, 
       ROW_LASTMANT_DTTM, ROW_LASTMANT_OPRID)
     values (#{tzJgId,jdbcType=VARCHAR}, #{tzOrderId,jdbcType=VARCHAR}, #{tzTimecardBefore,jdbcType=INTEGER}, 
@@ -36,7 +36,7 @@
       #{rowLastmantDttm,jdbcType=TIMESTAMP}, #{rowLastmantOprid,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
-    insert into px_jg_ks_order_t
+    insert into PX_JG_KS_ORDER_T
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="tzJgId != null" >
         TZ_JG_ID,
@@ -91,7 +91,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
-    update px_jg_ks_order_t
+    update PX_JG_KS_ORDER_T
     <set >
       <if test="tzTimecardBefore != null" >
         TZ_TIMECARD_BEFORE = #{tzTimecardBefore,jdbcType=INTEGER},
@@ -116,7 +116,7 @@
       and TZ_ORDER_ID = #{tzOrderId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT" >
-    update px_jg_ks_order_t
+    update PX_JG_KS_ORDER_T
     set TZ_TIMECARD_BEFORE = #{tzTimecardBefore,jdbcType=INTEGER},
       TZ_TIMECARD_AFTER = #{tzTimecardAfter,jdbcType=INTEGER},
       TZ_TIMECARD_ADD = #{tzTimecardAdd,jdbcType=INTEGER},

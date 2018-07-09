@@ -1,4 +1,4 @@
-﻿Ext.define('KitchenSink.view.trainOrgTimeCardMg.trainOrgTimeCardAddList', {
+﻿Ext.define('KitchenSink.view.trainOrgTimeCardMg.trainOrgTimeCardAssignList', {
     extend: 'Ext.panel.Panel',
 	requires: [
         'Ext.data.*',
@@ -7,11 +7,11 @@
         'Ext.toolbar.Paging',
         'Ext.ux.ProgressBarPager',
 		'KitchenSink.view.trainOrgTimeCardMg.trainOrgTimeCardController',
-        'KitchenSink.view.trainOrgTimeCardMg.trainOrgTimeCardAddListStore'
+        'KitchenSink.view.trainOrgTimeCardMg.trainOrgTimeCardAssignListStore'
     ],
-    xtype: 'trainOrgTimeCardAddList',
+    xtype: 'trainOrgTimeCardAssignList',
 	controller: 'trainOrgTimeCardMg',
-    title:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.titleOrderView","机构课时订购查询"),
+    title:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.titleOrderView","机构课时分配查询"),
     bodyStyle:'overflow-y:auto;overflow-x:hidden',
     listeners:{
         resize:function( panel, width, height, oldWidth, oldHeight, eOpts ){
@@ -22,7 +22,7 @@
     },
 	orgId:Ext.tzOrgID,
     initComponent: function (){
-        var store = new KitchenSink.view.trainOrgTimeCardMg.trainOrgTimeCardAddListStore();
+        var store = new KitchenSink.view.trainOrgTimeCardMg.trainOrgTimeCardAssignListStore();
         Ext.apply(this, {
             items: [{
                 xtype: 'grid',
@@ -37,51 +37,51 @@
                 dockedItems:[{
                     xtype:"toolbar",
                     items:[
-                        {text:"查询",tooltip:"查询数据",iconCls: "query",handler:'queryTimeCardAddHis'}
+                        {text:"查询",tooltip:"查询数据",iconCls: "query",handler:'queryTimeCardAssignHis'}
                     ]
                 }],
                 columns: [{
                     //text: '机构编号',
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgId","机构编号"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.orgId","机构编号"),
                     dataIndex: 'orgId',
 					hidden:true
                 },{
                     //text: '机构名称',
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgName","机构名称"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.orgName","机构名称"),
                     sortable: true,
                     dataIndex: 'orgName',
                     flex: 1
                 },{
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgLxrName","联系人姓名"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.stuName","学员姓名"),
                     sortable: true,
-                    dataIndex: 'orgLxrName',
+                    dataIndex: 'stuName',
                     width: 120
                 },{
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgLxrPhone","联系人手机"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.stuPhone","学员手机"),
                     sortable: true,
-                    dataIndex: 'orgLxrPhone',
+                    dataIndex: 'stuPhone',
                     width: 120
                 },{
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgTimeCardAdd","充值课时卡数"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.stuTimeCardAssign","分配课时卡数"),
                     sortable: true,
-                    dataIndex: 'orgTimeCardAdd',
+                    dataIndex: 'stuTimeCardAssign',
                     width: 120
                 },{
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgTimeCardHaveAfter","充值后课时卡数"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.stuTimeCardAssignAfter","分配后课时卡数"),
                     sortable: true,
-                    dataIndex: 'orgTimeCardHaveAfter',
+                    dataIndex: 'stuTimeCardAssignAfter',
                     width: 120
                 },{
                     
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgTimeCardAddTime","充值时间"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.stuTimeCardAssignTime","分配时间"),
                     sortable: true,
-                    dataIndex: 'orgTimeCardAddTime',
+                    dataIndex: 'stuTimeCardAssignTime',
                     width: 140
                 },{
                     
-                    text:Ext.tzGetResourse("TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.orgTimeCardAddOprName","充值操作人"),
+                    text:Ext.tzGetResourse("TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.stuTimeCardAssignOprName","分配操作人"),
                     sortable: true,
-                    dataIndex: 'orgTimeCardAddOprName',
+                    dataIndex: 'stuTimeCardAssignOprName',
                     width: 120
                 }],
                 store: store,
@@ -93,7 +93,7 @@
 							var grid = pbar.findParentByType("grid");
 							var panel = grid.findParentByType("panel");
 							var gridStore = grid.store;
-							gridStore.tzStoreParams ='{"cfgSrhId":"TZ_PX_KS_DGCX_COM.TZ_KS_ADD_HIS_STD.PX_JG_KS_ORDER_VW","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+panel.orgId+'"}}',
+							gridStore.tzStoreParams ='{"cfgSrhId":"TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_STU_KS_CHG_V","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+panel.orgId+'"}}',
 							pbar.setStore(gridStore);
 						}
 					},

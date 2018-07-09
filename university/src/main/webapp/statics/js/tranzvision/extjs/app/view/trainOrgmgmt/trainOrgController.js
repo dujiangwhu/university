@@ -588,10 +588,10 @@
 		   //选中行长度
 		   var checkLen = selList.length;
 		   if(checkLen == 0){
-				Ext.Msg.alert("提示","请选择一条要修改的记录");
+				Ext.Msg.alert("提示","请选择一个机构");
 				return;
 		   }else if(checkLen >1){
-			   Ext.Msg.alert("提示","只能选择一条要修改的记录");
+			   Ext.Msg.alert("提示","只能选择一个机构");
 			   return;
 		   }
 

@@ -46,15 +46,15 @@
     <include refid="Base_Column_List" />
     ,
     <include refid="Blob_Column_List" />
-    from ps_tz_jg_base_t
+    from PS_TZ_JG_BASE_T
     where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </select>
   <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
-    delete from ps_tz_jg_base_t
+    delete from PS_TZ_JG_BASE_T
     where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseTWithBLOBs" >
-    insert into ps_tz_jg_base_t (TZ_JG_ID, TZ_JG_NAME, TZ_JG_EFF_STA, 
+    insert into PS_TZ_JG_BASE_T (TZ_JG_ID, TZ_JG_NAME, TZ_JG_EFF_STA, 
       TZ_JG_DESCR, TZ_JG_SUP_FLG, TZ_ORGAN_CONTACT, 
       TZ_ORGAN_CONTACTPH, TZ_ORGAN_CONTACTEM, TZ_JG_JTFJ_PATH, 
       TZ_JG_LOGIN_INFO, TZ_ATTACHSYSFILENA, ROW_ADDED_DTTM, 
@@ -74,7 +74,7 @@
       #{tzJgLoginCopr,jdbcType=LONGVARCHAR}, #{tzJgIntro,jdbcType=LONGVARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseTWithBLOBs" >
-    insert into ps_tz_jg_base_t
+    insert into PS_TZ_JG_BASE_T
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="tzJgId != null" >
         TZ_JG_ID,
@@ -237,7 +237,7 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseTWithBLOBs" >
-    update ps_tz_jg_base_t
+    update PS_TZ_JG_BASE_T
     <set >
       <if test="tzJgName != null" >
         TZ_JG_NAME = #{tzJgName,jdbcType=VARCHAR},
@@ -318,7 +318,7 @@
     where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseTWithBLOBs" >
-    update ps_tz_jg_base_t
+    update PS_TZ_JG_BASE_T
     set TZ_JG_NAME = #{tzJgName,jdbcType=VARCHAR},
       TZ_JG_EFF_STA = #{tzJgEffSta,jdbcType=VARCHAR},
       TZ_JG_DESCR = #{tzJgDescr,jdbcType=VARCHAR},
@@ -347,7 +347,7 @@
     where TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseT" >
-    update ps_tz_jg_base_t
+    update PS_TZ_JG_BASE_T
     set TZ_JG_NAME = #{tzJgName,jdbcType=VARCHAR},
       TZ_JG_EFF_STA = #{tzJgEffSta,jdbcType=VARCHAR},
       TZ_JG_DESCR = #{tzJgDescr,jdbcType=VARCHAR},
