@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
-import com.tranzvision.gd.TZPXBundle.dao.PxCourseMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PxCourseTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxCourse;
+import com.tranzvision.gd.TZPXBundle.model.PxCourseT;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
@@ -27,7 +28,7 @@ public class PxCourseInfo extends FrameworkImpl {
 	@Autowired
 	private SqlQuery jdbcTemplate;
 	@Autowired
-	private PxCourseMapper pxCourseMapper;
+	private PxCourseTMapper pxCourseMapper;
 	@Autowired
 	private FliterForm fliterForm;	
 
@@ -102,7 +103,7 @@ public class PxCourseInfo extends FrameworkImpl {
 					
 					// 组件名称;
 					
-					PxCourse pxCourse=pxCourseMapper.selectByPrimaryKey(tzCourseId);
+					PxCourseT pxCourse=pxCourseMapper.selectByPrimaryKey(tzCourseId);
 					// 是否已经存在;
 					if (pxCourse==null) {
 						errMsg[0] = "1";
@@ -166,14 +167,14 @@ public class PxCourseInfo extends FrameworkImpl {
 					
 					// 组件名称;
 					
-					PxCourse pxCourse=pxCourseMapper.selectByPrimaryKey(tzCourseId);
+					PxCourseT pxCourse=pxCourseMapper.selectByPrimaryKey(tzCourseId);
 					// 是否已经存在;
 					if (pxCourse!=null) {
 						errMsg[0] = "1";
 						errMsg[1] = "组件ID为：" + tzCourseId + "的信息已经注册，请修改组件ID。";
 						return strRet;
 					}
-					pxCourse=new PxCourse();
+					pxCourse=new PxCourseT();
 					pxCourse.setTzCourseId(tzCourseId);
 					pxCourse.setTzCourseName(tzCourseName);
 					pxCourse.setTzCourseTypeId(tzCourseTypeId);

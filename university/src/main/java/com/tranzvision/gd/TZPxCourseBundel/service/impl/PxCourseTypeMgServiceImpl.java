@@ -16,9 +16,9 @@ import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxCourseTypeMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PxCourseTypeTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxCourseType;
+import com.tranzvision.gd.TZPXBundle.model.PxCourseTypeT;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
@@ -48,7 +48,7 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 	private PxTeacherMapper pxTeacherMapper;
 	
 	@Autowired
-	private PxCourseTypeMapper pxCourseTypeMapper;
+	private PxCourseTypeTMapper pxCourseTypeMapper;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -217,7 +217,7 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 					// 组件名称;
 					String tzCourseTypeName = (String) infoData.get("tzCourseTypeName");
 
-					PxCourseType pxCourseType=pxCourseTypeMapper.selectByPrimaryKey(tzCourseTypeId);
+					PxCourseTypeT pxCourseType=pxCourseTypeMapper.selectByPrimaryKey(tzCourseTypeId);
 					// 是否已经存在;
 					if (pxCourseType!=null) {
 						errMsg[0] = "1";
@@ -225,7 +225,7 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 						return strRet;
 					}
 					
-					pxCourseType=new PxCourseType();
+					pxCourseType=new PxCourseTypeT();
 					pxCourseType.setTzCourseTypeId(tzCourseTypeId);
 					pxCourseType.setTzCourseTypeName(tzCourseTypeName);
 					
@@ -282,7 +282,7 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 					Integer tzMaxAge = Integer.valueOf((String)infoData.get("tzMaxAge"));
 					Integer tzMinAge = Integer.valueOf((String)infoData.get("tzMinAge"));
 
-					PxCourseType pxCourseType=pxCourseTypeMapper.selectByPrimaryKey(tzCourseTypeId);
+					PxCourseTypeT pxCourseType=pxCourseTypeMapper.selectByPrimaryKey(tzCourseTypeId);
 					// 是否已经存在;
 					if (pxCourseType==null) {
 						errMsg[0] = "1";

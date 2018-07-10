@@ -16,11 +16,11 @@ import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxScoreLogMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxStuFocusMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PxStuFocusTeaTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeaToCrashMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxScoreLog;
-import com.tranzvision.gd.TZPXBundle.model.PxStuFocusKey;
+import com.tranzvision.gd.TZPXBundle.model.PxStuFocusTeaTKey;
 import com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
@@ -51,7 +51,7 @@ public class PxFocusMgServiceImpl extends FrameworkImpl {
 	private PxTeacherMapper pxTeacherMapper;
 	
 	@Autowired
-	private PxStuFocusMapper pxStuFocusMapper;
+	private PxStuFocusTeaTMapper pxStuFocusMapper;
 	
 
 	@SuppressWarnings("unchecked")
@@ -132,7 +132,7 @@ System.out.println(strParams);
 				String teaOprid = jacksonUtil.getString("teaOprid");
 				if(stuOprid!=null&&teaOprid!=null){
 					
-					PxStuFocusKey pxStuFocusKey=new PxStuFocusKey();
+					PxStuFocusTeaTKey pxStuFocusKey=new PxStuFocusTeaTKey();
 					pxStuFocusKey.setStuOprid(stuOprid);
 					pxStuFocusKey.setTeaOprid(teaOprid);
 					pxStuFocusMapper.deleteByPrimaryKey(pxStuFocusKey);

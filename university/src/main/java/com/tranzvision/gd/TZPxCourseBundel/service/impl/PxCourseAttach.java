@@ -15,8 +15,8 @@ import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
 import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqPagzcTbl;
-import com.tranzvision.gd.TZPXBundle.dao.PxCourseAnnexMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxCourseAnnex;
+import com.tranzvision.gd.TZPXBundle.dao.PxCourseAnnexTMapper;
+import com.tranzvision.gd.TZPXBundle.model.PxCourseAnnexT;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
@@ -37,7 +37,7 @@ public class PxCourseAttach extends FrameworkImpl {
 	@Autowired
 	private HttpServletRequest request;
 	@Autowired
-	private PxCourseAnnexMapper pxCourseAnnexMapper;
+	private PxCourseAnnexTMapper pxCourseAnnexMapper;
 
 	/* 新增组件注册信息 */
 	@Override
@@ -64,7 +64,7 @@ public class PxCourseAttach extends FrameworkImpl {
 				String accessPath = jacksonUtil.getString("accessPath");
 				// 信息内容;
 				
-				PxCourseAnnex pxCourseAnnex=new PxCourseAnnex();
+				PxCourseAnnexT pxCourseAnnex=new PxCourseAnnexT();
 				pxCourseAnnex.setTzCourseId(tzCourseId);
 				
 				//需要修改

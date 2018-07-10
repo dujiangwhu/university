@@ -396,7 +396,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 								pkStuCourseChangeT.setOprid(oprid);
 								pkStuCourseChangeT.setTzBeforeChange(tzBeforeChange);
 								pkStuCourseChangeT.setTzAfterChange(tzAfterChange);
-								pkStuCourseChangeT.setTzChangeType("2");
+								pkStuCourseChangeT.setTzChangeType("1");
 								pkStuCourseChangeT.setTzChange(new Integer(-1));
 								pkStuCourseChangeT.setTzChangeTime(new Date());
 								pkStuCourseChangeT.setTzScheduleId(TZ_SCHEDULE_ID);
@@ -449,7 +449,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 								pkStuCourseChangeT.setOprid(oprid);
 								pkStuCourseChangeT.setTzBeforeChange(tzBeforeChange);
 								pkStuCourseChangeT.setTzAfterChange(tzAfterChange);
-								pkStuCourseChangeT.setTzChangeType("2");
+								pkStuCourseChangeT.setTzChangeType("1");
 								pkStuCourseChangeT.setTzChange(new Integer(-1));
 								pkStuCourseChangeT.setTzChangeTime(new Date());
 								pkStuCourseChangeT.setTzScheduleId(TZ_SCHEDULE_ID);

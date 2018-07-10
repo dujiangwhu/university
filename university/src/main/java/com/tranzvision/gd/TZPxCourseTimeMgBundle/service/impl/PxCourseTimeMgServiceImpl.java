@@ -16,7 +16,6 @@ import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxJgKsLogTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxStuFocusKey;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 

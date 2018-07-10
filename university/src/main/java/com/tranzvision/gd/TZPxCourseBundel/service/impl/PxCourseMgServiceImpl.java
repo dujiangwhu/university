@@ -11,8 +11,9 @@ import org.springframework.stereotype.Service;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
-import com.tranzvision.gd.TZPXBundle.dao.PxCourseMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PxCourseTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxCourse;
+import com.tranzvision.gd.TZPXBundle.model.PxCourseT;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
@@ -27,7 +28,7 @@ public class PxCourseMgServiceImpl extends FrameworkImpl {
 	@Autowired
 	private SqlQuery jdbcTemplate;
 	@Autowired
-	private PxCourseMapper pxCourseMapper;
+	private PxCourseTMapper pxCourseMapper;
 	@Autowired
 	private FliterForm fliterForm;
 	
@@ -98,7 +99,7 @@ public class PxCourseMgServiceImpl extends FrameworkImpl {
 				String strComID = jacksonUtil.getString("tzCourseId");
 				if (strComID != null && !"".equals(strComID)) {
 
-					PxCourse pxCourse = pxCourseMapper.selectByPrimaryKey(strComID);
+					PxCourseT pxCourse = pxCourseMapper.selectByPrimaryKey(strComID);
 					if (pxCourse != null) {
 						// 组件注册信息;
 						Map<String, Object> jsonMap = new HashMap<>();

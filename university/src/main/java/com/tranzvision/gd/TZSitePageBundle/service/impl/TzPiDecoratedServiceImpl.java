@@ -21,8 +21,8 @@ import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
 
 /**
- * 原PS：TZ_SITE_DECORATED_APP:TZ_PI_DECORATED_CLS
- * 申请首页个人信息编辑器
+ * 原PS：TZ_SITE_DECORATED_APP:TZ_PI_DECORATED_CLS 申请首页个人信息编辑器
+ * 
  * @author SHIHUA
  * @since 2015-12-17
  */
@@ -99,7 +99,7 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 				m_curOrgID = tzWebsiteLoginServiceImpl.getLoginedUserOrgid(request);
 				m_curOPRID = tzWebsiteLoginServiceImpl.getLoginedUserOprid(request);
 			}
-		
+
 			if (!m_curOrgID.equals(orgId)) {
 				// 如果当前用户登录的机构与请求的机构不一致，则返回空
 				return "";
@@ -130,168 +130,239 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 
 			String strResultHeadImg = tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerPhotoCard", strPhoto,
 					edituserpt_url);
-					// 处理头像部分 - 结束
+			// 处理头像部分 - 结束
 
 			// 处理信息项部分 - 开始
-			//sql = "select count(1) from PS_TZ_REG_FIELD_T where TZ_JG_ID =? and TZ_ENABLE = 'Y' and TZ_IS_SHOWWZSY = 'Y' order by TZ_ORDER";
-			sql = "select count(1) from PS_TZ_REG_FIELD_T where TZ_SITEI_ID =? and TZ_ENABLE = 'Y' and TZ_IS_SHOWWZSY = 'Y' order by TZ_ORDER";
-			int tz_fld_num = sqlQuery.queryForObject(sql, new Object[] { siteId }, "int");
-
-			sql = tzGDObject.getSQLText("SQL.TZSitePageBundle.TzGetUserInfoFieldsList");
-			List<Map<String, Object>> listFields = sqlQuery.queryForList(sql, new Object[] { siteId });
+			sql = "SELECT TZ_DLZH_ID,TZ_RYLX,TZ_REALNAME FROM PS_TZ_AQ_YHXX_TBL WHERE OPRID=?";
+			Map<String, Object> map = sqlQuery.queryForMap(sql, new Object[] { m_curOPRID });
+			String TZ_RYLX = "";
+			String TZ_DLZH_ID = "";
+			String TZ_REALNAME = "";
+			if (map != null) {
+				TZ_RYLX = map.get("TZ_RYLX") == null ? "" : String.valueOf(mapSiteiInfo.get("TZ_RYLX"));
+				TZ_DLZH_ID = map.get("TZ_DLZH_ID") == null ? "" : String.valueOf(mapSiteiInfo.get("TZ_DLZH_ID"));
+				TZ_REALNAME = map.get("TZ_REALNAME") == null ? "" : String.valueOf(mapSiteiInfo.get("TZ_REALNAME"));
+			}
+			int tz_fld_num = 0;
 
 			String strResult_fld = "";
 			String strResult_fld_aleft = ""; // 样式为左对齐对应的html
+			// 学生
+			if (TZ_RYLX.equals("PXXY")) {
+				// 学生显示手机号码 姓名 已用课时卡 剩余课时卡
+				tz_fld_num = 4;
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "姓名",
+						TZ_REALNAME, String.valueOf(td_long));
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "手机号码",
+						TZ_DLZH_ID, String.valueOf(td_long));
+				int sy = sqlQuery.queryForObject("SELECT TIMECARD_REMAIND FROM  PX_STUDENT_T where OPRID=? limit 1",
+						new Object[] { m_curOPRID }, "Integer");
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "剩余课时卡",
+						String.valueOf(sy), String.valueOf(td_long));
 
-			for (Map<String, Object> mapField : listFields) {
+				int yd = sqlQuery.queryForObject(
+						"SELECT COUNT(*) FROM  PK_STU_COURSE_CHANGE_T where OPRID=? AND TZ_CHANGE_TYPE=?",
+						new Object[] { m_curOPRID, "1" }, "Integer");
 
-				String str_TZ_REG_FIELD_ID = mapField.get("TZ_REG_FIELD_ID") == null ? ""
-						: String.valueOf(mapField.get("TZ_REG_FIELD_ID"));
-				String str_TZ_REG_FIELD_NAME = mapField.get("TZ_REG_FIELD_NAME") == null ? ""
-						: String.valueOf(mapField.get("TZ_REG_FIELD_NAME"));
-				String str_TZ_FIELD_TYPE = mapField.get("TZ_FIELD_TYPE") == null ? ""
-						: String.valueOf(mapField.get("TZ_FIELD_TYPE"));
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "使用的课时卡",
+						String.valueOf(yd), String.valueOf(td_long));
 
-				// 双语化信息项代码 - 开始
-				if (!sysDefaultLang.equals(strLangID)) {
-					// 如果在英文环境下 ， 取英文字段（如果英文为空，用中文）;
-					sql = tzGDObject.getSQLText("SQL.TZSitePageBundle.TzGetUserFieldInEng");
-					String str_TZ_REG_FIELD_EN_NAME = sqlQuery.queryForObject(sql,
-							new Object[] { m_curOrgID, str_TZ_REG_FIELD_ID, strLangID }, "String");
-					if (null != str_TZ_REG_FIELD_EN_NAME && !"".equals(str_TZ_REG_FIELD_EN_NAME)) {
-						str_TZ_REG_FIELD_NAME = str_TZ_REG_FIELD_EN_NAME;
-					}
-				}
-				// 双语化信息项代码 - 结束
+			} else if (TZ_RYLX.equals("JGJS")) { // 教师
+				// 显示 手机号码，姓名， 剩余积分 提 课程类型
+				tz_fld_num = 4;
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "姓名",
+						TZ_REALNAME, String.valueOf(td_long));
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "手机号码",
+						TZ_DLZH_ID, String.valueOf(td_long));
 
-				switch (str_TZ_REG_FIELD_ID) {
-				case "TZ_MOBILE":
+				int sy = sqlQuery.queryForObject("SELECT SCORE FROM  PX_TEACHER_T where OPRID=? limit 1",
+						new Object[] { m_curOPRID }, "Integer");
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "剩余积分",
+						String.valueOf(sy), String.valueOf(td_long));
 
-					sql = "select TZ_ZY_SJ from PS_TZ_LXFSINFO_TBL where TZ_LXFS_LY = 'ZCYH' and TZ_LYDX_ID = ?";
-					String str_phone = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
+				// 课程类型 目前没表
+				sql = "SELECT  group_concat(B.TZ_COURSE_TYPE_NAME) FROM PX_TEA_COURSE_TYPE_T A,PX_COURSE_TYPE_T B WHERE A.TZ_COURSE_TYPE_ID=B.TZ_COURSE_TYPE_ID AND A.OPRID=? GROUP BY A.OPRID";
+				String types = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
 
-					str_phone = str_phone == null ? "" : str_phone;
-					str_phone = StringEscapeUtils.escapeHtml(str_phone);
-					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
-							str_TZ_REG_FIELD_NAME, str_phone, String.valueOf(td_long));
+				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "课程类型",
+						types, String.valueOf(td_long));
 
-					strResult_fld_aleft = strResult_fld_aleft
-							+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft", str_TZ_REG_FIELD_NAME,
-									str_phone, String.valueOf(td_long));
+			} else { // 管理
+				// sql = "select count(1) from PS_TZ_REG_FIELD_T where TZ_JG_ID
+				// =? and TZ_ENABLE = 'Y' and TZ_IS_SHOWWZSY = 'Y' order by
+				// TZ_ORDER";
+				sql = "select count(1) from PS_TZ_REG_FIELD_T where TZ_SITEI_ID =? and TZ_ENABLE = 'Y' and TZ_IS_SHOWWZSY = 'Y' order by TZ_ORDER";
+				tz_fld_num = sqlQuery.queryForObject(sql, new Object[] { siteId }, "int");
 
-					break;
+				sql = tzGDObject.getSQLText("SQL.TZSitePageBundle.TzGetUserInfoFieldsList");
+				List<Map<String, Object>> listFields = sqlQuery.queryForList(sql, new Object[] { siteId });
 
-				case "TZ_EMAIL":
+				for (Map<String, Object> mapField : listFields) {
 
-					sql = "select TZ_ZY_EMAIL from PS_TZ_LXFSINFO_TBL where TZ_LXFS_LY = 'ZCYH' and TZ_LYDX_ID = ?";
-					String str_Email = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
+					String str_TZ_REG_FIELD_ID = mapField.get("TZ_REG_FIELD_ID") == null ? ""
+							: String.valueOf(mapField.get("TZ_REG_FIELD_ID"));
+					String str_TZ_REG_FIELD_NAME = mapField.get("TZ_REG_FIELD_NAME") == null ? ""
+							: String.valueOf(mapField.get("TZ_REG_FIELD_NAME"));
+					String str_TZ_FIELD_TYPE = mapField.get("TZ_FIELD_TYPE") == null ? ""
+							: String.valueOf(mapField.get("TZ_FIELD_TYPE"));
 
-					str_Email = str_Email == null ? "" : str_Email;
-					str_Email = StringEscapeUtils.escapeHtml(str_Email);
-					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
-							str_TZ_REG_FIELD_NAME, str_Email, String.valueOf(td_long));
-
-					strResult_fld_aleft = strResult_fld_aleft
-							+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft", str_TZ_REG_FIELD_NAME,
-									str_Email, String.valueOf(td_long));
-
-					break;
-
-				case "TZ_SKYPE":
-
-					sql = "select TZ_SKYPE from PS_TZ_LXFSINFO_TBL where TZ_LXFS_LY = 'ZCYH' and TZ_LYDX_ID = ?";
-					String str_Skype = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
-
-					str_Skype = str_Skype == null ? "" : str_Skype;
-					str_Skype = StringEscapeUtils.escapeHtml(str_Skype);
-					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
-							str_TZ_REG_FIELD_NAME, str_Skype, String.valueOf(td_long));
-
-					strResult_fld_aleft = strResult_fld_aleft
-							+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft", str_TZ_REG_FIELD_NAME,
-									str_Skype, String.valueOf(td_long));
-
-					break;
-				case "TZ_PROJECT":	
-					
-					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld2",
-							"查看新闻及活动范围设置：<a href=\"javaScript: void(0);\" onclick=\"selectNewsProject("+siteId+");\" ><img src=\""+ctxPath+"/statics/images/tranzvision/sz.png\" width=\"25px;\" height=\"25px;\"></a>");
-
-					strResult_fld_aleft = strResult_fld_aleft
-							+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft2",
-									"查看新闻及活动范围设置：<a href=\"javaScript: void(0);\" onclick=\"selectNewsProject("+siteId+");\" ><img src=\""+ctxPath+"/statics/images/tranzvision/sz.png\" width=\"25px;\" height=\"25px;\"></a>");
-					
-					break;
-
-				default:
-
-					if ("DROP".equals(str_TZ_FIELD_TYPE)) {
-
-						sql = "select " + str_TZ_REG_FIELD_ID + " from PS_TZ_REG_USER_T where OPRID = ?";
-						String str_TZ_REG_FIELD_ID_value = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID },
-								"String");
-
-						str_TZ_REG_FIELD_ID_value = str_TZ_REG_FIELD_ID_value == null ? "" : str_TZ_REG_FIELD_ID_value;
-
-						//sql = "select TZ_OPT_VALUE from PS_TZ_YHZC_XXZ_TBL where TZ_JG_ID =? and TZ_REG_FIELD_ID =? and TZ_OPT_ID =?";
-						sql = "select TZ_OPT_VALUE from PS_TZ_YHZC_XXZ_TBL where TZ_SITEI_ID =? and TZ_REG_FIELD_ID =? and TZ_OPT_ID =?";
-						String str_TZ_REG_FIELD_ID_opt = sqlQuery.queryForObject(sql,
-								new Object[] { siteId, str_TZ_REG_FIELD_ID, str_TZ_REG_FIELD_ID_value }, "String");
-
-						str_TZ_REG_FIELD_ID_opt = str_TZ_REG_FIELD_ID_opt == null ? "" : str_TZ_REG_FIELD_ID_opt;
-
-						// 双语化下拉框代码 - 开始
-						if (!sysDefaultLang.equals(strLangID)) {
-							// 如果在英文环境下 ， 取英文字段（如果英文为空，用中文）;
-							sql = tzGDObject.getSQLText("SQL.TZSitePageBundle.TzGetUserDropListOptInEng");
-							String str_TZ_REG_FIELD_ID_optEN = sqlQuery.queryForObject(sql, new Object[] { strLangID,
-									siteId, str_TZ_REG_FIELD_ID, str_TZ_REG_FIELD_ID_value }, "String");
-							if (null != str_TZ_REG_FIELD_ID_optEN && !"".equals(str_TZ_REG_FIELD_ID_optEN)) {
-								str_TZ_REG_FIELD_ID_opt = str_TZ_REG_FIELD_ID_optEN;
-							}
+					// 双语化信息项代码 - 开始
+					if (!sysDefaultLang.equals(strLangID)) {
+						// 如果在英文环境下 ， 取英文字段（如果英文为空，用中文）;
+						sql = tzGDObject.getSQLText("SQL.TZSitePageBundle.TzGetUserFieldInEng");
+						String str_TZ_REG_FIELD_EN_NAME = sqlQuery.queryForObject(sql,
+								new Object[] { m_curOrgID, str_TZ_REG_FIELD_ID, strLangID }, "String");
+						if (null != str_TZ_REG_FIELD_EN_NAME && !"".equals(str_TZ_REG_FIELD_EN_NAME)) {
+							str_TZ_REG_FIELD_NAME = str_TZ_REG_FIELD_EN_NAME;
 						}
-						// 双语化下拉框代码 - 结束
-						str_TZ_REG_FIELD_ID_opt = StringEscapeUtils.escapeHtml(str_TZ_REG_FIELD_ID_opt);
+					}
+					// 双语化信息项代码 - 结束
+
+					switch (str_TZ_REG_FIELD_ID) {
+					case "TZ_MOBILE":
+
+						sql = "select TZ_ZY_SJ from PS_TZ_LXFSINFO_TBL where TZ_LXFS_LY = 'ZCYH' and TZ_LYDX_ID = ?";
+						String str_phone = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
+
+						str_phone = str_phone == null ? "" : str_phone;
+						str_phone = StringEscapeUtils.escapeHtml(str_phone);
 						strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
-								str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_opt, String.valueOf(td_long));
+								str_TZ_REG_FIELD_NAME, str_phone, String.valueOf(td_long));
 
 						strResult_fld_aleft = strResult_fld_aleft
 								+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft",
-										str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_opt, String.valueOf(td_long));
+										str_TZ_REG_FIELD_NAME, str_phone, String.valueOf(td_long));
 
-					} else {
+						break;
 
-						sql = "select " + str_TZ_REG_FIELD_ID + " from PS_TZ_REG_USER_T where OPRID = ?";
-						String str_TZ_REG_FIELD_ID_value = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID },
-								"String");
+					case "TZ_EMAIL":
 
-						str_TZ_REG_FIELD_ID_value = str_TZ_REG_FIELD_ID_value == null ? "" : str_TZ_REG_FIELD_ID_value;
-						str_TZ_REG_FIELD_ID_value = StringEscapeUtils.escapeHtml(str_TZ_REG_FIELD_ID_value);
+						sql = "select TZ_ZY_EMAIL from PS_TZ_LXFSINFO_TBL where TZ_LXFS_LY = 'ZCYH' and TZ_LYDX_ID = ?";
+						String str_Email = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
+
+						str_Email = str_Email == null ? "" : str_Email;
+						str_Email = StringEscapeUtils.escapeHtml(str_Email);
 						strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
-								str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_value, String.valueOf(td_long));
+								str_TZ_REG_FIELD_NAME, str_Email, String.valueOf(td_long));
 
 						strResult_fld_aleft = strResult_fld_aleft
 								+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft",
-										str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_value, String.valueOf(td_long));
+										str_TZ_REG_FIELD_NAME, str_Email, String.valueOf(td_long));
 
+						break;
+
+					case "TZ_SKYPE":
+
+						sql = "select TZ_SKYPE from PS_TZ_LXFSINFO_TBL where TZ_LXFS_LY = 'ZCYH' and TZ_LYDX_ID = ?";
+						String str_Skype = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
+
+						str_Skype = str_Skype == null ? "" : str_Skype;
+						str_Skype = StringEscapeUtils.escapeHtml(str_Skype);
+						strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
+								str_TZ_REG_FIELD_NAME, str_Skype, String.valueOf(td_long));
+
+						strResult_fld_aleft = strResult_fld_aleft
+								+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft",
+										str_TZ_REG_FIELD_NAME, str_Skype, String.valueOf(td_long));
+
+						break;
+					case "TZ_PROJECT":
+
+						strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld2",
+								"查看新闻及活动范围设置：<a href=\"javaScript: void(0);\" onclick=\"selectNewsProject(" + siteId
+										+ ");\" ><img src=\"" + ctxPath
+										+ "/statics/images/tranzvision/sz.png\" width=\"25px;\" height=\"25px;\"></a>");
+
+						strResult_fld_aleft = strResult_fld_aleft + tzGDObject.getHTMLText(
+								"HTML.TZSitePageBundle.TzPerInfoFldAleft2",
+								"查看新闻及活动范围设置：<a href=\"javaScript: void(0);\" onclick=\"selectNewsProject(" + siteId
+										+ ");\" ><img src=\"" + ctxPath
+										+ "/statics/images/tranzvision/sz.png\" width=\"25px;\" height=\"25px;\"></a>");
+
+						break;
+
+					default:
+
+						if ("DROP".equals(str_TZ_FIELD_TYPE)) {
+
+							sql = "select " + str_TZ_REG_FIELD_ID + " from PS_TZ_REG_USER_T where OPRID = ?";
+							String str_TZ_REG_FIELD_ID_value = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID },
+									"String");
+
+							str_TZ_REG_FIELD_ID_value = str_TZ_REG_FIELD_ID_value == null ? ""
+									: str_TZ_REG_FIELD_ID_value;
+
+							// sql = "select TZ_OPT_VALUE from
+							// PS_TZ_YHZC_XXZ_TBL where TZ_JG_ID =? and
+							// TZ_REG_FIELD_ID =? and TZ_OPT_ID =?";
+							sql = "select TZ_OPT_VALUE from PS_TZ_YHZC_XXZ_TBL where TZ_SITEI_ID =? and TZ_REG_FIELD_ID =? and TZ_OPT_ID =?";
+							String str_TZ_REG_FIELD_ID_opt = sqlQuery.queryForObject(sql,
+									new Object[] { siteId, str_TZ_REG_FIELD_ID, str_TZ_REG_FIELD_ID_value }, "String");
+
+							str_TZ_REG_FIELD_ID_opt = str_TZ_REG_FIELD_ID_opt == null ? "" : str_TZ_REG_FIELD_ID_opt;
+
+							// 双语化下拉框代码 - 开始
+							if (!sysDefaultLang.equals(strLangID)) {
+								// 如果在英文环境下 ， 取英文字段（如果英文为空，用中文）;
+								sql = tzGDObject.getSQLText("SQL.TZSitePageBundle.TzGetUserDropListOptInEng");
+								String str_TZ_REG_FIELD_ID_optEN = sqlQuery.queryForObject(sql, new Object[] {
+										strLangID, siteId, str_TZ_REG_FIELD_ID, str_TZ_REG_FIELD_ID_value }, "String");
+								if (null != str_TZ_REG_FIELD_ID_optEN && !"".equals(str_TZ_REG_FIELD_ID_optEN)) {
+									str_TZ_REG_FIELD_ID_opt = str_TZ_REG_FIELD_ID_optEN;
+								}
+							}
+							// 双语化下拉框代码 - 结束
+							str_TZ_REG_FIELD_ID_opt = StringEscapeUtils.escapeHtml(str_TZ_REG_FIELD_ID_opt);
+							strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
+									str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_opt, String.valueOf(td_long));
+
+							strResult_fld_aleft = strResult_fld_aleft
+									+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft",
+											str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_opt, String.valueOf(td_long));
+
+						} else {
+
+							sql = "select " + str_TZ_REG_FIELD_ID + " from PS_TZ_REG_USER_T where OPRID = ?";
+							String str_TZ_REG_FIELD_ID_value = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID },
+									"String");
+
+							str_TZ_REG_FIELD_ID_value = str_TZ_REG_FIELD_ID_value == null ? ""
+									: str_TZ_REG_FIELD_ID_value;
+							str_TZ_REG_FIELD_ID_value = StringEscapeUtils.escapeHtml(str_TZ_REG_FIELD_ID_value);
+							strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld",
+									str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_value, String.valueOf(td_long));
+
+							strResult_fld_aleft = strResult_fld_aleft
+									+ tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFldAleft",
+											str_TZ_REG_FIELD_NAME, str_TZ_REG_FIELD_ID_value, String.valueOf(td_long));
+
+						}
+
+						break;
 					}
 
-					break;
 				}
-
 			}
+
 			// 处理信息项部分 - 结束
 
-			//sql = "select TZ_IS_SHOW_PHOTO from PS_TZ_USERREG_MB_T where TZ_JG_ID=?";
-			sql = "select TZ_IS_SHOW_PHOTO from PS_TZ_USERREG_MB_T where TZ_SITEI_ID=?";
-			String isShowPhoto = sqlQuery.queryForObject(sql, new Object[] { siteId }, "String");
-			if ("Y".equals(isShowPhoto)) {
-				strRet = tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoCard", strResultHeadImg, strResult_fld,
-						String.valueOf(tz_fld_num));
-			} else {
-				strRet = tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoCardNoHeadImg", strResult_fld_aleft,
-						String.valueOf(tz_fld_num));
-			}
+			// sql = "select TZ_IS_SHOW_PHOTO from PS_TZ_USERREG_MB_T where
+			// TZ_JG_ID=?";
+			// sql = "select TZ_IS_SHOW_PHOTO from PS_TZ_USERREG_MB_T where
+			// TZ_SITEI_ID=?";
+			// String isShowPhoto = sqlQuery.queryForObject(sql, new Object[] {
+			// siteId }, "String");
+
+			// 写死显示头像
+			// if ("Y".equals(isShowPhoto)) {
+			strRet = tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoCard", strResultHeadImg, strResult_fld,
+					String.valueOf(tz_fld_num));
+			// } else {
+			// strRet =
+			// tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoCardNoHeadImg",
+			// strResult_fld_aleft,
+			// String.valueOf(tz_fld_num));
+			// }
 
 			strRet = strRet.replace((char) (10), ' ');
 			strRet = strRet.replace((char) (13), ' ');
@@ -301,12 +372,11 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 
 			strRet = "\"" + strRet + "\"";
 
-
 		} catch (Exception e) {
 			e.printStackTrace();
 
 		}
-		
+
 		return strRet;
 	}
 

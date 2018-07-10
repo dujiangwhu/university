@@ -14,7 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxStuReviewMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PxStuReviewTeaTMapper;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
@@ -40,7 +40,7 @@ public class PxReviewMgServiceImpl extends FrameworkImpl {
 	private PsTzJgBaseTMapper psTzJgBaseTMapper;
 	
 	@Autowired
-	private PxStuReviewMapper pxStuReviewMapper;
+	private PxStuReviewTeaTMapper pxStuReviewMapper;
 
 	@SuppressWarnings("unchecked")
 	@Override
