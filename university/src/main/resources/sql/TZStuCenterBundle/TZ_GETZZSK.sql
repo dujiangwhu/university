@@ -1,6 +1,7 @@
 SELECT
 	A.OPRID,
 	A.TZ_SCHEDULE_ID,
+	B.TZ_COURSE_ID,
 	date_format(
 		B.TZ_CLASS_START_TIME,
 		'%Y-%m-%d %H:%I:%S'

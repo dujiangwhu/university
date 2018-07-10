@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZPXBundle.dao.PkStuCourseChangeTMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PxCourseAnnexTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PkStuCourseChangeT;
 import com.tranzvision.gd.TZWebSiteUtilBundle.service.impl.SiteRepCssServiceImpl;
 import com.tranzvision.gd.util.Calendar.DateUtil;
@@ -51,6 +52,9 @@ public class MyOverCourseImpl extends FrameworkImpl {
 	@Autowired
 	private GetSeqNum getSeqNum;
 
+	@Autowired
+	private PxCourseAnnexTMapper pxCourseAnnexTMapper;
+
 	@Override
 	public String tzGetHtmlContent(String strParams) {
 		String applicationCenterHtml = "";
@@ -60,7 +64,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 
 		jacksonUtil.json2Map(strParams);
 
-	//  1预约课程 2正在上课 3上完课程 4即将开课 5取消课程 6 缺课
+		// 1预约课程 2正在上课 3上完课程 4即将开课 5取消课程 6 缺课
 		String opType = "";
 
 		if (jacksonUtil.containsKey("opType")) {
@@ -126,6 +130,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 				new Object[] { "TZ_LIMIT_HOUR" }, "String");
 		StringBuffer sb = new StringBuffer();
 		Date now = new Date();
+		String path = request.getContextPath();
 
 		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -142,9 +147,12 @@ public class MyOverCourseImpl extends FrameworkImpl {
 
 		List<Map<String, Object>> l = null;
 		String sql = "";
+
+		String annexSQL = "SELECT TZ_ATTACHFILE_NAME,TZ_ATT_A_URL FROM PX_COURSE_ANNEX_T WHERE TZ_COURSE_ID=?";
+		List<Map<String, Object>> annex = null;
 		try {
 			switch (opType) {
-			//  1预约课程 2正在上课 3上完课程 4即将开课 5取消课程 6 缺课
+			// 1预约课程 2正在上课 3上完课程 4即将开课 5取消课程 6 缺课
 			case "1":
 				sql = tzGDObject.getSQLText("SQL.TZStuCenterBundle.TZ_GETYYPK");
 				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "0" });
@@ -166,9 +174,6 @@ public class MyOverCourseImpl extends FrameworkImpl {
 				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "0" });
 				break;
 			}
-			
-			
-			
 
 			sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"index-bm-border\">");
 			sb.append("<tbody><tr class=\"index_hd\">");
@@ -191,7 +196,11 @@ public class MyOverCourseImpl extends FrameworkImpl {
 				String SKJS = "";
 				String status = "";
 				String KKID = "";
+				String TZ_COURSE_ID = "";
+
+				String flies = "";
 				for (int i = 0; i < l.size(); i++) {
+					flies = "";
 					KCJB = (String) l.get(i).get("TZ_COURSE_TYPE_NAME");
 					SKSJ = (String) l.get(i).get("TZ_CLASS_START_TIME");
 					JSSJ = (String) l.get(i).get("TZ_CLASS_END_TIME");
@@ -199,6 +208,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 					SKJS = (String) l.get(i).get("TZ_REALNAME");
 					status = (String) l.get(i).get("TZ_APP_STATUS");
 					KKID = (String) l.get(i).get("TZ_SCHEDULE_ID");
+					TZ_COURSE_ID = (String) l.get(i).get("TZ_COURSE_ID");
 					sb.append("<tr>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + KCJB
 							+ "</td>");
@@ -208,48 +218,29 @@ public class MyOverCourseImpl extends FrameworkImpl {
 							+ "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + SKJS
 							+ "</td>");
-					
-					
-					//获取文件名，文件路径
-					
 
-					switch (status) {
-					// 0 正常 1 撤销 2已上课
-					case "0":
-						Date starDate = DateUtil.parse(SKSJ);
-						Date endDate = DateUtil.parse(JSSJ);
-						// 结束时间小于 当前时间，缺课
-						if (endDate.compareTo(now) < 0) {
-							sb.append(
-									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >学生缺席</td>");
-						} else
-						// 开始时间 小于当前时间 结束时间大于当前时间 正在上课
-						if (starDate.compareTo(now) <= 0 && endDate.compareTo(now) > 0) {
-							sb.append(
-									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='shangK(\""
-											+ oprid + "\",\"" + KKID + "\")'>正在上课</a></td>");
-						} else
-						// 开始时间 大于当前时间，开始时间小于当前时间+N小时 即将开课
-						if (starDate.compareTo(now) > 0 && starDate.compareTo(date) < 0) {
-							sb.append(
-									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='shangK(\""
-											+ KKID + "\")'>即将开课</a></td>");
-						} else {
-							sb.append(
-									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='cancel(\""
-											+ KKID + "\")'>取消</a></td>");
+					// 获取文件名，文件路径
+
+					annex = jdbcTemplate.queryForList(annexSQL, new Object[] { TZ_COURSE_ID });
+					if (annex != null && annex.size() > 0) {
+						for (int x = 0; x < annex.size(); x++) {
+							if (x == 0) {
+								flies = "<a href=\"" + path + "/" + l.get(i).get("TZ_ATT_A_URL").toString() + "\">"
+										+ l.get(i).get("TZ_ATTACHFILE_NAME").toString() + "</a>";
+							} else {
+								flies = flies + "&nbsp;&nbsp;,&nbsp;&nbsp;" + "<a href=\"" + path + "/"
+										+ l.get(i).get("TZ_ATT_A_URL").toString() + "\">"
+										+ l.get(i).get("TZ_ATTACHFILE_NAME").toString() + "</a>";
+							}
+
 						}
-
-						break;
-					case "1":
-						sb.append(
-								"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >已取消</td>");
-						break;
-					case "2":
-						sb.append(
-								"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >正常结束</td>");
-						break;
+					} else {
+						flies = "没有课件";
 					}
+
+					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + flies
+							+ "</td>");
+
 					sb.append("</tr>");
 				}
 				sb.append("</tbody></table>");
