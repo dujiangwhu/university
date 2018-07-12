@@ -59,7 +59,6 @@ public class MyCourseImpl extends FrameworkImpl {
 		String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 
 		jacksonUtil.json2Map(strParams);
-		
 
 		// 查询类型：0所有查询 1预约课程 2正在上课 3上完课程 4即将开课 5取消课程
 		String opType = "";
@@ -100,8 +99,8 @@ public class MyCourseImpl extends FrameworkImpl {
 		String ZSGL_URL = request.getContextPath() + "/dispatcher";
 		String classSelectHtml = "";
 		try {
-			classSelectHtml = tzGDObject.getHTMLText("HTML.TZApplicationCenterBundle.TZ_GD_My_COURSE", table, ZSGL_URL,
-					strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath());
+			classSelectHtml = tzGDObject.getHTMLText("HTML.TZApplicationCenterBundle.TZ_GD_My_COURSE", true, table,
+					ZSGL_URL, strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath());
 		} catch (TzSystemException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -303,11 +302,12 @@ public class MyCourseImpl extends FrameworkImpl {
 				String limitHour = jdbcTemplate.queryForObject(
 						"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
 						new Object[] { "TZ_LIMIT_HOUR" }, "String");
-				//StringBuffer sb = new StringBuffer();
+				// StringBuffer sb = new StringBuffer();
 				Date now = new Date();
 
-				//SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-				//String starTime = dateFormat.format(now);
+				// SimpleDateFormat dateFormat = new
+				// SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+				// String starTime = dateFormat.format(now);
 				long currentTime = System.currentTimeMillis();
 				currentTime += Integer.parseInt(limitHour) * 60 * 60 * 1000;
 
@@ -360,6 +360,17 @@ public class MyCourseImpl extends FrameworkImpl {
 						pkStuCourseChangeT.setRowLastmantOprid(oprid);
 						pkStuCourseChangeT.setRowLastmantDttm(new Date());
 						pkStuCourseChangeTMapper.insert(pkStuCourseChangeT);
+
+						// 修改教师排课表预约状态
+
+						int count = jdbcTemplate.queryForObject(
+								"SELECT COUNT(1) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS=0",
+								new Object[] { kkid }, "Integer");
+						if (count < 1) {
+							jdbcTemplate.update("UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=0  WHERE TZ_SCHEDULE_ID=? ",
+									new Object[] { kkid });
+						}
+
 						strRet = "{\"success\":\"取消成功\"}";
 					}
 

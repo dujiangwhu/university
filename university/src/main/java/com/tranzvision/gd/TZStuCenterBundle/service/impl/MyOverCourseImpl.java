@@ -52,8 +52,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 	@Autowired
 	private GetSeqNum getSeqNum;
 
-	@Autowired
-	private PxCourseAnnexTMapper pxCourseAnnexTMapper;
+
 
 	@Override
 	public String tzGetHtmlContent(String strParams) {
@@ -103,7 +102,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 		String ZSGL_URL = request.getContextPath() + "/dispatcher";
 		String classSelectHtml = "";
 		try {
-			classSelectHtml = tzGDObject.getHTMLText("HTML.TZApplicationCenterBundle.TZ_GD_My_COURSE", table, ZSGL_URL,
+			classSelectHtml = tzGDObject.getHTMLText("HTML.TZApplicationCenterBundle.TZ_GD_My_COURSE",true, table, ZSGL_URL,
 					strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath());
 		} catch (TzSystemException e) {
 			// TODO Auto-generated catch block

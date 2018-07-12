@@ -155,7 +155,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 		String ZSGL_URL = request.getContextPath() + "/dispatcher";
 		String classSelectHtml = "";
 		try {
-			classSelectHtml = tzGDObject.getHTMLText("HTML.TZApplicationCenterBundle.TZ_GD_ONLINE_APP",
+			classSelectHtml = tzGDObject.getHTMLText("HTML.TZApplicationCenterBundle.TZ_GD_ONLINE_APP",true,
 					select.toString(), ZSGL_URL, strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath(),
 					selectDate.toString(), "预约时间从第二天开始到下周的周日");
 		} catch (TzSystemException e) {
@@ -219,7 +219,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 			if (l == null || l.size() == 0) {
 				sb.append("<tr>");
 				sb.append(
-						"<td colspan=\"5\" valign=\"middle\" width=\"100%\" align=\"left\" style=\"padding-left:5px;\" >没有数据</td>");
+						"<td colspan=\"6\" valign=\"middle\" width=\"100%\" align=\"left\" style=\"padding-left:5px;\" >没有数据</td>");
 				sb.append("</tr>");
 			} else {
 				String TZ_REALNAME = "";
@@ -403,6 +403,12 @@ public class OnlineAPPImpl extends FrameworkImpl {
 								pkStuCourseChangeT.setRowLastmantOprid(oprid);
 								pkStuCourseChangeT.setRowLastmantDttm(new Date());
 								pkStuCourseChangeTMapper.insert(pkStuCourseChangeT);
+								
+								//修改教师排课表预约状态
+								rs = jdbcTemplate.update(
+										"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=1  WHERE TZ_SCHEDULE_ID=?",
+										new Object[] { TZ_SCHEDULE_ID });
+								
 								strRet = "{\"success\":\"预约课程成功\"}";
 							} else {
 								strRet = "{\"false\":\"没有剩余课时卡\"}";
@@ -456,6 +462,12 @@ public class OnlineAPPImpl extends FrameworkImpl {
 								pkStuCourseChangeT.setRowLastmantOprid(oprid);
 								pkStuCourseChangeT.setRowLastmantDttm(new Date());
 								pkStuCourseChangeTMapper.insert(pkStuCourseChangeT);
+								
+								
+								//修改教师排课表预约状态
+								rs = jdbcTemplate.update(
+										"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=1  WHERE TZ_SCHEDULE_ID=?",
+										new Object[] { TZ_SCHEDULE_ID });
 								strRet = "{\"success\":\"预约课程成功\"}";
 							} else {
 								strRet = "{\"false\":\"没有剩余课时卡\"}";
