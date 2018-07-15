@@ -24,7 +24,78 @@
 			Ext.MessageBox.alert('提示','当前机构未审核通过，不能导入学员，请联系系统管理员。');
 			return;
 		}
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_STU_COM"]["TZ_PX_STU_IMPORT"];
+        if( pageResSet == "" || pageResSet == undefined){
+            Ext.MessageBox.alert(Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_IMPORT.prompt","提示"),Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_INFO.nmyqx","您没有权限") );
+            return;
+        }
+
+        //该功能对应的JS类
+        var className = pageResSet["jsClassName"];
+        if(className == "" || className == undefined){
+            Ext.MessageBox.alert(Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_IMPORT.prompt","提示"), Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_IMPORT.wzdgjs","未找到该功能页面对应的JS类，请检查配置。"));
+            return;
+        }
+
+        var win = this.lookupReference('trainStuImportWindow');
+        if (!win) {
+            Ext.syncRequire(className);
+            ViewClass = Ext.ClassManager.get(className);
+            //新建类
+            // var modalID =btn.findParentByType('userMgGL').child('form').getForm().findField('modalID').getValue();
+            win = new ViewClass();
+            this.getView().add(win);
+        };
+		win.orgId = orgid;
 		
+        var form = win.child("form").getForm();
+        form.reset();
+        win.show();
+		
+	},
+	ensureImport:function(btn){
+		
+		//获取窗口
+        var win = btn.findParentByType("window");
+		var panel = win.findParentByType("panel");
+		var orgId = win.orgId;
+		//解析上传Excel文件
+		var filename = win.down("#orguploadfile").getValue();
+		var fileArr=filename.split("\\");
+		var fileArr2=fileArr[fileArr.length-1].split(".");
+		win.filename = fileArr2[0];
+		var form = win.down('form[name=uploadExcelForm]').getForm();
+		if(filename&&form.isValid()){
+			 var filePath = 'tmpFileUpLoad';
+	         var updateUrl = TzUniversityContextPath + '/UpdServlet?filePath='+filePath;
+			 form.submit({
+				url: updateUrl,
+				waitMsg: '正在上传Excel...',
+				success: function (form, action) {
+					/*上传到服务器*/
+					var sysFileName = action.result.msg.sysFileName;
+					var userFileName = action.result.msg.filename;
+					var path = action.result.msg.accessPath;
+					console.log(sysFileName);
+					console.log(path);
+					/*解析Excel内容*/
+					var tzParams = '{"ComID":"TZ_PX_STU_COM","PageID":"TZ_PX_STU_IMPORT","OperateType":"tzAnalyzeExcel","comParams":{"path":'+Ext.JSON.encode(path)+',"sysFileName":'+Ext.JSON.encode(sysFileName)+',"userFileName":'+Ext.JSON.encode(userFileName)+',"orgId":'+Ext.JSON.encode(orgId)+'}}';
+					Ext.tzLoad(tzParams,function(responseData){
+						if(responseData.error){
+							Ext.Msg.alert("错误",responseData.error);
+							return false;
+						}else{
+							Ext.Msg.alert("成功","导入成功");
+							var grid = panel.down("grid[name=studentGrid]");
+							var gridStore = grid.store;
+							gridStore.tzStoreParams ='{"cfgSrhId":"TZ_PX_STU_COM.TZ_PX_STU_STD.PX_STUDENT_VW","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+panel.orgId+'"}}',
+							gridStore.reload();
+							return false;
+						}
+					});
+				}
+			});
+		}
 	},
     addStudentInfo: function(btn){
 		
