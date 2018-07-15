@@ -93,7 +93,7 @@
 							var grid = pbar.findParentByType("grid");
 							var panel = grid.findParentByType("panel");
 							var gridStore = grid.store;
-							gridStore.tzStoreParams ='{"cfgSrhId":"TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_STU_KS_CHG_V","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+panel.orgId+'"}}',
+							gridStore.tzStoreParams ='{"cfgSrhId":"TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_JG_KS_ASSIGN_VW","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+panel.orgId+'"}}',
 							pbar.setStore(gridStore);
 						}
 					},

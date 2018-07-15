@@ -117,6 +117,8 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 				
 				Map<String, Object> userMap = sqlQuery.queryForMap("SELECT TZ_REALNAME,TZ_MOBILE FROM PS_TZ_AQ_YHXX_TBL WHERE OPRID=? AND TZ_JG_ID = ?",
 						new Object[] { str_oprid ,str_orgid});
+				
+				
 
 				if (userMap == null) {
 					errMsg[0] = "1";
@@ -134,6 +136,15 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						errMsg[0] = "1";
 						errMsg[1] = "不存在该用户！";
 					} else {
+						
+						int stuUseTimeCard = sqlQuery.queryForObject("SELECT IFNULL(SUM(X.TZ_CHANGE),0) FROM PK_STU_COURSE_CHANGE_T X WHERE X.OPRID = ? AND X.TZ_CHANGE_TYPE = '1'",
+								new Object[] { str_oprid },"Integer");
+						
+						int stuBackTimeCard = sqlQuery.queryForObject("SELECT IFNULL(SUM(X.TZ_CHANGE),0) FROM PK_STU_COURSE_CHANGE_T X WHERE X.OPRID = ? AND X.TZ_CHANGE_TYPE = '2'",
+								new Object[] { str_oprid },"Integer");
+						
+						stuUseTimeCard = stuUseTimeCard - stuBackTimeCard;
+						
 						Map<String, Object> jsonMap2 = new HashMap<String, Object>();
 						jsonMap2.put("titleImageUrl", titleImageUrl);
 						jsonMap2.put("oprid", pxStudentT.getOprid());
@@ -149,7 +160,8 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						jsonMap2.put("contactorAddress", pxStudentT.getContactAddress());
 						jsonMap2.put("statu", pxStudentT.getStuStatus());
 						jsonMap2.put("timecardRemaind", pxStudentT.getTimecardRemaind());
-						jsonMap2.put("timecardUsed", pxStudentT.getTimecardUsed());
+						
+						jsonMap2.put("timecardUsed", stuUseTimeCard);
 
 						returnJsonMap.replace("formData", jsonMap2);
 					}
@@ -169,7 +181,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 	}
 
 	/**
-	 * 修改消息集合信息
+	 * 添加学员
 	 */
 	@Override
 	@Transactional
@@ -252,7 +264,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						/*添加角色*/
 						Psroleuser psroleuser = new Psroleuser();
 						psroleuser.setRoleuser(oprID);
-						psroleuser.setRolename("PX_STUDENT");
+						psroleuser.setRolename("PK_STU");
 						psroleuser.setDynamicSw("N");
 						psroleuserMapper.insert(psroleuser);
 						
@@ -296,7 +308,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 	}
 	
 	/**
-	 * 修改消息集合信息
+	 * 修改修改学员信息信息
 	 */
 	@Override
 	@Transactional

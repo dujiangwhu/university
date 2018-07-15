@@ -11,13 +11,33 @@
 			}
 		});	
 	},
+	/*导入学员*/
 	//编辑项目（列表）
+	importStudentInfo: function(btn){
+		var panelList = btn.findParentByType("trainStudentList");
+		var orgid = panelList.orgId;
+		
+		var stuOrgInfoForm = panelList.child('form').getForm();	
+		
+		var orgAuditStatus = stuOrgInfoForm.findField("orgAuditStatus").getValue();
+    	if (orgAuditStatus != "B") {
+			Ext.MessageBox.alert('提示','当前机构未审核通过，不能导入学员，请联系系统管理员。');
+			return;
+		}
+		
+	},
     addStudentInfo: function(btn){
 		
 		var panelList = btn.findParentByType("trainStudentList");
 		var orgid = panelList.orgId;
-		console.log(orgid);
-    	
+		
+		var stuOrgInfoForm = panelList.child('form').getForm();	
+		
+		var orgAuditStatus = stuOrgInfoForm.findField("orgAuditStatus").getValue();
+    	if (orgAuditStatus != "B") {
+			Ext.MessageBox.alert('提示','当前机构未审核通过，不能添加学员，请联系系统管理员。');
+			return;
+		}
      	//是否有访问权限
     	var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_STU_COM"]["TZ_PX_STU_INFO"];
 		if (pageResSet == "" || pageResSet == undefined) {
@@ -95,6 +115,16 @@
     },
     //编辑项目（列表）
     editStudentInfo: function(btn){
+		
+		var panelList = btn.findParentByType("trainStudentList");
+		var stuOrgInfoForm = panelList.child('form').getForm();	
+		
+		var orgAuditStatus = stuOrgInfoForm.findField("orgAuditStatus").getValue();
+    	if (orgAuditStatus != "B") {
+			Ext.MessageBox.alert('提示','当前机构未审核通过，不能编辑学员，请联系系统管理员。');
+			return;
+		}
+
     	//console.log(view);
     	var grid = btn.findParentByType("grid");
 
@@ -117,6 +147,15 @@
     },
 	editStudentInfoOne: function(view, rowIndex){
     	//console.log(view);
+		var panelList = view.findParentByType("trainStudentList");
+		var stuOrgInfoForm = panelList.child('form').getForm();	
+		
+		var orgAuditStatus = stuOrgInfoForm.findField("orgAuditStatus").getValue();
+    	if (orgAuditStatus != "B") {
+			Ext.MessageBox.alert('提示','当前机构未审核通过，不能编辑学员，请联系系统管理员。');
+			return;
+		}
+		
     	var store = view.findParentByType("grid").store;
     	console.log(view.findParentByType("grid"));
 	 	var selRec = store.getAt(rowIndex);
@@ -286,6 +325,16 @@
         comView.close();
     },
 	addStuTimeCard:function(btn){
+		
+		var panelList = btn.findParentByType("trainStudentList");
+		var stuOrgInfoForm = panelList.child('form').getForm();	
+		
+		var orgAuditStatus = stuOrgInfoForm.findField("orgAuditStatus").getValue();
+    	if (orgAuditStatus != "B") {
+			Ext.MessageBox.alert('提示','当前机构未审核通过，不能给学员分配课时卡，请联系系统管理员。');
+			return;
+		}
+		
         //选中行
         var selList = btn.findParentByType("grid").getSelectionModel().getSelection();
         //选中行长度

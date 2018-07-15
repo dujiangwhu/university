@@ -151,6 +151,7 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 					Map<String, Object> mapData = new HashMap<String, Object>();
 					mapData.put("orgId", psTzJgBaseT.getTzJgId());
 					mapData.put("orgName", psTzJgBaseT.getTzJgName());
+					mapData.put("orgAuditStatus", psTzJgBaseT.getTzJgAuditSta());
 	
 					Map<String, Object> mapRet = new HashMap<String, Object>();
 					mapRet.put("formData", mapData);

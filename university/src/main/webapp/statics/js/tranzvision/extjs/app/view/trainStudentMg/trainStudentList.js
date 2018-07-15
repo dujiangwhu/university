@@ -28,6 +28,7 @@
                 form.setValues(formData);
                 form.findField("orgId").setReadOnly(true);
                 form.findField("orgName").setReadOnly(true);
+				form.findField("orgAuditStatus").setReadOnly(true);
                 panel.commitChanges(panel);
             });
         }
@@ -63,6 +64,17 @@
 				cls:'lanage_1',
 				fieldLabel: Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_STD.orgName","机构名称"),
 				name: 'orgName'
+			}, {
+				xtype: 'combobox',
+				cls:'lanage_1',
+				fieldLabel: Ext.tzGetResourse("TZ_PX_STU_COM.TZ_PX_STU_STD.orgAuditStatus","审核状态"),
+				forceSelection: true,
+				valueField: 'TValue',
+				displayField: 'TSDesc',
+				store: new KitchenSink.view.common.store.appTransStore("TZ_ORG_AUDIT_STATE"),
+				typeAhead: true,
+				queryMode: 'local',
+				name: 'orgAuditStatus'
 			}]
 		},{
 			xtype: 'grid', 
@@ -170,6 +182,7 @@
 				items:[
 					{text:"新增",tooltip:"添加学员",iconCls:"add",handler:"addStudentInfo"},"-",
 					{text:"编辑",tooltip:"编辑学员信息",iconCls:"edit",handler:"editStudentInfo"},"-",
+					{text:"导入学员",tooltip:"导入学员",iconCls:"import",handler:"importStudentInfo"},"-",
 					{text:"给学员分配课时卡",tooltip:"给学员分配课时卡",iconCls:"edit",handler:"addStuTimeCard"}
 				]
 			}],

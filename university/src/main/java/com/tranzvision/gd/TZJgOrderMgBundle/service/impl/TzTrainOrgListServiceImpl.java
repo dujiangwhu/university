@@ -183,7 +183,7 @@ public class TzTrainOrgListServiceImpl extends FrameworkImpl {
 						pxJgKsLogT.setTzKsModifyType("A");
 						pxJgKsLogT.setTzTimecardBefore(orgTimeCardHaveBefore);
 						pxJgKsLogT.setTzTimecardAfter(orgTimeCardHaveAfter);
-						pxJgKsLogT.setTzTimecardModify(addTimeCardMoney);
+						pxJgKsLogT.setTzTimecardModify(orgTimeCardNumber);
 						pxJgKsLogT.setRowLastmantOprid(oprid);
 						pxJgKsLogT.setRowLastmantDttm(dateNow);
 						pxJgKsLogTMapper.insert(pxJgKsLogT);
