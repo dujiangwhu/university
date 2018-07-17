@@ -8,9 +8,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
@@ -44,6 +47,11 @@ public class PxCrashMgServiceImpl extends FrameworkImpl {
 	@Autowired
 	private PsTzJgBaseTMapper psTzJgBaseTMapper;
 	
+	@Autowired
+	private HttpServletRequest request;
+
+	@Autowired
+	private TzLoginServiceImpl tzLoginServiceImpl;
 
 	@Autowired
 	private PxTeacherMapper pxTeacherMapper;
@@ -71,7 +79,7 @@ public class PxCrashMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TEA_OPRID", "SCORE", "OPERATE_TIME","OPERATE_OPRID"};
+			String[] resultFldArray = { "TEA_OPRID", "SCORE", "OPERATE_TIME","OPERATE_OPRID","TZ_REALNAME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -88,6 +96,7 @@ public class PxCrashMgServiceImpl extends FrameworkImpl {
 					mapList.put("score", rowList[1]);
 					mapList.put("operateTime", rowList[2]);
 					mapList.put("operateOprid", rowList[3]);
+					mapList.put("tzRealName", rowList[4]);
 		
 					listData.add(mapList);
 				}
@@ -105,9 +114,10 @@ public class PxCrashMgServiceImpl extends FrameworkImpl {
 
 	}
 
-	
-	/* 修改组件注册信息 */
+	/*
+	 修改组件注册信息 
 	public String tzUpdate(String[] actData, String[] errMsg) {
+		System.out.println("update");
 		String strRet = "{}";
 		try {
 			JacksonUtil jacksonUtil = new JacksonUtil();
@@ -133,6 +143,8 @@ public class PxCrashMgServiceImpl extends FrameworkImpl {
 						pxTeaToCrash.setTeaOprid(pxTeacher.getOprid());
 						pxTeaToCrash.setOperateTime(new Date());
 						pxTeaToCrash.setScore(pxTeacher.getScore());
+						pxTeaToCrash.setOperateOprid(tzLoginServiceImpl.getLoginedManagerOprid(request));
+						System.out.println("oprid"+tzLoginServiceImpl.getLoginedManagerOprid(request));
 						pxTeaToCrashMapper.insert(pxTeaToCrash);
 						
 						PxScoreLog pxScoreLog=new PxScoreLog();
@@ -140,6 +152,8 @@ public class PxCrashMgServiceImpl extends FrameworkImpl {
 						pxScoreLog.setChangeScore(0-pxTeacher.getScore());
 						pxScoreLog.setChangeTime(new Date());
 						pxScoreLog.setChangeType("提现");
+						
+						
 						pxScoreLogMapper.insert(pxScoreLog);
 						
 						pxTeacher.setScore(0);
@@ -153,6 +167,6 @@ public class PxCrashMgServiceImpl extends FrameworkImpl {
 			errMsg[1] = e.toString();
 		}
 		return strRet;
-	}
+	}*/
 
 }

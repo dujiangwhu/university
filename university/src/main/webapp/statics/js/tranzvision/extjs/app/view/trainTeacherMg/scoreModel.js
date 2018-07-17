@@ -4,6 +4,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.scoreModel', {
         {name: 'teaOprid'},
         {name: 'changeType'},
         {name: 'changeScore'},
-        {name: 'changeTime'}
+        {name: 'changeTime'},
+        {name: 'tzRealName'}
 	]
 });

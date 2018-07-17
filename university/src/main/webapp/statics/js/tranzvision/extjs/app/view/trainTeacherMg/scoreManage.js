@@ -43,6 +43,12 @@ Ext.define('KitchenSink.view.trainTeacherMg.scoreManage', {//项目管理列表�
                 dataIndex:'teaOprid',
                 align: 'center',
                 width:150
+            },{
+            	text:"姓名",
+                sortable:true,
+                dataIndex:'tzRealName',
+                align: 'center',
+                width:150
             },{ 
             	text: "变动原因",
                 dataIndex: 'changeType',

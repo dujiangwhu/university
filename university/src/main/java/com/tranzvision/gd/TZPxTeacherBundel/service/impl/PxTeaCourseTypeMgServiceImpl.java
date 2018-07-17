@@ -11,12 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
-import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsTzRegUserT;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PxTeaCourseTypeTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
+import com.tranzvision.gd.TZPXBundle.model.PxTeaCourseTypeTKey;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
@@ -46,7 +46,7 @@ public class PxTeaCourseTypeMgServiceImpl extends FrameworkImpl {
 	private PxTeacherMapper pxTeacherMapper;
 	
 	@Autowired
-	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
+	private PxTeaCourseTypeTMapper pxTeaCourseTypeMapper;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -64,7 +64,7 @@ public class PxTeaCourseTypeMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "OPRID", "TZ_REALNAME", "TZ_COURSE_TYPE_ID","TYPE_NAME"};
+			String[] resultFldArray = { "OPRID", "TZ_REALNAME", "TZ_COURSE_TYPE_ID","COURSE_TYPE_NAME","TYPE_DMS"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -81,7 +81,7 @@ public class PxTeaCourseTypeMgServiceImpl extends FrameworkImpl {
 					mapList.put("name", rowList[1]);
 					mapList.put("tzCourseTypeId", rowList[2]);
 					mapList.put("typeName", rowList[3]);
-					//mapList.put("phone", rowList[4]);
+					mapList.put("typeDms", rowList[4]);
 					//mapList.put("score", rowList[5]);
 					//mapList.put("statu", rowList[6]);
 			        
@@ -190,6 +190,8 @@ public class PxTeaCourseTypeMgServiceImpl extends FrameworkImpl {
 	}
 	/* 修改组件注册信息 */
 	public String tzUpdate(String[] actData, String[] errMsg) {
+		
+		System.out.println("to updata");
 		String strRet = "{}";
 		try {
 			JacksonUtil jacksonUtil = new JacksonUtil();
@@ -202,8 +204,8 @@ public class PxTeaCourseTypeMgServiceImpl extends FrameworkImpl {
 				// 类型标志;
 				//Map<String, Object> infoData  = jacksonUtil.getMap("update");
 				String oprid=jacksonUtil.getString("oprid");
-				System.out.println(jacksonUtil.getString("sex"));
-				if(oprid==null){
+				System.out.println(oprid);
+				/*if(oprid==null){
 					errMsg[0] = "1";
 					errMsg[1] = "保存失败";
 				}else{
@@ -233,7 +235,7 @@ public class PxTeaCourseTypeMgServiceImpl extends FrameworkImpl {
 						
 						pxTeacherMapper.updateByPrimaryKey(pxTeacher);
 					}					
-				}
+				}*/
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -243,4 +245,85 @@ public class PxTeaCourseTypeMgServiceImpl extends FrameworkImpl {
 		return strRet;
 	}
 
+	/* 删除组件注册信息 */
+	@Override
+	public String tzDelete(String[] actData, String[] errMsg) {
+		// 返回值;
+		String strRet = "{}";
+
+		// 若参数为空，直接返回;
+		if (actData == null || actData.length == 0) {
+			return strRet;
+		}
+		JacksonUtil jacksonUtil = new JacksonUtil();
+		try {
+
+			int num = 0;
+			for (num = 0; num < actData.length; num++) {
+				// 表单内容;
+				String strForm = actData[num];
+				// 将字符串转换成json;
+				jacksonUtil.json2Map(strForm);
+				// 组件ID;
+				String oprid = jacksonUtil.getString("oprid");
+				String tzCourseTypeId = jacksonUtil.getString("tzCourseTypeId");
+				PxTeaCourseTypeTKey key=new PxTeaCourseTypeTKey();
+				key.setOprid(oprid);
+				key.setTzCourseTypeId(tzCourseTypeId);
+				pxTeaCourseTypeMapper.deleteByPrimaryKey(key);
+				
+			}
+		} catch (Exception e) {
+			errMsg[0] = "1";
+			errMsg[1] = e.toString();
+			return strRet;
+		}
+
+		return strRet;
+	}
+	
+	/* 新增用户账号信息 */
+	public String tzAdd(String[] actData, String[] errMsg) {
+		String strRet = "";
+		try {
+			JacksonUtil jacksonUtil = new JacksonUtil();
+			int num = 0;
+			for (num = 0; num < actData.length; num++) {
+				// 表单内容;
+				String strForm = actData[num];
+				// 将字符串转换成json;
+				jacksonUtil.json2Map(strForm);
+				// 类型标志;
+				String oprid = jacksonUtil.getString("oprid");
+				String tzCourseTypeId = jacksonUtil.getString("tzCourseTypeId");
+				//String typeName = jacksonUtil.getString("typeName");
+				
+				
+				PxTeaCourseTypeTKey key=new PxTeaCourseTypeTKey();
+				key.setOprid(oprid);
+				key.setTzCourseTypeId(tzCourseTypeId);
+				// 查看是否已经存在;
+				int isExistNum = 0;
+				String isExistSQL = "SELECT COUNT(1) FROM PX_TEA_COURSE_TYPE_T WHERE OPRID=? AND TZ_COURSE_TYPE_ID=? ";
+				isExistNum = jdbcTemplate.queryForObject(isExistSQL, new Object[] { oprid ,tzCourseTypeId }, "Integer");
+				if (isExistNum > 0) {
+					errMsg[0] = "1";
+					errMsg[1] = "课程类型编号为：" + tzCourseTypeId + "的信息已经存在。";
+					return strRet;
+				}else{
+					int i=pxTeaCourseTypeMapper.insertSelective(key);
+				}
+				
+				
+
+					
+
+						
+			}
+		} catch (Exception e) {
+			errMsg[0] = "1";
+			errMsg[1] = e.toString();
+		}
+		return strRet;
+	}
 }

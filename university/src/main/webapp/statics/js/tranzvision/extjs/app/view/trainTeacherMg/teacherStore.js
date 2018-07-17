@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.teacherStore', {//项目列表获取
     model: 'KitchenSink.view.trainTeacherMg.teacherModel',
 	comID: 'TZ_PX_TEACHER_COM',
 	pageID: 'TZ_PX_TEACHER_STD',
-	tzStoreParams: '{"cfgSrhId":"TZ_PX_TEACHER_COM.TZ_PX_TEACHER_STD.PX_TEACHER_VW"}',
+	tzStoreParams: '{"cfgSrhId":"TZ_PX_TEACHER_COM.TZ_PX_TEACHER_STD.PX_TEACHER_V"}',
 	autoLoad: true,
 	pageSize:30 ,
 	proxy: Ext.tzListProxy(),

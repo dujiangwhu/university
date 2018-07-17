@@ -8,9 +8,12 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
@@ -40,6 +43,12 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 	
 	@Autowired
 	private SqlQuery sqlQuery;
+	
+	@Autowired
+	private HttpServletRequest request;
+
+	@Autowired
+	private TzLoginServiceImpl tzLoginServiceImpl;
 
 	@Autowired
 	private PsTzJgBaseTMapper psTzJgBaseTMapper;
@@ -71,7 +80,7 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TEA_OPRID", "CHANGE_TYPE", "CHANGE_SCORE","CHANGE_TIME"};
+			String[] resultFldArray = { "TEA_OPRID", "CHANGE_TYPE", "CHANGE_SCORE","CHANGE_TIME","TZ_REALNAME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -88,7 +97,7 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 					mapList.put("changeType", rowList[1]);
 					mapList.put("changeScore", rowList[2]);
 					mapList.put("changeTime", rowList[3]);
-		
+					mapList.put("tzRealName", rowList[4]);
 					listData.add(mapList);
 				}
 
@@ -133,6 +142,7 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 						pxTeaToCrash.setTeaOprid(pxTeacher.getOprid());
 						pxTeaToCrash.setOperateTime(new Date());
 						pxTeaToCrash.setScore(pxTeacher.getScore());
+						pxTeaToCrash.setOperateOprid(tzLoginServiceImpl.getLoginedManagerOprid(request));
 						pxTeaToCrashMapper.insert(pxTeaToCrash);
 						
 						PxScoreLog pxScoreLog=new PxScoreLog();
@@ -140,6 +150,7 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 						pxScoreLog.setChangeScore(0-pxTeacher.getScore());
 						pxScoreLog.setChangeTime(new Date());
 						pxScoreLog.setChangeType("提现");
+						
 						pxScoreLogMapper.insert(pxScoreLog);
 						
 						pxTeacher.setScore(0);

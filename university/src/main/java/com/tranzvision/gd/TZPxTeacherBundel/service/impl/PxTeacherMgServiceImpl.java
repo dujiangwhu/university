@@ -64,7 +64,7 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "OPRID", "TZ_REALNAME", "TZ_SEX_VALUE","PX_TEACHER_LEVEL_VALUE","TZ_MOBILE","SCORE","PX_TEACHER_STATU_VALUE"};
+			String[] resultFldArray = { "OPRID", "TZ_REALNAME", "TZ_SEX_VALUE","PX_TEACHER_LEVEL","TZ_MOBILE","SCORE","PX_TEACHER_STATU"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);

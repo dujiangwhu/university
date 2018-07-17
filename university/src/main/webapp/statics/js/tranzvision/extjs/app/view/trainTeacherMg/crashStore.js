@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.crashStore', {//项目列表获取�
     model: 'KitchenSink.view.trainTeacherMg.crashModel',
 	comID: 'TZ_PX_CRASH_COM',
 	pageID: 'TZ_PX_CRASH_STD',
-	tzStoreParams: '{"cfgSrhId":"TZ_PX_CRASH_COM.TZ_PX_CRASH_STD.PX_TEA_TO_CRASH_T"}',
+	tzStoreParams: '{"cfgSrhId":"TZ_PX_CRASH_COM.TZ_PX_CRASH_STD.PX_TEA_TO_CRASH_V"}',
 	autoLoad: true,
 	pageSize:30 ,
 	proxy: Ext.tzListProxy()/*,

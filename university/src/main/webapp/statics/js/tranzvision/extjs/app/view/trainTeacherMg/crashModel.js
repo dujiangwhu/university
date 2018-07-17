@@ -4,6 +4,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.crashModel', {
         {name: 'teaOprid'},
         {name: 'score'},
         {name: 'operateTime'},
-        {name: 'operateOprid'}
+        {name: 'operateOprid'},
+        {name: 'tzRealName'}
 	]
 });

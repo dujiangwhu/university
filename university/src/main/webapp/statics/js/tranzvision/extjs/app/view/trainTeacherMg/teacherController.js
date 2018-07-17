@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'TZ_PX_TEACHER_COM.TZ_PX_TEACHER_STD.PX_TEACHER_VW', 
+            cfgSrhId: 'TZ_PX_TEACHER_COM.TZ_PX_TEACHER_STD.PX_TEACHER_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;
@@ -372,7 +372,7 @@
 	   editSiteMenuById: function(view, rowIndex){
 		    	var store = view.findParentByType("grid").store;
 				var selRec = store.getAt(rowIndex);
-				var teaOprid = selRec.get("teaOprid");
+				var teaOprid = selRec.get("oprid");
 				this.editSiteMenu(teaOprid);
 			},
 			editSiteMenu: function(teaOprid){
@@ -417,7 +417,7 @@
 		                   themeName + '\'. Is this intentional?');
 		           }
 		       }
-		       
+		       //alert(teaOprid);
 		       cmp = new ViewClass({ teaOprid:teaOprid });
 		       //操作类型设置为更新
 		       cmp.actType = "update";

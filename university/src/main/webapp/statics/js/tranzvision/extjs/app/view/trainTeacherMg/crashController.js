@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'TZ_PX_CRASH_COM.TZ_PX_CRASH_STD.PX_TEA_TO_CRASH_T', 
+            cfgSrhId: 'TZ_PX_CRASH_COM.TZ_PX_CRASH_STD.PX_TEA_TO_CRASH_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;

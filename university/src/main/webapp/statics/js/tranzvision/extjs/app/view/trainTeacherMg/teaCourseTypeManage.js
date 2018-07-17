@@ -29,13 +29,17 @@ Ext.define('KitchenSink.view.trainTeacherMg.teaCourseTypeManage', {//项目管�
 		//dock: 'top',设置工具条的位置
 		items:[
 			{text:Ext.tzGetResourse("TZ_FIRE_VIDEO_COM.TZ_FIRE_PROJ_STD.query","查询"),iconCls:"query",handler:'selectForm'},"-",
+			{text:"新增",tooltip:"新增数据",iconCls:"add",handler:"addPermission"},"-",
+			{text:"删除",tooltip:"删除选中的数据",iconCls:"remove",handler:"deletePageRegInfos"}
 			//{text:"提现",iconCls:"copy",handler:'scoreToCrash'},"-",
 			//{text:"评论管理",iconCls:"edit",handler:'editTeacherInfos'},"-",
 			//{text:"关注学员",iconCls:"edit",handler:'editTeacherInfos'},"-",
 			//{text:"课程级别",iconCls:"edit",handler:'editTeacherInfos'},"-",
 		]}
 		],
-    initComponent: function () {   
+    initComponent: function () { 
+    	var teaOprid=this.teaOprid;
+    	alert("alert(this.teaOprid);"+this.teaOprid);
 		var store = new KitchenSink.view.trainTeacherMg.teaCourseTypeStore();
         Ext.apply(this, {
         	store: store,
@@ -74,7 +78,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.teaCourseTypeManage', {//项目管�
  			   xtype: 'actioncolumn',
  			 
  			   items:[
- 			          //{iconCls: 'edit',tooltip:"编辑",handler:'editTeacherInfo'},
+ 			          {iconCls: 'remove',tooltip:"删除",handler:'deletePageRegInfoOne'}//,
  			          //{iconCls: 'copy',tooltip: '栏目管理',handler:'editSiteColuById'},
 					  //{iconCls: 'set',tooltip: '评论管理',handler:'editReviewById'},
 					  //{iconCls: 'preview',tooltip: '关注学员',handler:'editFocusById'},
@@ -83,9 +87,17 @@ Ext.define('KitchenSink.view.trainTeacherMg.teaCourseTypeManage', {//项目管�
              }
             ],
             buttons: [{
+        		text: '保存',
+        		iconCls:"save",
+        		handler: 'onComRegSave'
+        	}, {
+        		text: '确定',
+        		iconCls:"ensure",
+        		handler: 'onComRegEnsure'
+        	}, {
         		text: '关闭',
         		iconCls:"close",
-        		handler: 'onGridClose'
+        		handler: 'onComRegClose'
         	}],
             bbar: {
                 xtype: 'pagingtoolbar',

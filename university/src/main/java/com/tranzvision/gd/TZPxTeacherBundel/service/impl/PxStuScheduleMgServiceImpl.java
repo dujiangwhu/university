@@ -64,7 +64,10 @@ public class PxStuScheduleMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "OPRID", "TZ_SCHEDULE_ID"};
+			String[] resultFldArray = { "TZ_SCHEDULE_ID","STU_OPRID","STU_REALNAME","STU_PHONE"
+					,"TEA_OPRID","TEA_REALNAME"
+					,"TEA_PHONE","TZ_APP_STATUS","TZ_COURSE_NAME","COURSE_TYPE_NAME"
+					,"START_TIME","END_TIME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -76,8 +79,18 @@ public class PxStuScheduleMgServiceImpl extends FrameworkImpl {
 				for (int i = 0; i < list.size(); i++) {
 					String[] rowList = list.get(i);
 					Map<String, Object> mapList = new HashMap<String, Object>();
-					mapList.put("oprid", rowList[0]);
-					mapList.put("tzScheduleId", rowList[1]);
+					mapList.put("tzScheduleId", rowList[0]);
+					mapList.put("stuOprid", rowList[1]);
+					mapList.put("stuRealname", rowList[2]);
+					mapList.put("stuPhone", rowList[3]);
+					mapList.put("teaOprid", rowList[3]);
+					mapList.put("teaRealname", rowList[4]);
+					mapList.put("teaPhone", rowList[5]);
+					mapList.put("tzAppStatus", rowList[6]);
+					mapList.put("tzCourseName", rowList[7]);
+					mapList.put("courseTypeName", rowList[8]);
+					mapList.put("startTime", rowList[9]);
+					mapList.put("endTime", rowList[10]);
 					listData.add(mapList);
 				}
 

@@ -4,7 +4,6 @@
 package com.tranzvision.gd.TZPxTeacherBundel.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,14 +14,9 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxScoreLogMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxStuFocusTeaTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxTeaToCrashMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxScoreLog;
 import com.tranzvision.gd.TZPXBundle.model.PxStuFocusTeaTKey;
-import com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash;
-import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 

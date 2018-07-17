@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'TZ_PX_SCORE_COM.TZ_PX_SCORE_STD.PX_SCORE_LOG_T', 
+            cfgSrhId: 'TZ_PX_SCORE_COM.TZ_PX_SCORE_STD.PX_SCORE_LOG_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;
