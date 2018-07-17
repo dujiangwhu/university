@@ -178,7 +178,7 @@
 			//页面注册信息列表
 			var grid = panel.child('grid');
 			panel.orgId = orgId;
-			var tzStoreParams = '{"cfgSrhId":"TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_STU_KS_CHG_V","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+ orgId+'"}}';
+			var tzStoreParams = '{"cfgSrhId":"TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_JG_KS_ASSIGN_VW","condition":{"TZ_JG_ID-operator": "01","TZ_JG_ID-value": "'+ orgId+'"}}';
 			grid.store.tzStoreParams = tzStoreParams;
 			grid.store.load();
 
@@ -310,7 +310,7 @@
 		//console.log(panel);
 		//console.log(panel.orgId);
         Ext.tzShowCFGSearch({
-           cfgSrhId: 'TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_STU_KS_CHG_V',
+           cfgSrhId: 'TZ_PX_KS_FPCX_COM.TZ_KS_ASGN_HIS_STD.PX_JG_KS_ASSIGN_VW',
            condition:
             {
                 "TZ_JG_ID": panel.orgId   //设置搜索字段的默认值，没有可以不设置condition;

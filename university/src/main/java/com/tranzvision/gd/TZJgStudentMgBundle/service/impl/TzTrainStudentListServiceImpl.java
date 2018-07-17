@@ -3,9 +3,11 @@
  */
 package com.tranzvision.gd.TZJgStudentMgBundle.service.impl;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -14,6 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
+import com.tranzvision.gd.TZAccountMgBundle.dao.PsoprdefnMapper;
+import com.tranzvision.gd.TZAccountMgBundle.dao.PsroleuserMapper;
+import com.tranzvision.gd.TZAccountMgBundle.model.PsTzAqYhxxTbl;
+import com.tranzvision.gd.TZAccountMgBundle.model.Psoprdefn;
+import com.tranzvision.gd.TZAccountMgBundle.model.Psroleuser;
 import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
@@ -31,6 +39,8 @@ import com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT;
 import com.tranzvision.gd.TZPXBundle.model.PxStudentT;
 import com.tranzvision.gd.TZPXBundle.model.PxStudentTKey;
 import com.tranzvision.gd.util.base.JacksonUtil;
+import com.tranzvision.gd.util.encrypt.DESUtil;
+import com.tranzvision.gd.util.poi.excel.ExcelHandle2;
 import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
@@ -58,6 +68,13 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 	
 	@Autowired
 	private PkStuCourseChangeTMapper pkStuCourseChangeTMapper;
+	
+	@Autowired
+	private PsroleuserMapper psroleuserMapper;
+	@Autowired
+	private PsoprdefnMapper psoprdefnMapper;
+	@Autowired
+	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
 	
 	@Autowired
 	private TzLoginServiceImpl tzLoginServiceImpl;
@@ -151,6 +168,7 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 					Map<String, Object> mapData = new HashMap<String, Object>();
 					mapData.put("orgId", psTzJgBaseT.getTzJgId());
 					mapData.put("orgName", psTzJgBaseT.getTzJgName());
+					mapData.put("orgAuditStatus", psTzJgBaseT.getTzJgAuditSta());
 	
 					Map<String, Object> mapRet = new HashMap<String, Object>();
 					mapRet.put("formData", mapData);
@@ -306,5 +324,193 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 		}
 		return strRet;
 	}
+	
+	//解析Excel;
+		@Override
+		public String tzOther(String oprType, String strParams, String[] errorMsg) {
+			String strRet = "{}";
+			Map<String, Object> returnJsonMap = new HashMap<String, Object>();
+			returnJsonMap.put("success", "");
+			JacksonUtil jacksonUtil = new JacksonUtil();
+			try{
+				//修改密码;
+				if("tzAnalyzeExcel".equals(oprType)){
+					this.tzAnalyzeExcel(strParams, errorMsg);
+				}
+			}catch(Exception e){
+				errorMsg[0] = "1";
+				errorMsg[1] = e.toString();
+			}
+			strRet = jacksonUtil.Map2json(returnJsonMap);
+			return strRet;
+		}
+		
+		public void tzAnalyzeExcel(String strParams, String[] errorMsg) {
+			JacksonUtil jacksonUtil = new JacksonUtil();
+			
+			try {
+				jacksonUtil.json2Map(strParams);
+				
+				//项目编号
+				String strJgId = jacksonUtil.getString("orgId");
+				// Excel路径;
+				String strPath = jacksonUtil.getString("path");
+				// Excel系统文件名;
+				String strFileName = jacksonUtil.getString("sysFileName");
+
+				// Excel用户文件名;
+				String strUserFileName = jacksonUtil.getString("userFileName");
+				
+				String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
+				String orgid = tzLoginServiceImpl.getLoginedManagerOrgid(request);
+				
+				String strRealPath = request.getServletContext().getRealPath(strPath);
+				
+				System.out.println("机构编号："+strJgId);
+				System.out.println("excel系统文件名："+strFileName);
+				System.out.println("excel用户文件名："+strUserFileName);
+				System.out.println("excel路径："+strRealPath);
+
+				String dataFilePath = strRealPath + strFileName;
+
+				List<String> dataListCellKeys = new ArrayList<String>();
+
+				ExcelHandle2 excelHandle2 = new ExcelHandle2();
+				excelHandle2.readExcel(dataFilePath, dataListCellKeys, false);
+
+				ArrayList<Map<String, Object>> listData = excelHandle2.getExcelListData();
+				
+				Map<String, Object> listMapData = null;
+				
+				String strStuName = "";
+				String strStuPhone = "";
+				
+				String impStuMessage = "";
+				String impStuMessages = "";
+				
+				for (int i = 0; i < listData.size(); i++) {
+					if(i>0){
+						listMapData = listData.get(i);
+						strStuName = (String) listMapData.get("0");
+						strStuName = strStuName.trim();
+						strStuPhone = (String) listMapData.get("1");
+						strStuPhone = strStuPhone.trim();
+						
+						System.out.println(strStuName);
+						System.out.println(strStuPhone);
+						//有空格行忽略，无效数据
+						if(strStuName==null||strStuPhone==null||strStuName.equals("")||strStuPhone.equals(""))
+						{
+							continue;
+						}
+						impStuMessage = "";
+						impStuMessage = impStuMessage + this.tzAddStudent(strJgId,strStuName,strStuPhone) + ",";
+						
+						errorMsg[0] = "0";
+						errorMsg[1] = impStuMessage;
+						System.out.println("success");
+						
+					}
+				}
+				//删除临时文件
+				File file = new File(dataFilePath);
+			    if (file.isFile() && file.exists()) {  
+			        file.delete();
+			    }
+				
+			    
+			} catch (Exception e) {
+				errorMsg[0] = "1";
+				errorMsg[1] = e.toString();
+			}
+			
+		}
+		
+		public String tzAddStudent(String tzJgId,String strStuName,String strStuPhone){
+			String strRet = "";
+			if(strStuName==null||"".equals(strStuPhone)){
+				strRet = "手机和姓名不能为空";
+			}else{
+				
+				int count = sqlQuery.queryForObject("SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL WHERE TZ_DLZH_ID = ? AND TZ_JG_ID = ?", 
+						new Object[] { strStuPhone,tzJgId }, "Integer");
+						
+				if(count>0){
+					strRet= "手机号为" + strStuPhone + "的学员已存在。";
+				}else{
+					// 账号密码;
+					String password = "123456";
+					password = DESUtil.encrypt(password, "TZGD_Tranzvision");
+					/*创建用户信息*/
+					String oprID = "";
+					oprID = "TZ_" + getSeqNum.getSeqNum("PSOPRDEFN", "OPRID");
+					PsTzAqYhxxTbl psTzAqYhxxTbl = new PsTzAqYhxxTbl();
+					psTzAqYhxxTbl.setTzDlzhId(strStuPhone);
+					psTzAqYhxxTbl.setTzJgId(tzJgId);
+					psTzAqYhxxTbl.setOprid(oprID);
+					psTzAqYhxxTbl.setTzRealname(strStuName);
+					psTzAqYhxxTbl.setTzMobile(strStuPhone);
+					psTzAqYhxxTbl.setTzRylx("PXXY");
+					psTzAqYhxxTbl.setTzYxbdBz("N");
+					psTzAqYhxxTbl.setTzSjbdBz("Y");
+					psTzAqYhxxTbl.setTzJihuoZt("Y");
+					psTzAqYhxxTbl.setTzJihuoFs("R");
+					psTzAqYhxxTbl.setTzZhceDt(new Date());
+					psTzAqYhxxTbl.setTzBjsEml("");
+					psTzAqYhxxTbl.setTzBjsSms("");
+					
+					String updateOperid = tzLoginServiceImpl.getLoginedManagerOprid(request);
+					psTzAqYhxxTbl.setRowAddedDttm(new Date());
+					psTzAqYhxxTbl.setRowAddedOprid(updateOperid);
+					psTzAqYhxxTbl.setRowLastmantDttm(new Date());
+					psTzAqYhxxTbl.setRowLastmantOprid(updateOperid);
+					psTzAqYhxxTblMapper.insert(psTzAqYhxxTbl);
+					
+					short acctLockNum;
+
+					acctLockNum = 0;
+			
+					Psoprdefn psoprdefn = new Psoprdefn();
+					psoprdefn.setOprid(oprID);
+					psoprdefn.setOperpswd(password);
+					psoprdefn.setAcctlock(acctLockNum);
+					psoprdefn.setLastupddttm(new Date());
+					psoprdefn.setLastupdoprid(updateOperid);
+					psoprdefnMapper.insert(psoprdefn);
+					
+					/*添加角色*/
+					Psroleuser psroleuser = new Psroleuser();
+					psroleuser.setRoleuser(oprID);
+					psroleuser.setRolename("PK_STU");
+					psroleuser.setDynamicSw("N");
+					psroleuserMapper.insert(psroleuser);
+					
+					/* 联系方式;
+					if ((phone != null && !"".equals(phone)) || (email != null && !"".equals(email))) {
+						String lsfsSQL = "INSERT INTO PS_TZ_LXFSINFO_TBL(TZ_LXFS_LY,TZ_LYDX_ID,TZ_ZY_SJ,TZ_ZY_EMAIL) VALUES(?,?,?,?)";
+						sqlQuery.update(lsfsSQL, new Object[]{"PXXY", oprID, phone, email});
+					}*/
+					
+					/*添加学员信息表*/
+					PxStudentT pxStudentT = new PxStudentT();
+					pxStudentT.setOprid(oprID);
+					pxStudentT.setTzJgId(tzJgId);
+					pxStudentT.setSex("");
+					pxStudentT.setAge(0);
+					pxStudentT.setQq("");
+					pxStudentT.setEmail("");
+					pxStudentT.setContact("");
+					pxStudentT.setContactPhone("");
+					pxStudentT.setContactAddress("");
+					pxStudentT.setTimecardRemaind(0);
+					pxStudentT.setTimecardUsed(0);
+					pxStudentT.setStuStatus("A");
+					pxStudentTMapper.insert(pxStudentT);
+					
+				}						
+			}
+			return strRet;
+			
+		}
 
 }

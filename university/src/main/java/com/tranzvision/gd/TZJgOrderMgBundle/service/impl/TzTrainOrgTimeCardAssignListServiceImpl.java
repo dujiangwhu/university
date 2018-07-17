@@ -78,7 +78,7 @@ public class TzTrainOrgTimeCardAssignListServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TZ_JG_ID", "TZ_JG_NAME", "TZ_REALNAME","TZ_MOBILE","TZ_CHANGE","TZ_AFTER_CHANGE","TZ_CHANGE_TIME","OPRNAME"};
+			String[] resultFldArray = { "TZ_JG_ID", "TZ_JG_NAME", "TZ_REALNAME","TZ_MOBILE","TZ_TIMECARD_MODIFY","TZ_TIMECARD_AFTER","ROW_LASTMANT_DTTM","REALNAME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
