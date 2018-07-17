@@ -1,8 +1,6 @@
 package com.tranzvision.gd.TZPxCourseBundel.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
-import java.util.HashMap;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +8,6 @@ import org.springframework.stereotype.Service;
 
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
-import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
 import com.tranzvision.gd.TZPXBundle.dao.PxCourseTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxCourse;
 import com.tranzvision.gd.TZPXBundle.model.PxCourseT;
@@ -54,10 +51,10 @@ public class PxCourseInfo extends FrameworkImpl {
 				// 组件ID;
 				String tzCourseId = jacksonUtil.getString("tzCourseId");
 				String tzPkskXh = jacksonUtil.getString("tzPkskXh");
-				//psTzAqComzcTblMapper.deleteByPrimaryKey(sComID);
-				//pxCourseMapper.deleteByPrimaryKey(tzCourseId);
 				String comPageSql = "DELETE FROM PX_COURSE_ANNEX_T WHERE TZ_COURSE_ID=? AND TZ_PKSK_XH=?";
 				jdbcTemplate.update(comPageSql,new Object[]{tzCourseId,tzPkskXh});		
+				
+				//删除附件？地址？
 				
 			}
 		} catch (Exception e) {

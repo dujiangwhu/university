@@ -59,20 +59,6 @@
                 dataIndex: 'typeDms',
                 width: 230
             },{
-                text: '课程级别类型',
-                sortable: true,
-                dataIndex: 'tzCourseType',
-                width: 230,
-                renderer : function(value, metadata, record) {
-					if (value=="A"){
-						return "一对一";
-					}else if(value=="B"){
-						return "一对多";
-					}else if(value=="C"){
-						return "体验课程";
-					}
-				}
-            },{
                 text: '课程最小年龄',
                 sortable: true,
                 dataIndex: 'tzMinAge',

@@ -330,9 +330,11 @@
 			Ext.tzSubmit(tzParams,function(responseData){
 				comView.actType = "update";	
 				form.findField("tzCourseId").setReadOnly(true);
-                if(store.isLoaded()){
+                //if(store.isLoaded()){
+                	var tzStoreParams = '{"tzCourseId":"'+form.findField("tzCourseId").getValue()+'"}';
+                    store.tzStoreParams = tzStoreParams;
                     store.reload();
-                }
+                //}
 			},"",true,this);
 		}
 	},
@@ -412,6 +414,7 @@
 		//关闭窗口
 		this.getView().close();
 	},
+
 	onPageRegSave: function(btn){
 		//获取窗口
 		var win = btn.findParentByType("window");
@@ -537,5 +540,42 @@
 				store.removeAt(rowIndex);
 			}
 		},this);
+	},
+	clearPmtSearchCom: function(btn){
+		var form = this.getView().child("form").getForm();
+		form.findField("tzCourseTypeId").setValue("");
+		form.findField("name").setValue("");
+		
+	},
+	pmtSearchCom: function(btn){
+		var form = this.getView().child("form").getForm();
+		Ext.tzShowPromptSearch({
+			recname: 'PX_COURSE_TYPE_T',
+			searchDesc: '搜索课程类型',
+			maxRow:20,
+			condition:{
+				srhConFields:{
+					TZ_COURSE_TYPE_ID:{
+						desc:'课程类型编号',
+						operator:'07',
+						type:'01'	
+					},
+					COURSE_NAME:{
+						desc:'课程类型名称',
+						operator:'07',
+						type:'01'		
+					}	
+				}	
+			},
+			srhresult:{
+				TZ_COURSE_TYPE_ID: '课程类型编号',
+				COURSE_NAME: '课程类型名称'	
+			},
+			multiselect: false,
+			callback: function(selection){
+				form.findField("tzCourseTypeId").setValue(selection[0].data.TZ_COURSE_TYPE_ID);
+				form.findField("name").setValue(selection[0].data.COURSE_NAME);
+			}
+		});	
 	}
 });

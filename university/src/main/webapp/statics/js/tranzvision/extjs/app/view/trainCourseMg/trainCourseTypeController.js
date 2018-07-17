@@ -248,15 +248,15 @@
 			var tzParams = this.getComRegInfoParams();
 			var comView = this.getView();
 			//页面注册信息列表
+			
 			//var grid = comView.child("grid");
 			//页面注册信息数据
 			//var store = grid.getStore();
 			Ext.tzSubmit(tzParams,function(responseData){
 				comView.actType = "update";	
 				form.findField("tzCourseTypeId").setReadOnly(true);
-                //if(store.isLoaded()){
-                    //store.reload();
-                //}
+				contentPanel = Ext.getCmp('tranzvision-framework-content-panel');
+			    contentPanel.child("trainCourseTypeMg").store.reload();
 			},"",true,this);
 		}
 	},

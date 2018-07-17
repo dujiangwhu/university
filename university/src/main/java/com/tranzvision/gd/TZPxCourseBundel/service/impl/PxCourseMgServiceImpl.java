@@ -1,7 +1,6 @@
 package com.tranzvision.gd.TZPxCourseBundel.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -10,9 +9,7 @@ import org.springframework.stereotype.Service;
 
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
-import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
 import com.tranzvision.gd.TZPXBundle.dao.PxCourseTMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxCourse;
 import com.tranzvision.gd.TZPXBundle.model.PxCourseT;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;

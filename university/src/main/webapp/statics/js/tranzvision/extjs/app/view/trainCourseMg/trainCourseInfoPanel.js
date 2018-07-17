@@ -8,7 +8,8 @@
         'Ext.util.*',
         'Ext.toolbar.Paging',
         'Ext.ux.ProgressBarPager',
-		'KitchenSink.view.trainCourseMg.attachStore'
+		'KitchenSink.view.trainCourseMg.attachStore'//,
+		//'KitchenSink.view.trainCourseMg.fileuploadPanel'
 	],
     title: '课程信息',
 	bodyStyle:'overflow-y:auto;overflow-x:hidden', 
@@ -42,12 +43,45 @@
         }, {
             xtype: 'textfield',
             fieldLabel:"课程名称",
+            afterLabelTextTpl: [
+                                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                            ],
+                            allowBlank: false,
 			name: 'tzCourseName'
-        }, {
-            xtype: 'textfield',
-            fieldLabel: "课程类型编号",
-			name: 'tzCourseTypeId'
-        }, {
+        },{
+			layout : {
+				type : 'column'
+			},
+			items : [
+					{
+						columnWidth : .55,
+						xtype : 'textfield',
+						fieldLabel :"课程类型编号",
+						name : 'tzCourseTypeId',
+						editable : false,
+						 afterLabelTextTpl: [
+				                                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+				                            ],
+				                            allowBlank: false,
+						triggers : {
+							clear : {
+								cls : 'x-form-clear-trigger',
+								handler : 'clearPmtSearchCom'
+							},
+							search : {
+								cls : 'x-form-search-trigger',
+								handler : "pmtSearchCom"
+							}
+						}
+					},
+					{
+						columnWidth : .45,
+						xtype : 'displayfield',
+						hideLabel : true,
+						style : 'margin-left:5px',
+						name : 'name'
+					} ]
+		}, {
             xtype: 'textfield',
             fieldLabel: "课程简介",
 			name: 'tzCourseDesc'
@@ -116,6 +150,7 @@
 		dockedItems:[{
 			xtype:"toolbar",
 			items:[
+			       //{text:"删除",tooltip:"新增数据",iconCls:"delete",handler:"deletePageRegInfos"},"-",
 			{
 				xtype: 'form',
 				items:[{
@@ -128,11 +163,17 @@
 				    buttonOnly:true,
 								listeners:{
 									change:function(file, value, eOpts ){
+										
 										if(value != ""){
 											var form = file.findParentByType("form").getForm();
 											//获取该类
 											var panel = file.findParentByType("trainCourseInfoPanel");
 											var tzCourseId=panel.child("form").getForm().findField("tzCourseId").getValue();
+											
+											 if(panel.actType == "add"){
+										            Ext.MessageBox.alert("提示","请先保存许可权信息后，再新增授权组件。");
+										            return;
+										      }
 											//alert(tzCourseId);
 												//获取后缀
 												var fix = value.substring(value.lastIndexOf(".") + 1,value.length);
@@ -172,6 +213,7 @@
 																			Ext.MessageBox.alert("错误1", responseText.message);	
 																		}
 																	}*/
+															    	panel.child("grid").getStore().reload();
 															    }
 															});
 															
@@ -194,8 +236,8 @@
 									}
 								}
 				}]
-			}//,
-				//{text:"新增",tooltip:"新增数据",iconCls:"add",handler:"addPageRegInfo"},"-",
+			}//
+			
 				//{text:"删除",tooltip:"删除选中的数据",iconCls:"remove",handler:"deletePageRegInfos"}
 			]
 		}],

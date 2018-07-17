@@ -8,19 +8,20 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
-import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxCourseTypeTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxCourseTypeT;
-import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
+import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
 /**
@@ -50,6 +51,16 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 	@Autowired
 	private PxCourseTypeTMapper pxCourseTypeMapper;
 
+	@Autowired
+	private HttpServletRequest request;
+
+	@Autowired
+	private TzLoginServiceImpl tzLoginServiceImpl;
+	
+	@Autowired
+	private GetSeqNum getSeqNum;
+	//String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
+	//String strLogInsID =	String.valueOf(getSeqNum.getSeqNum("PX_JG_KS_LOG_T", "TZ_LOG_INS_ID"));
 	@SuppressWarnings("unchecked")
 	@Override
 	public String tzQueryList(String strParams, int numLimit, int numStart, String[] errorMsg) {
@@ -66,7 +77,7 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TZ_COURSE_TYPE_ID", "TYPE_NAME", 
+			String[] resultFldArray = { "TZ_COURSE_TYPE_ID", "COURSE_TYPE_NAME", 
 					"TZ_COURSE_TYPE","TZ_MAX_AGE","TZ_MIN_AGE","TYPE_DMS"};
 
 			// 可配置搜索通用函数;
@@ -101,11 +112,10 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 		return jacksonUtil.Map2json(mapRet);
 
 	}
-
+/*
 	@Override
 	@Transactional
 	public String tzQuery(String strParams, String[] errMsg) {
-
 		// 返回值;
 		String strRet = "{}";
 		Map<String, Object> returnJsonMap = new HashMap<String, Object>();
@@ -114,7 +124,6 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 		try {
 			jacksonUtil.json2Map(strParams);
 			if (jacksonUtil.containsKey("OPRID")) {
-
 				// oprid;
 				String str_oprid = jacksonUtil.getString("OPRID");
 				// 头像地址;
@@ -188,7 +197,7 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 
 		strRet = jacksonUtil.Map2json(returnJsonMap);
 		return strRet;
-	}
+	}*/
 	
 	/* 新增组件注册信息 */
 	@Override
@@ -213,33 +222,37 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 				Map<String, Object> infoData = jacksonUtil.getMap("data");
 				if ("COM".equals(strFlag)) {
 					// 组件编号;
-					String tzCourseTypeId = (String) infoData.get("tzCourseTypeId");
-					// 组件名称;
+					String tzCourseTypeId = (String) infoData.get("tzCourseTypeId");//String.valueOf(getSeqNum.getSeqNum("PX_COURSE_TYPE_T", "TZ_COURSE_TYPE_ID"));
 					String tzCourseTypeName = (String) infoData.get("tzCourseTypeName");
+					String tzCourseType = (String) infoData.get("tzCourseType");
+					Integer tzMaxAge = Integer.valueOf((String)infoData.get("tzMaxAge"));
+					Integer tzMinAge = Integer.valueOf((String)infoData.get("tzMinAge"));
+					String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 
 					PxCourseTypeT pxCourseType=pxCourseTypeMapper.selectByPrimaryKey(tzCourseTypeId);
 					// 是否已经存在;
 					if (pxCourseType!=null) {
 						errMsg[0] = "1";
-						errMsg[1] = "组件ID为：" + tzCourseTypeId + "的信息已经注册，请修改组件ID。";
+						errMsg[1] = "课程编号为：" + tzCourseTypeId + "的课程已经注册，请修改课程编号。";
 						return strRet;
 					}
 					
 					pxCourseType=new PxCourseTypeT();
 					pxCourseType.setTzCourseTypeId(tzCourseTypeId);
 					pxCourseType.setTzCourseTypeName(tzCourseTypeName);
+					pxCourseType.setTzCourseType(tzCourseType);
+					pxCourseType.setTzMaxAge(tzMaxAge);
+					pxCourseType.setTzMinAge(tzMinAge);
+					pxCourseType.setRowLastmantDttm(new Date());
+					pxCourseType.setRowLastmantOprid(oprid);
+					
 					
 					int i = pxCourseTypeMapper.insert(pxCourseType);
-					/*if(i <= 0){
+					if(i <= 0){
 						errMsg[0] = "1";
 						errMsg[1] = "保存失败";
-					}*/
+					}
 				}
-
-				/*if ("PAGE".equals(strFlag)) {
-					strRet = this.tzUpdatePageInfo(infoData, errMsg);
-				}*/
-
 			}
 		} catch (Exception e) {
 			errMsg[0] = "1";
@@ -276,17 +289,17 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 				if ("COM".equals(strFlag)) {
 					// 组件编号;
 					String tzCourseTypeId = (String) infoData.get("tzCourseTypeId");
-					// 组件名称;
 					String tzCourseTypeName = (String) infoData.get("tzCourseTypeName");
 					String tzCourseType = (String) infoData.get("tzCourseType");
 					Integer tzMaxAge = Integer.valueOf((String)infoData.get("tzMaxAge"));
 					Integer tzMinAge = Integer.valueOf((String)infoData.get("tzMinAge"));
+					String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 
 					PxCourseTypeT pxCourseType=pxCourseTypeMapper.selectByPrimaryKey(tzCourseTypeId);
 					// 是否已经存在;
 					if (pxCourseType==null) {
 						errMsg[0] = "1";
-						errMsg[1] = "组件ID为：" + tzCourseTypeId + "的信息不存在。";
+						errMsg[1] = "课程编号为：" + tzCourseTypeId + "的课程不存在。";
 						return strRet;
 					}
 					
@@ -295,6 +308,8 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 					pxCourseType.setTzCourseType(tzCourseType);
 					pxCourseType.setTzMaxAge(tzMaxAge);
 					pxCourseType.setTzMinAge(tzMinAge);
+					pxCourseType.setRowLastmantDttm(new Date());
+					pxCourseType.setRowLastmantOprid(oprid);
 					
 					int i = pxCourseTypeMapper.updateByPrimaryKey(pxCourseType);
 					if(i <= 0){

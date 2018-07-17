@@ -13,8 +13,6 @@ import org.springframework.stereotype.Service;
 
 import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
-import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqComzcTbl;
-import com.tranzvision.gd.TZComRegMgBundle.model.PsTzAqPagzcTbl;
 import com.tranzvision.gd.TZPXBundle.dao.PxCourseAnnexTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxCourseAnnexT;
 import com.tranzvision.gd.util.base.JacksonUtil;
@@ -66,10 +64,13 @@ public class PxCourseAttach extends FrameworkImpl {
 				
 				PxCourseAnnexT pxCourseAnnex=new PxCourseAnnexT();
 				pxCourseAnnex.setTzCourseId(tzCourseId);
-				
 				//需要修改
 				pxCourseAnnex.setTzPkskXh((int)new Date().getTime());
 				pxCourseAnnex.setTzAttachfileName(filename);
+				pxCourseAnnex.setTzAttachsysfilena(sysFileName);
+				pxCourseAnnex.setTzAttAUrl(accessPath);
+				pxCourseAnnex.setRowLastmantDttm(new Date());
+				pxCourseAnnex.setRowLastmantOprid(tzLoginServiceImpl.getLoginedManagerOprid(request));
 					int i = pxCourseAnnexMapper.insert(pxCourseAnnex);
 					if(i <= 0){
 						errMsg[0] = "1";
@@ -99,7 +100,7 @@ public class PxCourseAttach extends FrameworkImpl {
 			jacksonUtil.json2Map(strParams);
 
 			String strComID = jacksonUtil.getString("tzCourseId");
-			if (strComID != null && !"".equals(strComID)) {
+			if (strComID != null ) {
 
 				// 页面ID，页面名称，是否默认首页;
 				String tzCourseId = "", tzAttachfileName = "";

@@ -55,21 +55,21 @@
             },{ 
                 text: '课程名称',
                 dataIndex: 'tzCourseName',
-				width: 230
+				width: 180
             },{ 
                 text: '所属课程类型',
                 dataIndex: 'typeName',
-				width: 230
+				width: 180
             },{
                 text: '课程类型级别',
                 sortable: true,
                 dataIndex: 'typeDms',
-                width: 230
+                width: 180
             },{
                 text: '课程简介',
                 sortable: true,
                 dataIndex: 'tzCourseDesc',
-                minWidth: 100,
+                minWidth: 150,
 				flex:1
             },{
                menuDisabled: true,

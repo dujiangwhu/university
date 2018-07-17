@@ -44,11 +44,19 @@
         },{
             xtype: 'textfield',
             fieldLabel: "课程级别名称",
+            afterLabelTextTpl: [
+                                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                            ],
+                            allowBlank: false,
             name: 'tzCourseTypeName'
         },{
             xtype: 'combobox',
             editable:false,
-            fieldLabel: Ext.tzGetResourse("TZ_GD_ORGGL_COM.TZ_GD_ORGDEF_STD.stateStore","课程级别类型"),
+            fieldLabel: "课程级别类型",
+            afterLabelTextTpl: [
+                                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                            ],
+                            allowBlank: false,
             forceSelection: true,
             valueField: 'TValue',
             displayField: 'TSDesc',
@@ -57,12 +65,24 @@
             name: 'tzCourseType'//,
             //value:'Y'
         },{
-            xtype: 'textfield',
+            xtype: 'numberfield',
             fieldLabel: "课程最小年龄",
+            afterLabelTextTpl: [
+                                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                            ],
+                            allowBlank: false,
+            max:100,
+            min:0,
             name: 'tzMinAge'
         },{
-            xtype: 'textfield',
+            xtype: 'numberfield',
             fieldLabel: "课程最大年龄",
+            afterLabelTextTpl: [
+                                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                            ],
+                            allowBlank: false,
+            max:100,
+            min:0,
             name: 'tzMaxAge'
         }]
     }],
