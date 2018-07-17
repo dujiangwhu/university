@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.trainScheduleMg.scheduleStore', {//项目列表获�
     model: 'KitchenSink.view.trainScheduleMg.scheduleModel',
 	comID: 'TZ_PX_SCHEDULE_COM',
 	pageID: 'TZ_PX_SCHEDULE_STD',
-	tzStoreParams: '{"cfgSrhId":"TZ_PX_SCHEDULE_COM.TZ_PX_SCHEDULE_STD.PX_TEA_SCHEDULE_T"}',
+	tzStoreParams: '{"cfgSrhId":"TZ_PX_SCHEDULE_COM.TZ_PX_SCHEDULE_STD.PX_TEA_SCHEDULE_V"}',
 	autoLoad: true,
 	pageSize:30 ,
 	proxy: Ext.tzListProxy()/*,

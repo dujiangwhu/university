@@ -40,14 +40,26 @@ Ext.define('KitchenSink.view.trainScheduleMg.scheduleManage', {//项目管理列
         Ext.apply(this, {
         	store: store,
             columns: [{
-            	text:"教师编号",
+            	text:"课程",
                 sortable:true,
-                dataIndex:'oprid',
+                dataIndex:'tzCourseName',
+                align: 'center',
+                width:150
+            },{
+            	text:"课程级别",
+                sortable:true,
+                dataIndex:'courseTypeName',
+                align: 'center',
+                width:150
+            },{
+            	text:"上课老师",
+                sortable:true,
+                dataIndex:'teaName',
                 align: 'center',
                 width:150
             },{ 
-            	text: "课程编号",
-                dataIndex: 'tzCourseId',
+            	text: "老师电话",
+                dataIndex: 'teaPhone',
 				sortable: true,
 				align: 'center',
 				width: 100
@@ -66,6 +78,12 @@ Ext.define('KitchenSink.view.trainScheduleMg.scheduleManage', {//项目管理列
             },{ 
             	text: "上课结束时间",
                 dataIndex: 'tzClassEndTime',
+				sortable: true,
+				align: 'center',
+				width: 100
+            },{ 
+            	text: "排课提交时间",
+                dataIndex: 'rowLastmant',
 				sortable: true,
 				align: 'center',
 				width: 100
@@ -89,8 +107,8 @@ Ext.define('KitchenSink.view.trainScheduleMg.scheduleManage', {//项目管理列
  			          //{iconCls: 'edit',tooltip:"学员列表",handler:'editTeacherInfo'},
  			          //{iconCls: 'copy',tooltip: '栏目管理',handler:'editSiteColuById'},
 					  //{iconCls: 'set',tooltip: '评论管理',handler:'editReviewById'},
-					  {iconCls: 'preview',tooltip: '学员列表',handler:'editFocusById'}/*,
-					  {iconCls: 'publish',tooltip: '学员列表',handler:'editSiteMenuById'}*/
+					  {iconCls: 'preview',tooltip: '学员列表',handler:'editFocusById'},
+					  {iconCls: 'set',tooltip: '撤销课程',handler:'addPermission'}
  			   ]
              }
             ],

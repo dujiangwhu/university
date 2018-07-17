@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.trainScheduleMg.stuScheduleManage', {//项目管理
     },
 	style:"margin:8px",
     multiSelect: true,
-    title: "教师排课管理",
+    title: "学生列表",
     viewConfig: {
         enableTextSelection:true
     },
@@ -29,7 +29,7 @@ Ext.define('KitchenSink.view.trainScheduleMg.stuScheduleManage', {//项目管理
 		//dock: 'top',设置工具条的位置
 		items:[
 			{text:Ext.tzGetResourse("TZ_FIRE_VIDEO_COM.TZ_FIRE_PROJ_STD.query","查询"),iconCls:"query",handler:'selectForm'},"-",
-			{text:"提现",iconCls:"copy",handler:'scoreToCrash'},"-",
+			//{text:"提现",iconCls:"copy",handler:'scoreToCrash'},"-",
 			//{text:"评论管理",iconCls:"edit",handler:'editTeacherInfos'},"-",
 			//{text:"关注学员",iconCls:"edit",handler:'editTeacherInfos'},"-",
 			//{text:"课程级别",iconCls:"edit",handler:'editTeacherInfos'},"-",
@@ -40,14 +40,14 @@ Ext.define('KitchenSink.view.trainScheduleMg.stuScheduleManage', {//项目管理
         Ext.apply(this, {
         	store: store,
             columns: [{
-            	text:"学生编号",
+            	text:"学生姓名",
                 sortable:true,
-                dataIndex:'oprid',
+                dataIndex:'stuRealname',
                 align: 'center',
                 width:150
             },{ 
-            	text: "排课编号",
-                dataIndex: 'tzScheduleId',
+            	text: "电话号码",
+                dataIndex: 'stuPhone',
 				sortable: true,
 				align: 'center',
 				width: 100

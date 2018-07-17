@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'TZ_PX_SCHEDULE_COM.TZ_PX_SCHEDULE_STD.PX_TEA_SCHEDULE_T', 
+            cfgSrhId: 'TZ_PX_SCHEDULE_COM.TZ_PX_SCHEDULE_STD.PX_TEA_SCHEDULE_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;
@@ -172,10 +172,6 @@
             var tzParams = this.getResSetInfoParams();
             var comView = this.getView();
             Ext.tzSubmit(tzParams,function(responseData){
-            	// formData = responseData.formData;
-            	//form.setValues(formData);
-            	///.findField("teacherId").setReadOnly(true);
-    			//form.findField("teacherId").addCls("lanage_1");
                 comView.actType = "update";
             },"",true,this);
         }
@@ -183,18 +179,8 @@
     
      //项目详情页确定按钮
     onFormEnsure:function(btn){
-    	var form = this.getView().child("form").getForm();
-
-        if (form.isValid()) {
-            //获得项目表单信息
-            var tzParams = this.getResSetInfoParams();
-            var comView = this.getView();
-            Ext.tzSubmit(tzParams,function(responseData){
-            contentPanel = Ext.getCmp('tranzvision-framework-content-panel');
-		    contentPanel.child("teacherMg").store.reload();
-                comView.close();
-            },"",true,this);
-        }
+    	this.onFormSave();
+    	this.onFormClose();
     
     },
 
@@ -225,8 +211,8 @@
             comParams = '"update":['+Ext.JSON.encode(formParams)+']';
         }
 
-        //提交参数
-        var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TZ_PX_TEACHER_STD","OperateType":"U","comParams":{'+comParams+'}}';
+        //提交参数TZ_PX_SCHEDULE_COM"]["SCHEDULE_INFO_STD"
+        var tzParams = '{"ComID":"TZ_PX_SCHEDULE_COM","PageID":"SCHEDULE_INFO_STD","OperateType":"U","comParams":{'+comParams+'}}';
         console.log(tzParams);
         return tzParams;
     },
@@ -300,7 +286,7 @@
            cmp.show();
        }
    },
-	//关注列表
+   //关注列表
    editFocusById: function(view, rowIndex){
     	var store = view.findParentByType("grid").store;
 		var selRec = store.getAt(rowIndex);
@@ -367,6 +353,161 @@
        if (cmp.floating) {
            cmp.show();
        }
-   }
+   },
+ //课时变化列表
+   addPermission:function(view, rowIndex){
+	   var store = view.findParentByType("grid").store;
+	   var record=store.getAt(rowIndex);
+	   var tzScheduleType=record.get("tzScheduleType");
+	   alert(tzScheduleType);
+	   if(tzScheduleType!=1){
+		   Ext.MessageBox.confirm('确认', '无法撤销：原因为已上课或撤销', function(btnId){
+				/*if(btnId == 'yes'){
+					var store = view.findParentByType("grid").store;
+					var record=store.getAt(rowIndex);
+		   			var tzAppStatus=record.get("tzAppStatus");
+		   			alert(tzAppStatus);
+				}*/
+			},this);
+	   }else{
+		  /* var selRec = store.getAt(rowIndex);
+		   //组件ID
+		   var comID = selRec.get("tzCourseId");*/
+		   //显示组件注册信息编辑页面
+		   this.editByID(record);
+	   }  
+   },
+	editByID: function(comID){
+		//是否有访问权限TZ_PX_SCHEDULE_COM.TZ_PX_SCHEDULE_STD.
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_SCHEDULE_COM"]["SCHEDULE_INFO_STD"];
+		if( pageResSet == "" || pageResSet == undefined){
+			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
+			return;
+		}
+		//该功能对应的JS类
+		var className = pageResSet["jsClassName"];
+		if(className == "" || className == undefined){
+			Ext.MessageBox.alert('提示', '未找到该功能页面对应的JS类，页面ID为：TZ_AQ_COMREG_STD，请检查配置。');
+			return;
+		}
+		
+		var contentPanel,cmp, className, ViewClass, clsProto;
+		var themeName = Ext.themeName;
+		
+		contentPanel = Ext.getCmp('tranzvision-framework-content-panel');			
+		contentPanel.body.addCls('kitchensink-example');
+
+		//className = 'KitchenSink.view.security.com.comInfoPanel';
+		if(!Ext.ClassManager.isCreated(className)){
+			Ext.syncRequire(className);
+		}	
+		ViewClass = Ext.ClassManager.get(className);
+
+		clsProto = ViewClass.prototype;
+
+		if (clsProto.themes) {
+			clsProto.themeInfo = clsProto.themes[themeName];
+
+			if (themeName === 'gray') {
+				clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.classic);
+			} else if (themeName !== 'neptune' && themeName !== 'classic') {
+				if (themeName === 'crisp-touch') {
+					clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes['neptune-touch']);
+				}
+				clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.neptune);
+			}
+			// <debug warn>
+			// Sometimes we forget to include allowances for other themes, so issue a warning as a reminder.
+			if (!clsProto.themeInfo) {
+				Ext.log.warn ( 'Example \'' + className + '\' lacks a theme specification for the selected theme: \'' +
+					themeName + '\'. Is this intentional?');
+			}
+			// </debug>
+		}
+
+		cmp = new ViewClass();
+		//操作类型设置为更新
+		cmp.actType = "update";
+		
+		cmp.on('afterrender',function(panel){
+			//组件注册表单信息;
+			var form =panel.child('form').getForm();
+			form.findField("tzScheduleId").setReadOnly(true);
+			form.findField("tzScheduleId").setFieldStyle('background:#F4F4F4');
+			var tzAppStatus=comID.get("tzAppStatus");
+			//未预约
+			if(tzAppStatus==1){
+				form.findField("oprid").hide();
+				form.findField("oprid").setFieldStyle('background:#F4F4F4');
+				//form.findField("oprid").setReadOnly(true);
+				//form.findField("oprid").setFieldStyle('background:#F4F4F4');
+			}
+			form.loadRecord(comID);
+			//页面注册信息列表
+			/*var grid = panel.child('grid');
+			//参数
+			var tzParams = '{"ComID":"PX_COURSE_COM","PageID":"PX_COURSE_STD","OperateType":"QF","comParams":{"tzCourseId":"'+comID+'"}}';
+			//加载数据
+			Ext.tzLoad(tzParams,function(responseData){
+				//组件注册信息数据
+				var formData = responseData.formData;
+				form.setValues(formData);
+				//页面注册信息列表数据
+				var roleList = responseData.listData;	
+
+				var tzStoreParams = '{"tzCourseId":"'+comID+'"}';
+				grid.store.tzStoreParams = tzStoreParams;
+				grid.store.load();						
+			});*/
+			
+		});
+		
+		tab = contentPanel.add(cmp);     
+		
+		contentPanel.setActiveTab(tab);
+
+		Ext.resumeLayouts(true);
+
+		if (cmp.floating) {
+			cmp.show();
+		}
+	},
+	clearPmtSearchCom: function(btn){
+		var form = this.getView().child("form").getForm();
+		form.findField("oprid").setValue("");
+		form.findField("name").setValue("");
+		
+	},
+	pmtSearchCom: function(btn){
+		var form = this.getView().child("form").getForm();
+		Ext.tzShowPromptSearch({
+			recname: 'px_teacher_v',
+			searchDesc: '搜索组件',
+			maxRow:20,
+			condition:{
+				srhConFields:{
+					OPRID:{
+						desc:'组件ID',
+						operator:'07',
+						type:'01'	
+					},
+					NAME:{
+						desc:'组件名称',
+						operator:'07',
+						type:'01'		
+					}	
+				}	
+			},
+			srhresult:{
+				OPRID: '组件ID',
+				NAME: '组件名称'	
+			},
+			multiselect: false,
+			callback: function(selection){
+				form.findField("oprid").setValue(selection[0].data.OPRID);
+				form.findField("name").setValue(selection[0].data.NAME);
+			}
+		});	
+	}
 
 });
