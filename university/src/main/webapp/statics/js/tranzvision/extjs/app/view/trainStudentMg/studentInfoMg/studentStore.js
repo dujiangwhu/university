@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentStore', {//é¡¹ç
     model: 'KitchenSink.view.trainStudentMg.studentInfoMg.studentModel',
 	comID: 'PX_STU_COM',
 	pageID: 'PX_STU_STD',
-	tzStoreParams: '{"cfgSrhId":"PX_STU_COM.PX_STU_STD.PX_STUDENT_VW"}',
+	tzStoreParams: '{"cfgSrhId":"PX_STU_COM.PX_STU_STD.PX_STUDENT_V"}',
 	autoLoad: true,
 	pageSize:30 ,
 	proxy: Ext.tzListProxy(),

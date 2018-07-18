@@ -40,6 +40,12 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentManage', {//项
         Ext.apply(this, {
         	store: store,
             columns: [{
+            	text:"机构",
+                sortable:true,
+                dataIndex:'orgid',
+                align: 'center',
+                width:150
+            },{
             	text:"姓名",
                 sortable:true,
                 dataIndex:'name',
@@ -47,13 +53,13 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentManage', {//项
                 width:150
             },{ 
             	text: "性别",
-                dataIndex: 'sex',
+                dataIndex: 'tzSexValue',
 				sortable: true,
 				align: 'center',
 				width: 100
             },{ 
             	text: "年龄",
-                dataIndex: 'level',
+                dataIndex: 'age',
 				sortable: true,
 				align: 'center',
 				width: 100
@@ -65,7 +71,7 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentManage', {//项
 				width: 150
             },{ 
             	text: "状态信息",
-                dataIndex: 'statu',
+                dataIndex: 'stuStatusDms',
 				sortable: true,
 				align: 'center',
 				 flex: 1,

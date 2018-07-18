@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'PX_STU_COM.PX_STU_STD.PX_STUDENT_VW', 
+            cfgSrhId: 'PX_STU_COM.PX_STU_STD.PX_STUDENT_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;
@@ -25,29 +25,7 @@
 	   		Ext.Msg.alert("提示","请选择一条要修改的记录");   
 			return;
 	   	}
-	   	//var store = this.getView().store;
-	   	var removeJson = "";
-        var removeRecs = selList;
-
-        for(var i=0;i<removeRecs.length;i++){
-            if(removeJson == ""){
-                removeJson = Ext.JSON.encode(removeRecs[i].data);
-            }else{
-                removeJson = removeJson + ','+Ext.JSON.encode(removeRecs[i].data);
-            }
-        }
-        if(removeJson != ""){
-            comParams = '"update":[' + removeJson + "]";
-            //提交参数
-            var tzParams = '{"ComID":"PX_STU_INFO_COM","PageID":"TZ_PX_SCORE_STD","OperateType":"U","comParams":{'+comParams+'}}';
-            //保存数据
-            Ext.tzSubmit(tzParams,function(){
-                //store.reload();
-                //grid.commitChanges(grid);
-            },"",true,this);
-        }else{
-        	Ext.Msg.alert("提示","保存成功");
-        }
+	   	this.editTeacherInfoByRecord(selList[0]);
     },
 	//编辑项目（列表）
     editTeacherInfo: function(view, rowIndex){
@@ -123,7 +101,8 @@
 		cmp.on('afterrender', function(panel) {
 			// 组件注册表单信息;
 			var OPRID = record.get("oprid");
-			var tzParams = '{"ComID":"PX_STU_COM","PageID":"PX_STU_STD","OperateType":"QF","comParams":{"OPRID":"'+OPRID+'"}}';
+			var orgid = record.get("orgid");
+			var tzParams = '{"ComID":"PX_STU_COM","PageID":"PX_STU_STD","OperateType":"QF","comParams":{"OPRID":"'+OPRID+'","orgid":"'+orgid+'"}}';
 			//加载数据
 			var msgForm = this.lookupReference('studentMgForm');
 			var form = this.lookupReference('studentMgForm').getForm();
@@ -373,10 +352,10 @@
    editSiteMenuById: function(view, rowIndex){
 	    	var store = view.findParentByType("grid").store;
 			var selRec = store.getAt(rowIndex);
-			var teaOprid = selRec.get("teaOprid");
-			this.editSiteMenu(teaOprid);
+			var oprid = selRec.get("oprid");
+			this.editSiteMenu(oprid);
 		},
-		editSiteMenu: function(teaOprid){
+		editSiteMenu: function(oprid){
 			grid = this.getView();
 			var contentPanel,cmp, className, ViewClass, clsProto;
 			var themeName = Ext.themeName;
@@ -419,7 +398,7 @@
 	           }
 	       }
 	       
-	       cmp = new ViewClass({ teaOprid:teaOprid });
+	       cmp = new ViewClass({ oprid:oprid });
 	       //操作类型设置为更新
 	       cmp.actType = "update";
 

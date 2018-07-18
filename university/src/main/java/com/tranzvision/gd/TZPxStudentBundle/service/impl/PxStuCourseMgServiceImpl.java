@@ -18,7 +18,6 @@ import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxStudentTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxStudentT;
 import com.tranzvision.gd.TZPXBundle.model.PxStudentTKey;
-import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
@@ -44,7 +43,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 	private PsTzJgBaseTMapper psTzJgBaseTMapper;
 	
 	@Autowired
-	private PxStudentTMapper pxStudentTMapper;
+	private PxStudentTMapper pxStudentMapper;
 	
 	@Autowired
 	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
@@ -65,7 +64,10 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "OPRID","TZ_SCHEDULE_ID"};
+			String[] resultFldArray = { "TZ_SCHEDULE_ID","STU_OPRID","STU_REALNAME","STU_PHONE"
+					,"TEA_OPRID","TEA_REALNAME"
+					,"TEA_PHONE","TZ_APP_STATUS","TZ_COURSE_NAME","COURSE_TYPE_NAME"
+					,"START_TIME","END_TIME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -76,11 +78,19 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 
 				for (int i = 0; i < list.size(); i++) {
 					String[] rowList = list.get(i);
-
 					Map<String, Object> mapList = new HashMap<String, Object>();
-					mapList.put("oprid", rowList[0]);
-					mapList.put("tzScheduleId", rowList[1]);
-			        
+					mapList.put("tzScheduleId", rowList[0]);
+					mapList.put("stuOprid", rowList[1]);
+					mapList.put("stuRealname", rowList[2]);
+					mapList.put("stuPhone", rowList[3]);
+					mapList.put("teaOprid", rowList[4]);
+					mapList.put("teaRealname", rowList[5]);
+					mapList.put("teaPhone", rowList[6]);
+					mapList.put("tzAppStatus", rowList[7]);
+					mapList.put("tzCourseName", rowList[8]);
+					mapList.put("courseTypeName", rowList[9]);
+					mapList.put("startTime", rowList[10]);
+					mapList.put("endTime", rowList[11]);
 					listData.add(mapList);
 				}
 
@@ -111,11 +121,11 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 			if (jacksonUtil.containsKey("OPRID")) {
 
 				// oprid;
-				String str_oprid = jacksonUtil.getString("OPRID");
-				String str_orgid = jacksonUtil.getString("ORGID");
+				String orgid=jacksonUtil.getString("orgid");
+				String oprid=jacksonUtil.getString("oprid");
 				// 头像地址;
 				String titleImageUrlSQL = "SELECT B.TZ_ATT_A_URL,A.TZ_ATTACHSYSFILENA FROM PS_TZ_OPR_PHT_GL_T A , PS_TZ_OPR_PHOTO_T B WHERE A.OPRID=? AND A.TZ_ATTACHSYSFILENA = B.TZ_ATTACHSYSFILENA";
-				Map<String, Object> imgMap = jdbcTemplate.queryForMap(titleImageUrlSQL, new Object[] { str_oprid });
+				Map<String, Object> imgMap = jdbcTemplate.queryForMap(titleImageUrlSQL, new Object[] { oprid });
 				String titleImageUrl = "";
 				if (imgMap != null) {
 					String tzAttAUrl = (String) imgMap.get("TZ_ATT_A_URL");
@@ -131,7 +141,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 				
 				
 				titleImageUrlSQL = "SELECT TZ_REALNAME,TZ_MOBILE FROM PS_TZ_AQ_YHXX_TBL WHERE OPRID=? ";
-				Map<String, Object> userMap = jdbcTemplate.queryForMap(titleImageUrlSQL, new Object[] { str_oprid });
+				Map<String, Object> userMap = jdbcTemplate.queryForMap(titleImageUrlSQL, new Object[] { oprid });
 
 				if (userMap == null) {
 					errMsg[0] = "1";
@@ -139,10 +149,12 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 				} else {
 					String name = (String) userMap.get("TZ_REALNAME");
 					String phone = (String) userMap.get("TZ_MOBILE");
-					PxStudentTKey pxStudentTKey = new PxStudentTKey();
-					pxStudentTKey.setOprid(str_oprid);
-					pxStudentTKey.setTzJgId(str_orgid);
-					PxStudentT pxStudent = pxStudentTMapper.selectByPrimaryKey(pxStudentTKey);
+					
+					
+					PxStudentTKey pxStudentTKey=new PxStudentTKey();
+					pxStudentTKey.setOprid(oprid);
+					pxStudentTKey.setTzJgId(orgid);
+					PxStudentT pxStudent = pxStudentMapper.selectByPrimaryKey(pxStudentTKey);
 					if (pxStudent == null) {
 						errMsg[0] = "1";
 						errMsg[1] = "不存在该用户！";
@@ -192,17 +204,16 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 				jacksonUtil.json2Map(strForm);
 				// 类型标志;
 				//Map<String, Object> infoData  = jacksonUtil.getMap("update");
-				String oprid=jacksonUtil.getString("oprid");
 				String orgid=jacksonUtil.getString("orgid");
-				System.out.println(jacksonUtil.getString("sex"));
+				String oprid=jacksonUtil.getString("oprid");
 				if(oprid==null){
 					errMsg[0] = "1";
 					errMsg[1] = "保存失败";
 				}else{
-					PxStudentTKey pxStudentTKey = new PxStudentTKey();
+					PxStudentTKey pxStudentTKey=new PxStudentTKey();
 					pxStudentTKey.setOprid(oprid);
 					pxStudentTKey.setTzJgId(orgid);
-					PxStudentT pxStudent=pxStudentTMapper.selectByPrimaryKey(pxStudentTKey);
+					PxStudentT pxStudent = pxStudentMapper.selectByPrimaryKey(pxStudentTKey);
 					if(pxStudent==null){
 						errMsg[0] = "1";
 						errMsg[1] = "用户不存在！";
@@ -216,7 +227,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 						pxStudent.setContactAddress(jacksonUtil.getString("contactorAddress"));
 						pxStudent.setStuStatus(jacksonUtil.getString("statu"));
 						
-						pxStudentTMapper.updateByPrimaryKey(pxStudent);
+						pxStudentMapper.updateByPrimaryKey(pxStudent);
 					}					
 				}
 			}

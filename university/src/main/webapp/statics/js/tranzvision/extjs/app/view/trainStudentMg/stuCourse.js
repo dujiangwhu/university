@@ -50,12 +50,48 @@
         Ext.apply(this, {
             columns: [{ 
                 text: '学员编号',
-                dataIndex: 'oprid',
-				width: 240
+                dataIndex: 'stuOprid',
+				width: 150
             },{ 
-                text: '课程编号',
-                dataIndex: 'tzScheduleId',
-				width: 240
+                text: '学员姓名',
+                dataIndex: 'stuRealname',
+				width: 150
+            },{ 
+                text: '学员电话',
+                dataIndex: 'stuPhone',
+				width: 150
+            },{ 
+                text: '教师编号',
+                dataIndex: 'teaOprid',
+				width: 150
+            },{ 
+                text: '教师姓名',
+                dataIndex: 'teaRealname',
+				width: 150
+            },{ 
+                text: '教师电话',
+                dataIndex: 'teaPhone',
+				width: 150
+            },{ 
+                text: '课程名称',
+                dataIndex: 'tzCourseName',
+				width: 150
+            },{ 
+                text: '课程级别',
+                dataIndex: 'courseTypeName',
+				width: 150
+            },{ 
+                text: '开始时间',
+                dataIndex: 'startTime',
+				width: 150
+            },{ 
+                text: '结束时间',
+                dataIndex: 'endTime',
+				width: 150
+            },{ 
+                text: '课程状态',
+                dataIndex: 'tzAppStatus',
+				width: 150
             }],
 			store: store,
             bbar: {

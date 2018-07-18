@@ -3,12 +3,14 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentModel', {
     fields: [
         {name: 'orgid'},
         {name: 'oprid'},
-        {name: 'stuName'},
+        {name: 'name'},
 		{name: 'age'},
         {name: 'sex'},
 		{name: 'stuQQ'},
-        {name: 'stuPhone'},
+        {name: 'phone'},
 		{name: 'stuEmail'},
-		{name: 'stuRemaindTimeCard'}
+		{name: 'stuRemaindTimeCard'},
+		{name: 'stuStatusDms'},
+		{name: 'tzSexValue'}
 	]
 });

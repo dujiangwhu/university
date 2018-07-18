@@ -3,7 +3,7 @@
     alias: 'controller.stuCourseController', 
     searchComList: function(btn){
 		Ext.tzShowCFGSearch({
-			cfgSrhId: 'PX_STU_COURSE_COM.PX_STU_COURSE_STD.PX_STU_COURSE_T',
+			cfgSrhId: 'PX_STU_COURSE_COM.PX_STU_COURSE_STD.PX_STU_COURSE_V',
 			callback: function(seachCfg){
 				var store = btn.findParentByType("grid").store;
 				store.tzStoreParams = seachCfg;
