@@ -1,4 +1,4 @@
-Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentModel', {
+Ext.define('KitchenSink.view.trainStudentMg.studentModel', {
     extend: 'Ext.data.Model',
     fields: [
         {name: 'orgid'},

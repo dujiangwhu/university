@@ -1,4 +1,4 @@
-Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentManage', {//项目管理列表页面
+Ext.define('KitchenSink.view.trainStudentMg.studentManage', {//项目管理列表页面
     extend: 'Ext.grid.Panel',
 	requires: [
         'Ext.data.*',
@@ -6,8 +6,8 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentManage', {//项
         'Ext.util.*',
         'Ext.toolbar.Paging',
         'Ext.ux.ProgressBarPager',
-        'KitchenSink.view.trainStudentMg.studentInfoMg.studentController',//调用控制器
-        'KitchenSink.view.trainStudentMg.studentInfoMg.studentStore',
+        'KitchenSink.view.trainStudentMg.studentController',//调用控制器
+        'KitchenSink.view.trainStudentMg.studentStore',
         'tranzvision.extension.grid.column.Link'
     ],
     xtype: 'studentInfoMg',//不能变
@@ -36,7 +36,7 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentManage', {//项
 		]}
 		],
     initComponent: function () {   
-		var store = new KitchenSink.view.trainStudentMg.studentInfoMg.studentStore;
+		var store = new KitchenSink.view.trainStudentMg.studentStore;
         Ext.apply(this, {
         	store: store,
             columns: [{
@@ -90,7 +90,7 @@ Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentManage', {//项
  			          //{iconCls: 'copy',tooltip: '栏目管理',handler:'editSiteColuById'},
 					  {iconCls: 'set',tooltip: '评论管理',handler:'editReviewById'},
 					  {iconCls: 'preview',tooltip: '关注老师',handler:'editFocusById'},
-					  {iconCls: 'publish',tooltip: '课时变动查询',handler:'editSiteMenuById'}
+					  {iconCls: 'publish',tooltip: '课时变动查询',handler:'editCourseById'}
  			   ]
              }
             ],

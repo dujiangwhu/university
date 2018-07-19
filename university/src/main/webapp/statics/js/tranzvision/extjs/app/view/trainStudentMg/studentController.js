@@ -1,4 +1,4 @@
-﻿Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentController', {
+﻿Ext.define('KitchenSink.view.trainStudentMg.studentController', {
     extend: 'Ext.app.ViewController',
     alias: 'controller.studentInfoMg',
     
@@ -223,7 +223,8 @@
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_REVIEW_STD"];
+		alert(TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"])
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]["TZ_PX_REVIEW_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
@@ -291,13 +292,13 @@
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_FOCUS_STD"];
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]["TZ_PX_FOCUS_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
 	     }
 	      //该功能对应的JS类
-	    className = pageResSet["jsClassName"];
+	    className ="KitchenSink.view.trainTeacherMg.focusManage";// pageResSet["jsClassName"];
 	    if(className == "" || className == undefined){
 	         Ext.MessageBox.alert('提示', '未找到该功能页面对应的JS类，页面ID为：TZ_GD_WWLMGL_STD，请检查配置。');
 	         return;
@@ -349,18 +350,19 @@
    },
 	
 	//课时变化列表
-   editSiteMenuById: function(view, rowIndex){
-	    	var store = view.findParentByType("grid").store;
-			var selRec = store.getAt(rowIndex);
-			var oprid = selRec.get("oprid");
-			this.editSiteMenu(oprid);
-		},
-		editSiteMenu: function(oprid){
+					   editCourseById : function(view, rowIndex) {
+						var store = view.findParentByType("grid").store;
+						var selRec = store.getAt(rowIndex);
+						var oprid = selRec.get("oprid");
+						this.editCourseByIds(oprid);
+					},
+		editCourseByIds: function(oprid){
 			grid = this.getView();
 			var contentPanel,cmp, className, ViewClass, clsProto;
 			var themeName = Ext.themeName;
 			//是否有访问权限"PX_STU_COURSE_COM.PX_STU_COURSE_STD
-			var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_COURSE_TIME_COM"]["TZ_COURSE_TIME_STD"];
+			alert(TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]);
+			var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]["PX_COU_TIME_STD"];
 			if( pageResSet == "" || pageResSet == undefined){
 				Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 		        return;

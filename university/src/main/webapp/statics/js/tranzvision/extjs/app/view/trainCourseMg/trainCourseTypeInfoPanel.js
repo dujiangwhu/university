@@ -8,7 +8,6 @@
         'Ext.util.*',
         'Ext.toolbar.Paging',
         'Ext.ux.ProgressBarPager',
-        //'KitchenSink.view.security.user.userController',
         'KitchenSink.view.trainCourseMg.trainCourseTypeStore'
     ],
     title: '课程级别信息',
@@ -71,8 +70,8 @@
                                 '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
                             ],
                             allowBlank: false,
-            max:100,
-            min:0,
+            maxValue:100,
+            minValue:0,
             name: 'tzMinAge'
         },{
             xtype: 'numberfield',
@@ -81,8 +80,8 @@
                                 '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
                             ],
                             allowBlank: false,
-            max:100,
-            min:0,
+                            maxValue:100,
+                            minValue:0,
             name: 'tzMaxAge'
         }]
     }],

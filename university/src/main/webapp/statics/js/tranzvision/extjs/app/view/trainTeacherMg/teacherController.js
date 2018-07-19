@@ -312,6 +312,7 @@
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
+		alert(TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_FOCUS_STD"]);
 		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_FOCUS_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
@@ -380,6 +381,7 @@
 				var contentPanel,cmp, className, ViewClass, clsProto;
 				var themeName = Ext.themeName;
 				//是否有访问权限
+				alert(TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]);
 				var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TEA_COU_TYPE_STD"];
 				if( pageResSet == "" || pageResSet == undefined){
 					Ext.MessageBox.alert('提示', '您没有修改数据的权限');

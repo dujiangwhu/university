@@ -1,4 +1,4 @@
-﻿Ext.define('KitchenSink.view.trainStudentMg.studentInfoMg.studentMgInfoPanel', {
+﻿Ext.define('KitchenSink.view.trainStudentMg.studentMgInfoPanel', {
     extend: 'Ext.panel.Panel',
     xtype: 'studentMgInfoPanel',
     controller: 'studentInfoMg',

@@ -167,23 +167,6 @@
 			form.loadRecord(record);
 			form.findField("tzCourseTypeId").setReadOnly(true);
 			form.findField("tzCourseTypeId").setFieldStyle('background:#F4F4F4');
-			//页面注册信息列表
-			//var grid = panel.child('grid');
-			//参数
-			//var tzParams = '{"ComID":"TZ_AQ_COMREG_COM","PageID":"TZ_AQ_COMREG_STD","OperateType":"QF","comParams":{"record":"'+comID+'"}}';
-			//加载数据
-			//Ext.tzLoad(tzParams,function(responseData){
-				//组件注册信息数据
-				//var formData = responseData.formData;
-				//form.setValues(formData);
-				//页面注册信息列表数据
-				//var roleList = responseData.listData;	
-
-				//var tzStoreParams = '{"comID":"'+comID+'"}';
-				//grid.store.tzStoreParams = tzStoreParams;
-				//grid.store.load();						
-			//});
-			
 		});
 		
 		tab = contentPanel.add(cmp);     
