@@ -3,7 +3,7 @@
 <mapper namespace="com.tranzvision.gd.TZPXBundle.dao.PxStudentTMapper" >
   <resultMap id="BaseResultMap" type="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
     <id column="OPRID" property="oprid" jdbcType="VARCHAR" />
-    <id column="TZ_JG_ID" property="tzJgId" jdbcType="VARCHAR" />
+    <result column="TZ_JG_ID" property="tzJgId" jdbcType="VARCHAR" />
     <result column="PHOTO_SYSFILENAME" property="photoSysfilename" jdbcType="VARCHAR" />
     <result column="TZ_FILE_PATH" property="tzFilePath" jdbcType="VARCHAR" />
     <result column="SEX" property="sex" jdbcType="VARCHAR" />
@@ -22,20 +22,18 @@
     OPRID, TZ_JG_ID, PHOTO_SYSFILENAME, TZ_FILE_PATH, SEX, AGE, QQ, PHONE, EMAIL, CONTACT, 
     CONTACT_PHONE, CONTACT_ADDRESS, TIMECARD_REMAIND, TIMECARD_USED, STU_STATUS
   </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentTKey" >
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.String" >
     select 
     <include refid="Base_Column_List" />
-    from px_student_t
+    from PX_STUDENT_T
     where OPRID = #{oprid,jdbcType=VARCHAR}
-      and TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </select>
-  <delete id="deleteByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentTKey" >
-    delete from px_student_t
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.String" >
+    delete from PX_STUDENT_T
     where OPRID = #{oprid,jdbcType=VARCHAR}
-      and TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </delete>
   <insert id="insert" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
-    insert into px_student_t (OPRID, TZ_JG_ID, PHOTO_SYSFILENAME, 
+    insert into PX_STUDENT_T (OPRID, TZ_JG_ID, PHOTO_SYSFILENAME, 
       TZ_FILE_PATH, SEX, AGE, 
       QQ, PHONE, EMAIL, CONTACT, 
       CONTACT_PHONE, CONTACT_ADDRESS, TIMECARD_REMAIND, 
@@ -47,7 +45,7 @@
       #{timecardUsed,jdbcType=INTEGER}, #{stuStatus,jdbcType=VARCHAR})
   </insert>
   <insert id="insertSelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
-    insert into px_student_t
+    insert into PX_STUDENT_T
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="oprid != null" >
         OPRID,
@@ -144,8 +142,11 @@
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
-    update px_student_t
+    update PX_STUDENT_T
     <set >
+      <if test="tzJgId != null" >
+        TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR},
+      </if>
       <if test="photoSysfilename != null" >
         PHOTO_SYSFILENAME = #{photoSysfilename,jdbcType=VARCHAR},
       </if>
@@ -187,11 +188,11 @@
       </if>
     </set>
     where OPRID = #{oprid,jdbcType=VARCHAR}
-      and TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </update>
   <update id="updateByPrimaryKey" parameterType="com.tranzvision.gd.TZPXBundle.model.PxStudentT" >
-    update px_student_t
-    set PHOTO_SYSFILENAME = #{photoSysfilename,jdbcType=VARCHAR},
+    update PX_STUDENT_T
+    set TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR},
+      PHOTO_SYSFILENAME = #{photoSysfilename,jdbcType=VARCHAR},
       TZ_FILE_PATH = #{tzFilePath,jdbcType=VARCHAR},
       SEX = #{sex,jdbcType=VARCHAR},
       AGE = #{age,jdbcType=INTEGER},
@@ -205,6 +206,5 @@
       TIMECARD_USED = #{timecardUsed,jdbcType=INTEGER},
       STU_STATUS = #{stuStatus,jdbcType=VARCHAR}
     where OPRID = #{oprid,jdbcType=VARCHAR}
-      and TZ_JG_ID = #{tzJgId,jdbcType=VARCHAR}
   </update>
 </mapper>

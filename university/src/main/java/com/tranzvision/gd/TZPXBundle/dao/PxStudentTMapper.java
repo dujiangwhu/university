@@ -1,16 +1,15 @@
 package com.tranzvision.gd.TZPXBundle.dao;
 
 import com.tranzvision.gd.TZPXBundle.model.PxStudentT;
-import com.tranzvision.gd.TZPXBundle.model.PxStudentTKey;
 
 public interface PxStudentTMapper {
-    int deleteByPrimaryKey(PxStudentTKey key);
+    int deleteByPrimaryKey(String oprid);
 
     int insert(PxStudentT record);
 
     int insertSelective(PxStudentT record);
 
-    PxStudentT selectByPrimaryKey(PxStudentTKey key);
+    PxStudentT selectByPrimaryKey(String oprid);
 
     int updateByPrimaryKeySelective(PxStudentT record);
 
