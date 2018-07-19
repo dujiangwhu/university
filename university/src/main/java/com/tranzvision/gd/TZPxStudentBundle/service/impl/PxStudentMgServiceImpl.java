@@ -148,10 +148,7 @@ public class PxStudentMgServiceImpl extends FrameworkImpl {
 					String name = (String) userMap.get("TZ_REALNAME");
 					String phone = (String) userMap.get("TZ_MOBILE");
 					
-					PxStudentTKey pxStudentTKey=new PxStudentTKey();
-					pxStudentTKey.setOprid(oprid);
-					pxStudentTKey.setTzJgId(orgid);
-					PxStudentT pxStudent = pxStudentMapper.selectByPrimaryKey(pxStudentTKey);
+					PxStudentT pxStudent = pxStudentMapper.selectByPrimaryKey(oprid);
 					
 					if (pxStudent == null) {
 						errMsg[0] = "1";
@@ -209,10 +206,7 @@ public class PxStudentMgServiceImpl extends FrameworkImpl {
 					errMsg[0] = "1";
 					errMsg[1] = "保存失败";
 				}else{
-					PxStudentTKey pxStudentTKey=new PxStudentTKey();
-					pxStudentTKey.setOprid(oprid);
-					pxStudentTKey.setTzJgId(orgid);
-					PxStudentT pxStudent = pxStudentMapper.selectByPrimaryKey(pxStudentTKey);
+					PxStudentT pxStudent = pxStudentMapper.selectByPrimaryKey(oprid);
 					if(pxStudent==null){
 						errMsg[0] = "1";
 						errMsg[1] = "用户不存在！";

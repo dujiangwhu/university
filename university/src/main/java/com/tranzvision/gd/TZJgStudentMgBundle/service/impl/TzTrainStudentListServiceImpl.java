@@ -266,10 +266,7 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 							
 							
 							/*给学员添加课时卡*/
-							PxStudentTKey pxStudentTKey= new PxStudentTKey();
-							pxStudentTKey.setOprid(tzStuId);
-							pxStudentTKey.setTzJgId(tzJgId);
-							PxStudentT pxStudentT=pxStudentTMapper.selectByPrimaryKey(pxStudentTKey);
+							PxStudentT pxStudentT=pxStudentTMapper.selectByPrimaryKey(tzStuId);
 							
 
 							Map<String, Object> stuInfo = sqlQuery.queryForMap("SELECT TIMECARD_REMAIND FROM PX_STUDENT_T WHERE OPRID = ? AND TZ_JG_ID = ?", 
