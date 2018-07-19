@@ -126,11 +126,8 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 				} else {
 					String name = (String) userMap.get("TZ_REALNAME");
 					String phone = (String) userMap.get("TZ_MOBILE");
-					
-					PxStudentTKey pxStudentTkey = new PxStudentTKey();
-					pxStudentTkey.setOprid(str_oprid);
-					pxStudentTkey.setTzJgId(str_orgid);					
-					PxStudentT pxStudentT = pxStudentTMapper.selectByPrimaryKey(pxStudentTkey);
+									
+					PxStudentT pxStudentT = pxStudentTMapper.selectByPrimaryKey(str_oprid);
 					
 					if (pxStudentT == null) {
 						errMsg[0] = "1";
@@ -331,11 +328,8 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 					errMsg[0] = "1";
 					errMsg[1] = "保存失败";
 				}else{
-					PxStudentTKey  pxStudentTKey = new PxStudentTKey();
-					pxStudentTKey.setOprid(oprid);
-					pxStudentTKey.setTzJgId(orgid);
 					
-					PxStudentT pxStudentT=pxStudentTMapper.selectByPrimaryKey(pxStudentTKey);
+					PxStudentT pxStudentT=pxStudentTMapper.selectByPrimaryKey(oprid);
 					if(pxStudentT==null){
 						errMsg[0] = "1";
 						errMsg[1] = "用户不存在！";
