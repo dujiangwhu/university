@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'TZ_PX_TEACHER_COM.TEA_COU_TYPE_STD.PX_TEA_COURSE_V', 
+            cfgSrhId: 'PX_TEACHER_COM.TEA_COU_TYPE_STD.PX_TEA_COURSE_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;
@@ -39,7 +39,7 @@
         if(removeJson != ""){
             comParams = '"update":[' + removeJson + "]";
             //提交参数
-            var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TZ_PX_SCORE_STD","OperateType":"U","comParams":{'+comParams+'}}';
+            var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"PX_SCORE_STD","OperateType":"U","comParams":{'+comParams+'}}';
             //保存数据
             Ext.tzSubmit(tzParams,function(){
                 //store.reload();
@@ -62,7 +62,7 @@
     },
     editTeacherInfoByRecord:function(record){
     	//是否有访问权限
-    	var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_TEA_INFO_STD"];
+    	var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_TEACHER_COM"]["PX_TEA_INFO_STD"];
 		if (pageResSet == "" || pageResSet == undefined) {
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 			return;
@@ -123,7 +123,7 @@
 		cmp.on('afterrender', function(panel) {
 			// 组件注册表单信息;
 			var OPRID = record.get("oprid");
-			var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TZ_PX_TEACHER_STD","OperateType":"QF","comParams":{"OPRID":"'+OPRID+'"}}';
+			var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"PX_TEACHER_STD","OperateType":"QF","comParams":{"OPRID":"'+OPRID+'"}}';
 			//加载数据
 			var msgForm = this.lookupReference('teacherMgForm');
 			var form = this.lookupReference('teacherMgForm').getForm();
@@ -226,7 +226,7 @@
         }
 
         //提交参数
-        var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TZ_PX_TEACHER_STD","OperateType":"U","comParams":{'+comParams+'}}';
+        var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"PX_TEACHER_STD","OperateType":"U","comParams":{'+comParams+'}}';
         console.log(tzParams);
         return tzParams;
     },
@@ -244,7 +244,7 @@
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_REVIEW_STD"];
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_TEACHER_COM"]["PX_REVIEW_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
@@ -312,7 +312,7 @@
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_FOCUS_STD"];
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_TEACHER_COM"]["PX_FOCUS_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
@@ -381,7 +381,7 @@
        var teaOprid=grid.teaOprid;
        var store = grid.store;
        Ext.tzShowPromptSearch({
-           recname: 'PX_COURSE_TYPE_T',
+           recname: 'PX_COURSE_TYPE_V',
            searchDesc: '选择课程级别',
            maxRow:20,
            condition:{
@@ -391,23 +391,23 @@
                        operator:'07',
                        type:'01'
                    },
-                   TZ_COURSE_TYPE:{
-                       desc:'课程级别类型',
+                   COURSE_TYPE_NAME:{
+                       desc:'课程级别名称',
                        operator:'07',
                        type:'01'
                    }
                }
            },
            srhresult:{
-        	   TZ_COURSE_TYPE_ID: '许可权编号',
-        	   TZ_COURSE_TYPE: '许可权描述'
+        	   TZ_COURSE_TYPE_ID: '课程级别编号',
+        	   COURSE_TYPE_NAME: '课程级别名称'
            },
            multiselect: true,
            callback: function(selection){
                //var oprid= "TZ_14072";//form.findField("roleName").getValue();
                for(var i= 0;i<selection.length;i++){
                    var tzCourseTypeId=selection[i].data.TZ_COURSE_TYPE_ID;
-                   var typeName=selection[i].data.TZ_COURSE_TYPE;
+                   var typeName=selection[i].data.COURSE_TYPE_NAME;
 
                    var rolePlstModal = Ext.create('KitchenSink.view.trainTeacherMg.teaCourseTypeModel',{
                 	   oprid:teaOprid,
@@ -419,8 +419,8 @@
                 	   //新增
                        comParams = '"add":['+Ext.JSON.encode(rolePlstModal.data)+']';
 
-                     //提交参数TZ_PX_TEACHER_COM.TEA_COU_TYPE_STD
-   					var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TEA_COU_TYPE_STD","OperateType":"U","comParams":{'+comParams+'}}';
+                     //提交参数PX_TEACHER_COM.TEA_COU_TYPE_STD
+   					var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"TEA_COU_TYPE_STD","OperateType":"U","comParams":{'+comParams+'}}';
    			        //保存数据
    			        if(comParams!=""){
    			            Ext.tzSubmit(tzParams,function(){
@@ -444,7 +444,7 @@
 			},
 			deletePageRegInfos: function(btn){
 				   //页面注册信息列表
-				   var grid = this.getView().child("grid");
+				   var grid = this.getView();
 					//选中行
 				   var selList = grid.getSelectionModel().getSelection();
 				   //选中行长度
@@ -539,8 +539,8 @@
 			            }
 			        }
 
-					//提交参数TZ_PX_TEACHER_COM.TEA_COU_TYPE_STD
-					var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TEA_COU_TYPE_STD","OperateType":"U","comParams":{'+comParams+'}}';
+					//提交参数PX_TEACHER_COM.TEA_COU_TYPE_STD
+					var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"TEA_COU_TYPE_STD","OperateType":"U","comParams":{'+comParams+'}}';
 			        //保存数据
 			        if(comParams!=""){
 			            Ext.tzSubmit(tzParams,function(){

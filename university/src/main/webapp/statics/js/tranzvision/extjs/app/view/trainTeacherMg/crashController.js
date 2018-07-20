@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'TZ_PX_CRASH_COM.TZ_PX_CRASH_STD.PX_TEA_TO_CRASH_V', 
+            cfgSrhId: 'PX_CRASH_COM.PX_CRASH_STD.PX_TEA_TO_CRASH_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;
@@ -59,7 +59,7 @@
         if(removeJson != ""){
             comParams = '"delete":[' + removeJson + "]";
             //提交参数
-            var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TZ_PX_FOCUS_STD","OperateType":"U","comParams":{'+comParams+'}}';
+            var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"PX_FOCUS_STD","OperateType":"U","comParams":{'+comParams+'}}';
             //保存数据
             Ext.tzSubmit(tzParams,function(){
                 store.reload();

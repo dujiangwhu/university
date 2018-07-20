@@ -3,7 +3,6 @@
  */
 package com.tranzvision.gd.TZJgStudentMgBundle.service.impl;
 
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -24,19 +23,10 @@ import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
-import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseT;
-import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseTWithBLOBs;
-import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgLoginbjT;
-import com.tranzvision.gd.TZPXBundle.dao.PxJgKsLogTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxJgKsOrderTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxStudentTMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxJgKsLogT;
-import com.tranzvision.gd.TZPXBundle.model.PxJgKsOrderT;
 import com.tranzvision.gd.TZPXBundle.model.PxStudentT;
-import com.tranzvision.gd.TZPXBundle.model.PxStudentTKey;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.encrypt.DESUtil;
-import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 

@@ -78,7 +78,7 @@ public class PxCourseTypeMgServiceImpl extends FrameworkImpl {
 
 			// json数据要的结果字段;
 			String[] resultFldArray = { "TZ_COURSE_TYPE_ID", "COURSE_TYPE_NAME", 
-					"TZ_COURSE_TYPE","TZ_MAX_AGE","TZ_MIN_AGE","TYPE_DMS"};
+					"COURSE_LEVEL_TYPE","TZ_MAX_AGE","TZ_MIN_AGE","TYPE_DMS"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);

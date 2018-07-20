@@ -37,15 +37,13 @@ Ext.define('KitchenSink.view.trainTeacherMg.reviewManage', {//项目管理列表
     	var stuOprid=this.stuOprid==undefined?"":this.stuOprid;
     	var teaOprid=this.teaOprid==undefined?"":this.teaOprid;
     	//alert(teaOprid);
-    	var tzStoreParams='{"cfgSrhId":"TZ_PX_TEACHER_COM.TZ_PX_REVIEW_STD.PX_STU_REVIEW_V","condition":{'
+    	var tzStoreParams='{"cfgSrhId":"PX_REVIEW_COM.PX_REVIEW_STD.PX_STU_REVIEW_V","condition":{'
     		+'"STU_OPRID-operator":"01","STU_OPRID-value":"'+stuOprid+'"'
     		+',"TEA_OPRID-operator":"01","TEA_OPRID-value":"'+teaOprid+'"'
     		+'}}';
 		var store = new KitchenSink.view.trainTeacherMg.reviewStore({tzStoreParams:tzStoreParams});
         Ext.apply(this, {
         	store: store,
-        	
-            
             columns: [{
             	text:"编号",
                 sortable:true,
@@ -89,7 +87,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.reviewManage', {//项目管理列表
 				align: 'center',
 				flex: 1,
 				width: 500
-            },
+            }/*,
             {
                 menuDisabled: true,
                 text:"操作",
@@ -100,7 +98,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.reviewManage', {//项目管理列表
  			   items:[
  			          {iconCls: 'delete',tooltip:"删除",handler:'deleteInfo'}			         
  			   ]
-             }
+             }*/
             ],
             buttons: [{
         		text: '保存',

@@ -37,7 +37,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.focusManage', {//项目管理列表�
     	var stuOprid=this.stuOprid==undefined?"":this.stuOprid;
     	var teaOprid=this.teaOprid==undefined?"":this.teaOprid;
     	//alert(teaOprid);
-    	var tzStoreParams='{"cfgSrhId":"TZ_PX_TEACHER_COM.TZ_PX_FOCUS_STD.PX_STU_FOCUS_V","condition":{'
+    	var tzStoreParams='{"cfgSrhId":"PX_FOCUS_COM.PX_FOCUS_STD.PX_STU_FOCUS_V","condition":{'
     		+'"STU_OPRID-operator":"01","STU_OPRID-value":"'+stuOprid+'"'
     		+',"TEA_OPRID-operator":"01","TEA_OPRID-value":"'+teaOprid+'"'
     		+'}}';

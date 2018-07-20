@@ -1,10 +1,9 @@
 /**
  * 
  */
-package com.tranzvision.gd.TZPxTeacherBundel.service.impl;
+package com.tranzvision.gd.TZPxTeacherBundle.service.impl;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,14 +11,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
+import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsTzRegUserT;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxScheduleCancelTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxTeaScheduleTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxScheduleCancelT;
-import com.tranzvision.gd.TZPXBundle.model.PxTeaScheduleT;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
@@ -30,8 +27,8 @@ import com.tranzvision.gd.util.sql.SqlQuery;
  * @author SHIHUA
  * @since 2015-11-06
  */
-@Service("com.tranzvision.gd.TZPxTeacherBundel.service.impl.PxScheduleMgServiceImpl")
-public class PxScheduleMgServiceImpl extends FrameworkImpl {
+@Service("com.tranzvision.gd.TZPxTeacherBundle.service.impl.PxStuScheduleMgServiceImpl")
+public class PxStuScheduleMgServiceImpl extends FrameworkImpl {
 
 	@Autowired
 	private FliterForm fliterForm;
@@ -49,10 +46,7 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 	private PxTeacherMapper pxTeacherMapper;
 	
 	@Autowired
-	private PxScheduleCancelTMapper pxScheduleCancelMapper;
-	
-	@Autowired
-	private PxTeaScheduleTMapper pxTeaScheduleMapper;
+	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -70,10 +64,10 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TZ_SCHEDULE_ID", "OPRID", 
-					"TZ_COURSE_TYPE_ID","TZ_COURSE_ID","TZ_APP_STATUS",
-					"TZ_CLASS_START_TIME","TZ_CLASS_END_TIME",
-					"TZ_SCHEDULE_TYPE","TZ_SCHEDULE_DATE","COURSE_TYPE_NAME","TZ_COURSE_NAME","TEA_NAME","TEA_PHONE","ROW_LASTMANT_DTTM"};
+			String[] resultFldArray = { "TZ_SCHEDULE_ID","STU_OPRID","STU_REALNAME","STU_PHONE"
+					,"TEA_OPRID","TEA_REALNAME"
+					,"TEA_PHONE","TZ_APP_STATUS","TZ_COURSE_NAME","COURSE_TYPE_NAME"
+					,"START_TIME","END_TIME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -86,20 +80,17 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 					String[] rowList = list.get(i);
 					Map<String, Object> mapList = new HashMap<String, Object>();
 					mapList.put("tzScheduleId", rowList[0]);
-					mapList.put("oprid", rowList[1]);
-					mapList.put("tzCourseTypeId", rowList[2]);
-					mapList.put("tzCourseId", rowList[3]);
-					mapList.put("tzAppStatus", rowList[4]);
-					mapList.put("tzClassStartTime", rowList[5]);
-					mapList.put("tzClassEndTime", rowList[6]);
-					mapList.put("tzScheduleType", rowList[7]);
-					mapList.put("tzScheduleDate", rowList[8]);
-					mapList.put("courseTypeName", rowList[9]);
-					mapList.put("tzCourseName", rowList[10]);
-					mapList.put("teaName", rowList[11]);
-					mapList.put("teaPhone", rowList[12]);
-					mapList.put("rowLastmant", rowList[13]);
-			        
+					mapList.put("stuOprid", rowList[1]);
+					mapList.put("stuRealname", rowList[2]);
+					mapList.put("stuPhone", rowList[3]);
+					mapList.put("teaOprid", rowList[3]);
+					mapList.put("teaRealname", rowList[4]);
+					mapList.put("teaPhone", rowList[5]);
+					mapList.put("tzAppStatus", rowList[6]);
+					mapList.put("tzCourseName", rowList[7]);
+					mapList.put("courseTypeName", rowList[8]);
+					mapList.put("startTime", rowList[9]);
+					mapList.put("endTime", rowList[10]);
 					listData.add(mapList);
 				}
 
@@ -205,7 +196,6 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 	}
 	/* 修改组件注册信息 */
 	public String tzUpdate(String[] actData, String[] errMsg) {
-		System.out.println("tzUpdate");
 		String strRet = "{}";
 		try {
 			JacksonUtil jacksonUtil = new JacksonUtil();
@@ -217,44 +207,37 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 				jacksonUtil.json2Map(strForm);
 				// 类型标志;
 				//Map<String, Object> infoData  = jacksonUtil.getMap("update");
-				String tzScheduleId=jacksonUtil.getString("tzScheduleId");
-				String cancelReason=jacksonUtil.getString("cancelReason");
 				String oprid=jacksonUtil.getString("oprid");
-				System.out.println(tzScheduleId+":"+cancelReason+":"+oprid);
-				if(tzScheduleId==null){
+				System.out.println(jacksonUtil.getString("sex"));
+				if(oprid==null){
 					errMsg[0] = "1";
 					errMsg[1] = "保存失败";
 				}else{
-					PxTeaScheduleT pxTeaSchedule=pxTeaScheduleMapper.selectByPrimaryKey(tzScheduleId);
-					if(pxTeaSchedule==null){
+					PxTeacher pxTeacher=pxTeacherMapper.selectByPrimaryKey(oprid);
+					if(pxTeacher==null){
 						errMsg[0] = "1";
 						errMsg[1] = "用户不存在！";
 					}else{
-						pxTeaSchedule.setTzScheduleType("B");
-						pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
+						pxTeacher.setSex(jacksonUtil.getString("sex"));
+						pxTeacher.setAge(jacksonUtil.getInt("age"));
+						pxTeacher.setLevel(jacksonUtil.getString("level"));
+						pxTeacher.setSchool(jacksonUtil.getString("school"));
+						pxTeacher.setEducationBg(jacksonUtil.getString("educationBg"));
+						pxTeacher.setSchoolAge(jacksonUtil.getInt("schoolAge"));
+						pxTeacher.setTeacherCard(jacksonUtil.getString("teacherCard"));
+						pxTeacher.setIntroduce(jacksonUtil.getString("introduce"));
+						pxTeacher.setAccountType(jacksonUtil.getString("accountType"));
+						pxTeacher.setAccountNum(jacksonUtil.getString("accountNum"));
+						pxTeacher.setScore(jacksonUtil.getInt("score"));
+						pxTeacher.setQq(jacksonUtil.getString("qq"));
+						pxTeacher.setEmail(jacksonUtil.getString("email"));
+						pxTeacher.setContactor(jacksonUtil.getString("contactor"));
+						pxTeacher.setContactorPhone(jacksonUtil.getString("contactorPhone"));
+						pxTeacher.setContactorAddress(jacksonUtil.getString("contactorAddress"));
+						pxTeacher.setStatu(jacksonUtil.getString("statu"));
+						pxTeacher.setIdCard(jacksonUtil.getString("idCard"));
 						
-						PxScheduleCancelT pxScheduleCancel=new PxScheduleCancelT();
-						pxScheduleCancel.setTzScheduleId(tzScheduleId);
-						pxScheduleCancel.setOprid(pxTeaSchedule.getOprid());
-						pxScheduleCancel.setTzCancelDesc(cancelReason);
-						pxScheduleCancel.setTzCancelTime(new Date());
-						//只取消
-						if(pxTeaSchedule.getTzAppStatus()=="A"){
-							
-						}else{
-							//pxTeaSchedule.setTzScheduleType("B");
-							//pxTeaSchedule.setOprid(oprid);
-							//pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
-							String newTzScheduleId=new Date().getTime()+"";
-							pxTeaSchedule.setTzScheduleId(newTzScheduleId);
-							pxTeaSchedule.setOprid(oprid);
-							pxTeaScheduleMapper.insert(pxTeaSchedule);
-							
-							pxScheduleCancel.setNewOprid(oprid);
-							pxScheduleCancel.setNewTzScheduleId(newTzScheduleId);
-							
-						}
-						pxScheduleCancelMapper.insert(pxScheduleCancel);
+						pxTeacherMapper.updateByPrimaryKey(pxTeacher);
 					}					
 				}
 			}

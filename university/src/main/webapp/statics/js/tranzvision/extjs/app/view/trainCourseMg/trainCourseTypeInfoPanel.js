@@ -32,7 +32,7 @@
 
         items: [{
             xtype: 'textfield',
-            fieldLabel: "课程编号",
+            fieldLabel: "课程级别编号",
             name: 'tzCourseTypeId',
             afterLabelTextTpl: [
                 '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'

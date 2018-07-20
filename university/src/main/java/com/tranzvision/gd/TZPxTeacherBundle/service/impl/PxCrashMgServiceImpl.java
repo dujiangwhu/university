@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tranzvision.gd.TZPxTeacherBundel.service.impl;
+package com.tranzvision.gd.TZPxTeacherBundle.service.impl;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -32,7 +32,7 @@ import com.tranzvision.gd.util.sql.SqlQuery;
  * @author SHIHUA
  * @since 2015-11-06
  */
-@Service("com.tranzvision.gd.TZPxTeacherBundel.service.impl.PxCrashMgServiceImpl")
+@Service("com.tranzvision.gd.TZPxTeacherBundle.service.impl.PxCrashMgServiceImpl")
 public class PxCrashMgServiceImpl extends FrameworkImpl {
 
 	@Autowired

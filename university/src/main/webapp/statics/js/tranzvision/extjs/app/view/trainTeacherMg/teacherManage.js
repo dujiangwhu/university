@@ -29,10 +29,12 @@ Ext.define('KitchenSink.view.trainTeacherMg.teacherManage', {//项目管理列�
 		//dock: 'top',设置工具条的位置
 		items:[
 			{text:Ext.tzGetResourse("TZ_FIRE_VIDEO_COM.TZ_FIRE_PROJ_STD.query","查询"),iconCls:"query",handler:'selectForm'},"-",
-			{text:"提现",iconCls:"copy",handler:'scoreToCrash'},"-",
-			//{text:"评论管理",iconCls:"edit",handler:'editTeacherInfos'},"-",
-			//{text:"关注学员",iconCls:"edit",handler:'editTeacherInfos'},"-",
-			//{text:"课程级别",iconCls:"edit",handler:'editTeacherInfos'},"-",
+			{text:"提现",iconCls:"copy",handler:'scoreToCrashs'},"-",
+			{text:"编辑",iconCls:"edit",handler:'editTeacherInfos'},"-",
+			{text:"评论管理",iconCls:"view",handler:'reviewInfos'},"-",
+			{text:"关注学员",iconCls:"view",handler:'focusInfos'},"-",
+			{text:"课程级别",iconCls:"view",handler:'courseLevelInfos'},"-"
+			
 		]}
 		],
     initComponent: function () {   
@@ -82,7 +84,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.teacherManage', {//项目管理列�
 				align: 'center',
 				 flex: 1,
 				width: 150
-            },
+            }/*,
             {
                 menuDisabled: true,
                 text:"操作",
@@ -98,7 +100,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.teacherManage', {//项目管理列�
 					  {iconCls: 'preview',tooltip: '关注学员',handler:'editFocusById'},
 					  {iconCls: 'publish',tooltip: '课程级别',handler:'editSiteMenuById'}
  			   ]
-             }
+             }*/
             ],
             buttons: [{
         		text: '关闭',

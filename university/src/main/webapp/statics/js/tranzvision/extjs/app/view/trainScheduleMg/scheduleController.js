@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'TZ_PX_SCHEDULE_COM.TZ_PX_SCHEDULE_STD.PX_TEA_SCHEDULE_V', 
+            cfgSrhId: 'PX_SCHEDULE_COM.PX_SCHEDULE_STD.PX_TEA_SCHEDULE_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;
@@ -39,7 +39,7 @@
         if(removeJson != ""){
             comParams = '"update":[' + removeJson + "]";
             //提交参数
-            var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TZ_PX_SCORE_STD","OperateType":"U","comParams":{'+comParams+'}}';
+            var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"PX_SCORE_STD","OperateType":"U","comParams":{'+comParams+'}}';
             //保存数据
             Ext.tzSubmit(tzParams,function(){
                 //store.reload();
@@ -62,7 +62,7 @@
     },
     editTeacherInfoByRecord:function(record){
     	//是否有访问权限
-    	var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_TEA_INFO_STD"];
+    	var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_TEACHER_COM"]["PX_TEA_INFO_STD"];
 		if (pageResSet == "" || pageResSet == undefined) {
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 			return;
@@ -123,7 +123,7 @@
 		cmp.on('afterrender', function(panel) {
 			// 组件注册表单信息;
 			var OPRID = record.get("oprid");
-			var tzParams = '{"ComID":"TZ_PX_TEACHER_COM","PageID":"TZ_PX_TEACHER_STD","OperateType":"QF","comParams":{"OPRID":"'+OPRID+'"}}';
+			var tzParams = '{"ComID":"PX_TEACHER_COM","PageID":"PX_TEACHER_STD","OperateType":"QF","comParams":{"OPRID":"'+OPRID+'"}}';
 			//加载数据
 			var msgForm = this.lookupReference('teacherMgForm');
 			var form = this.lookupReference('teacherMgForm').getForm();
@@ -211,8 +211,8 @@
             comParams = '"update":['+Ext.JSON.encode(formParams)+']';
         }
 
-        //提交参数TZ_PX_SCHEDULE_COM"]["SCHEDULE_INFO_STD"
-        var tzParams = '{"ComID":"TZ_PX_SCHEDULE_COM","PageID":"SCHEDULE_INFO_STD","OperateType":"U","comParams":{'+comParams+'}}';
+        //提交参数PX_SCHEDULE_COM"]["SCHEDULE_INFO_STD"
+        var tzParams = '{"ComID":"PX_SCHEDULE_COM","PageID":"SCHEDULE_INFO_STD","OperateType":"U","comParams":{'+comParams+'}}';
         console.log(tzParams);
         return tzParams;
     },
@@ -230,7 +230,7 @@
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_TEACHER_COM"]["TZ_PX_REVIEW_STD"];
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_TEACHER_COM"]["PX_REVIEW_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
@@ -288,9 +288,15 @@
    },
    //关注列表
    editFocusById: function(view, rowIndex){
-    	var store = view.findParentByType("grid").store;
-		var selRec = store.getAt(rowIndex);
-		var tzScheduleId = selRec.get("tzScheduleId");
+	 //选中行
+	   	var selList = this.getView().getSelectionModel().getSelection();//返回一个当前被选择的记录的数组
+	   	//选中行长度
+	   	var checkLen = selList.length;
+	   	if(checkLen == 0){
+	   		Ext.Msg.alert("提示","请选择一条记录");   
+			return;
+	   	}
+		var tzScheduleId = selList[0].get("tzScheduleId");
 		this.editFocus(tzScheduleId);
 	},
 	editFocus: function(tzScheduleId){
@@ -298,7 +304,7 @@
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_SCHEDULE_COM"]["TZ_PX_STUSCH_STD"];
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_SCHEDULE_COM"]["PX_STUSCH_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
@@ -378,8 +384,8 @@
 	   }  
    },
 	editByID: function(comID){
-		//是否有访问权限TZ_PX_SCHEDULE_COM.TZ_PX_SCHEDULE_STD.
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["TZ_PX_SCHEDULE_COM"]["SCHEDULE_INFO_STD"];
+		//是否有访问权限PX_SCHEDULE_COM.PX_SCHEDULE_STD.
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_SCHEDULE_COM"]["SCHEDULE_INFO_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 			return;

@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.tranzvision.gd.TZPxTeacherBundel.service.impl;
+package com.tranzvision.gd.TZPxReviewBundle.service.impl;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,9 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxStuFocusTeaTMapper;
-import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
-import com.tranzvision.gd.TZPXBundle.model.PxStuFocusTeaTKey;
+import com.tranzvision.gd.TZPXBundle.dao.PxStuReviewTeaTMapper;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
@@ -26,8 +24,8 @@ import com.tranzvision.gd.util.sql.SqlQuery;
  * @author SHIHUA
  * @since 2015-11-06
  */
-@Service("com.tranzvision.gd.TZPxTeacherBundel.service.impl.PxFocusMgServiceImpl")
-public class PxFocusMgServiceImpl extends FrameworkImpl {
+@Service("com.tranzvision.gd.TZPxReviewBundle.service.impl.PxReviewMgServiceImpl")
+public class PxReviewMgServiceImpl extends FrameworkImpl {
 
 	@Autowired
 	private FliterForm fliterForm;
@@ -42,11 +40,7 @@ public class PxFocusMgServiceImpl extends FrameworkImpl {
 	private PsTzJgBaseTMapper psTzJgBaseTMapper;
 	
 	@Autowired
-	private PxTeacherMapper pxTeacherMapper;
-	
-	@Autowired
-	private PxStuFocusTeaTMapper pxStuFocusMapper;
-	
+	private PxStuReviewTeaTMapper pxStuReviewMapper;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -58,13 +52,14 @@ public class PxFocusMgServiceImpl extends FrameworkImpl {
 		mapRet.put("root", "[]");
 
 		ArrayList<Map<String, Object>> listData = new ArrayList<Map<String, Object>>();
-System.out.println(strParams);
+
 		try {
 			// 排序字段如果没有不要赋值
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "STU_OPRID", "TEA_OPRID", "TZ_FOCUS_TIME","ROW_LASTMANT_DTTM","ROW_LASTMANT_OPRID","STU_NAME", "TEA_NAME"};
+			String[] resultFldArray = { "TZ_REVIEW_ID", "STU_OPRID", "TEA_OPRID","TZ_REVIEW_TYPE","TZ_REVIEW_DESC","TZ_REVIEW_TIME",
+					"TZ_REVIEW_STATUS","ROW_LASTMANT_DTTM","ROW_LASTMANT_OPRID","STU_NAME", "TEA_NAME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -77,14 +72,18 @@ System.out.println(strParams);
 					String[] rowList = list.get(i);
 
 					Map<String, Object> mapList = new HashMap<String, Object>();
-					mapList.put("stuOprid", rowList[0]);
-					mapList.put("teaOprid", rowList[1]);
-					mapList.put("tzFocusTime", rowList[2]);
-					mapList.put("rowLastmantDttm", rowList[3]);
-					mapList.put("rowLastmantOprid", rowList[4]);
-					mapList.put("stuName", rowList[5]);
-					mapList.put("teaName", rowList[6]);
-		
+					mapList.put("tzReviewId", rowList[0]);
+					mapList.put("stuOprid", rowList[1]);
+					mapList.put("teaOprid", rowList[2]);
+					mapList.put("tzReviewType", rowList[3]);
+					mapList.put("tzReviewDesc", rowList[4]);
+					mapList.put("tzReviewTime", rowList[5]);
+					mapList.put("tzReviewStatus", rowList[6]);
+					mapList.put("rowLastmantDttm", rowList[7]);
+					mapList.put("rowLastmantOprid", rowList[8]);
+					mapList.put("stuName", rowList[9]);
+					mapList.put("teaName", rowList[10]);
+			        
 					listData.add(mapList);
 				}
 
@@ -122,18 +121,13 @@ System.out.println(strParams);
 				// 解析json
 				jacksonUtil.json2Map(strForm);
 
-				String stuOprid = jacksonUtil.getString("stuOprid");
-				String teaOprid = jacksonUtil.getString("teaOprid");
-				if(stuOprid!=null&&teaOprid!=null){
-					
-					PxStuFocusTeaTKey pxStuFocusKey=new PxStuFocusTeaTKey();
-					pxStuFocusKey.setStuOprid(stuOprid);
-					pxStuFocusKey.setTeaOprid(teaOprid);
-					pxStuFocusMapper.deleteByPrimaryKey(pxStuFocusKey);
+				String tzReviewId = jacksonUtil.getString("tzReviewId");
+				if(tzReviewId!=null){
+					pxStuReviewMapper.deleteByPrimaryKey(tzReviewId);
 				}
 				
 				Map<String, Object> mapJson = new HashMap<String, Object>();
-				mapJson.put("teaOprid", teaOprid);
+				mapJson.put("tzReviewId", tzReviewId);
 				strRet = jacksonUtil.Map2json(mapJson);
 			}
 		} catch (Exception e) {
@@ -144,6 +138,5 @@ System.out.println(strParams);
 
 		return strRet;
 	}
-	
 
 }
