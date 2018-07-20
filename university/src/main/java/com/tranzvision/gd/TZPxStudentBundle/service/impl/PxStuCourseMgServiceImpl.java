@@ -66,7 +66,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 			String[] resultFldArray = { "TZ_SCHEDULE_ID","STU_OPRID","STU_REALNAME","STU_PHONE"
 					,"TEA_OPRID","TEA_REALNAME"
 					,"TEA_PHONE","TZ_APP_STATUS","TZ_COURSE_NAME","COURSE_TYPE_NAME"
-					,"START_TIME","END_TIME"};
+					,"START_TIME","END_TIME","TZ_SCHEDULE_TYPE"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -90,6 +90,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 					mapList.put("courseTypeName", rowList[9]);
 					mapList.put("startTime", rowList[10]);
 					mapList.put("endTime", rowList[11]);
+					mapList.put("tzScheduleType", rowList[12]);
 					listData.add(mapList);
 				}
 

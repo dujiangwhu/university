@@ -50,13 +50,13 @@ Ext.define('KitchenSink.view.trainScheduleMg.scheduleManage', {//项目管理列
                 sortable:true,
                 dataIndex:'courseTypeName',
                 align: 'center',
-                width:150
+                width:100
             },{
             	text:"上课老师",
                 sortable:true,
                 dataIndex:'teaName',
                 align: 'center',
-                width:150
+                width:100
             },{ 
             	text: "老师电话",
                 dataIndex: 'teaPhone',
@@ -74,7 +74,7 @@ Ext.define('KitchenSink.view.trainScheduleMg.scheduleManage', {//项目管理列
                 dataIndex: 'tzClassStartTime',
 				sortable: true,
 				align: 'center',
-				width: 150
+				width: 100
             },{ 
             	text: "上课结束时间",
                 dataIndex: 'tzClassEndTime',

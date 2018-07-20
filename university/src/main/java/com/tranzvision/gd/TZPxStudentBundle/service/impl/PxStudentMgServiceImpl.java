@@ -199,7 +199,7 @@ public class PxStudentMgServiceImpl extends FrameworkImpl {
 				// 类型标志;
 				//Map<String, Object> infoData  = jacksonUtil.getMap("update");
 				String orgid=jacksonUtil.getString("orgid");
-				String oprid=jacksonUtil.getString("OPRID");
+				String oprid=jacksonUtil.getString("oprid");
 				System.out.println(jacksonUtil.getString("sex"));
 				if(oprid==null){
 					errMsg[0] = "1";

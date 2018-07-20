@@ -12,6 +12,8 @@ Ext.define('KitchenSink.view.trainStudentMg.stuCourseModel', {
         {name: 'tzCourseName'},
         {name: 'courseTypeName'},
         {name: 'startTime'},
-        {name: 'endTime'}
+        {name: 'endTime'},
+        {name: 'tzScheduleType'}
+        
 	]
 });

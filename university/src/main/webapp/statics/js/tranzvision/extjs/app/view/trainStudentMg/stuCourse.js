@@ -48,15 +48,15 @@
 	    //组件注册信息列表
 	    var store = new KitchenSink.view.trainStudentMg.stuCourseStore();
         Ext.apply(this, {
-            columns: [{ 
+            columns: [/*{ 
                 text: '学员编号',
                 dataIndex: 'stuOprid',
 				width: 150
-            },{ 
+            },*/{ 
                 text: '学员姓名',
                 dataIndex: 'stuRealname',
 				width: 150
-            },{ 
+            },/*{ 
                 text: '学员电话',
                 dataIndex: 'stuPhone',
 				width: 150
@@ -64,15 +64,15 @@
                 text: '教师编号',
                 dataIndex: 'teaOprid',
 				width: 150
-            },{ 
+            },*/{ 
                 text: '教师姓名',
                 dataIndex: 'teaRealname',
 				width: 150
-            },{ 
+            },/*{ 
                 text: '教师电话',
                 dataIndex: 'teaPhone',
 				width: 150
-            },{ 
+            },*/{ 
                 text: '课程名称',
                 dataIndex: 'tzCourseName',
 				width: 150
@@ -90,7 +90,7 @@
 				width: 150
             },{ 
                 text: '课程状态',
-                dataIndex: 'tzAppStatus',
+                dataIndex: 'tzScheduleType',
 				width: 150
             }],
 			store: store,

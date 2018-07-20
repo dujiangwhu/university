@@ -63,7 +63,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.focusManage', {//项目管理列表�
 				align: 'center',
 				width: 200,
 				flex:1
-            },
+            }/*,
             {
                 menuDisabled: true,
                 text:"操作",
@@ -74,7 +74,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.focusManage', {//项目管理列表�
  			   items:[
  			          {iconCls: 'delete',tooltip:"删除",handler:'deleteInfo'}			         
  			   ]
-             }
+             }*/
             ],
             buttons: [{
         		text: '保存',

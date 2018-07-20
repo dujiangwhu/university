@@ -58,8 +58,8 @@ public class PxReviewMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TZ_REVIEW_ID", "STU_OPRID", "TEA_OPRID","TZ_REVIEW_TYPE","TZ_REVIEW_DESC","TZ_REVIEW_TIME",
-					"TZ_REVIEW_STATUS","ROW_LASTMANT_DTTM","ROW_LASTMANT_OPRID","STU_NAME", "TEA_NAME"};
+			String[] resultFldArray = { "TZ_REVIEW_ID", "STU_OPRID", "TEA_OPRID","REVIEW_TYPE_DMS","TZ_REVIEW_DESC","TZ_REVIEW_TIME",
+					"REVIEW_STATUS_DMS","ROW_LASTMANT_DTTM","ROW_LASTMANT_OPRID","STU_NAME", "TEA_NAME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);

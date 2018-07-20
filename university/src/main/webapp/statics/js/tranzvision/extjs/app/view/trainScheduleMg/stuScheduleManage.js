@@ -28,7 +28,7 @@ Ext.define('KitchenSink.view.trainScheduleMg.stuScheduleManage', {//项目管理
 		xtype:"toolbar",
 		//dock: 'top',设置工具条的位置
 		items:[
-			{text:Ext.tzGetResourse("TZ_FIRE_VIDEO_COM.TZ_FIRE_PROJ_STD.query","查询"),iconCls:"query",handler:'selectForm'},"-",
+			//{text:Ext.tzGetResourse("TZ_FIRE_VIDEO_COM.TZ_FIRE_PROJ_STD.query","查询"),iconCls:"query",handler:'selectForm'},"-",
 			//{text:"提现",iconCls:"copy",handler:'scoreToCrash'},"-",
 			//{text:"评论管理",iconCls:"edit",handler:'editTeacherInfos'},"-",
 			//{text:"关注学员",iconCls:"edit",handler:'editTeacherInfos'},"-",

@@ -32,7 +32,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.teacherManage', {//项目管理列�
 			{text:"提现",iconCls:"copy",handler:'scoreToCrashs'},"-",
 			{text:"编辑",iconCls:"edit",handler:'editTeacherInfos'},"-",
 			{text:"评论管理",iconCls:"view",handler:'reviewInfos'},"-",
-			{text:"关注学员",iconCls:"view",handler:'focusInfos'},"-",
+			{text:"关注管理",iconCls:"view",handler:'focusInfos'},"-",
 			{text:"课程级别",iconCls:"view",handler:'courseLevelInfos'},"-"
 			
 		]}

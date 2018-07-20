@@ -49,7 +49,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.reviewManage', {//项目管理列表
                 sortable:true,
                 dataIndex:'tzReviewId',
                 align: 'center',
-                width:150
+                width:60
             },{
             	text:"学生姓名",
                 sortable:true,

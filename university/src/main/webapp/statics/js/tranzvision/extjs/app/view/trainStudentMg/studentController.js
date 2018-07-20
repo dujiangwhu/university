@@ -212,19 +212,23 @@
     
     
     //评论管理
-    editReviewById: function(view, rowIndex){
-    	var store = view.findParentByType("grid").store;
-		var selRec = store.getAt(rowIndex);
-		var oprid = selRec.get("oprid");
-		this.editSiteColu(oprid);
+    reviewInfos: function(view, rowIndex){
+    	var selList = this.getView().getSelectionModel().getSelection();//返回一个当前被选择的记录的数组
+	   	//选中行长度
+	   	var checkLen = selList.length;
+	   	if(checkLen == 0){
+	   		Ext.Msg.alert("提示","请选择一条记录");   
+			return;
+	   	}
+     	this.reviewInfosByRecord(selList[0]);
 	},
-	editSiteColu: function(oprid){
+	reviewInfosByRecord: function(record){
+		Ext.tzSetCompResourses("PX_REVIEW_COM");
 		grid = this.getView();
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		alert(TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"])
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]["TZ_PX_REVIEW_STD"];
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_REVIEW_COM"]["PX_REVIEW_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
@@ -262,7 +266,7 @@
            }
        }
        
-       cmp = new ViewClass({ oprid:oprid });
+       cmp = new ViewClass({ oprid:record.get("oprid") });
        //操作类型设置为更新
        cmp.actType = "update";
 
@@ -280,19 +284,24 @@
            cmp.show();
        }
    },
-	//关注列表
-   editFocusById: function(view, rowIndex){
-    	var store = view.findParentByType("grid").store;
-		var selRec = store.getAt(rowIndex);
-		var teaOprid = selRec.get("teaOprid");
-		this.editFocus(teaOprid);
+ //关注列表
+   focusInfos: function(view, rowIndex){
+	   var selList = this.getView().getSelectionModel().getSelection();//返回一个当前被选择的记录的数组
+	   	//选中行长度
+	   	var checkLen = selList.length;
+	   	if(checkLen == 0){
+	   		Ext.Msg.alert("提示","请选择一条记录");   
+			return;
+	   	}
+    	this.focusInfosByRecord(selList[0]);
 	},
-	editFocus: function(teaOprid){
+	focusInfosByRecord: function(record){
+		Ext.tzSetCompResourses("PX_FOCUS_COM");
 		grid = this.getView();
 		var contentPanel,cmp, className, ViewClass, clsProto;
 		var themeName = Ext.themeName;
 		//是否有访问权限
-		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]["TZ_PX_FOCUS_STD"];
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_FOCUS_COM"]["PX_FOCUS_STD"];
 		if( pageResSet == "" || pageResSet == undefined){
 			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
 	        return;
@@ -330,7 +339,7 @@
            }
        }
        
-       cmp = new ViewClass({ teaOprid:teaOprid });
+       cmp = new ViewClass({ teaOprid:record.get("teaOprid") });
        //操作类型设置为更新
        cmp.actType = "update";
 
@@ -350,73 +359,77 @@
    },
 	
 	//课时变化列表
-					   editCourseById : function(view, rowIndex) {
-						var store = view.findParentByType("grid").store;
-						var selRec = store.getAt(rowIndex);
-						var oprid = selRec.get("oprid");
-						this.editCourseByIds(oprid);
-					},
-		editCourseByIds: function(oprid){
-			grid = this.getView();
-			var contentPanel,cmp, className, ViewClass, clsProto;
-			var themeName = Ext.themeName;
-			//是否有访问权限"PX_STU_COURSE_COM.PX_STU_COURSE_STD
-			alert(TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]);
-			var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]["PX_COU_TIME_STD"];
-			if( pageResSet == "" || pageResSet == undefined){
-				Ext.MessageBox.alert('提示', '您没有修改数据的权限');
-		        return;
-		     }
-		      //该功能对应的JS类
-		    className = pageResSet["jsClassName"];
-		    if(className == "" || className == undefined){
-		         Ext.MessageBox.alert('提示', '未找到该功能页面对应的JS类，页面ID为：TZ_GD_WWLMGL_STD，请检查配置。');
-		         return;
-	       }
-	       contentPanel = Ext.getCmp('tranzvision-framework-content-panel');
-	       contentPanel.body.addCls('kitchensink-example');
+   editCourseById: function(view, rowIndex){
+	   var selList = this.getView().getSelectionModel().getSelection();//返回一个当前被选择的记录的数组
+	   	//选中行长度
+	   	var checkLen = selList.length;
+	   	if(checkLen == 0){
+	   		Ext.Msg.alert("提示","请选择一条记录");   
+			return;
+	   	}
+    	this.editCourseByIds(selList[0]);
+   },
+   editCourseByIds: function(record){
+		grid = this.getView();
+		var contentPanel,cmp, className, ViewClass, clsProto;
+		var themeName = Ext.themeName;
+		//是否有访问权限"PX_STU_COURSE_COM.PX_STU_COURSE_STD
+		var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_STU_COM"]["PX_COU_TIME_STD"];
+		if( pageResSet == "" || pageResSet == undefined){
+			Ext.MessageBox.alert('提示', '您没有修改数据的权限');
+	        return;
+	     }
+	      //该功能对应的JS类
+	    className = pageResSet["jsClassName"];
+	    if(className == "" || className == undefined){
+	         Ext.MessageBox.alert('提示', '未找到该功能页面对应的JS类，页面ID为：TZ_GD_WWLMGL_STD，请检查配置。');
+	         return;
+      }
+      contentPanel = Ext.getCmp('tranzvision-framework-content-panel');
+      contentPanel.body.addCls('kitchensink-example');
 
-	       if(!Ext.ClassManager.isCreated(className)){
-	           Ext.syncRequire(className);
-	       }
-	       ViewClass = Ext.ClassManager.get(className);
+      if(!Ext.ClassManager.isCreated(className)){
+          Ext.syncRequire(className);
+      }
+      ViewClass = Ext.ClassManager.get(className);
 
-	       clsProto = ViewClass.prototype;
+      clsProto = ViewClass.prototype;
 
-	       if (clsProto.themes) {
-	           clsProto.themeInfo = clsProto.themes[themeName];
+      if (clsProto.themes) {
+          clsProto.themeInfo = clsProto.themes[themeName];
 
-	           if (themeName === 'gray') {
-	               clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.classic);
-	           } else if (themeName !== 'neptune' && themeName !== 'classic') {
-	               if (themeName === 'crisp-touch') {
-	                   clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes['neptune-touch']);
-	               }
-	               clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.neptune);
-	           }
-	           if (!clsProto.themeInfo) {
-	               Ext.log.warn ( 'Example \'' + className + '\' lacks a theme specification for the selected theme: \'' +
-	                   themeName + '\'. Is this intentional?');
-	           }
-	       }
-	       
-	       cmp = new ViewClass({ oprid:oprid });
-	       //操作类型设置为更新
-	       cmp.actType = "update";
+          if (themeName === 'gray') {
+              clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.classic);
+          } else if (themeName !== 'neptune' && themeName !== 'classic') {
+              if (themeName === 'crisp-touch') {
+                  clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes['neptune-touch']);
+              }
+              clsProto.themeInfo = Ext.applyIf(clsProto.themeInfo || {}, clsProto.themes.neptune);
+          }
+          if (!clsProto.themeInfo) {
+              Ext.log.warn ( 'Example \'' + className + '\' lacks a theme specification for the selected theme: \'' +
+                  themeName + '\'. Is this intentional?');
+          }
+      }
+      
+      cmp = new ViewClass({ oprid:record.get("oprid") });
+      //操作类型设置为更新
+      cmp.actType = "update";
 
-	       cmp.on('close',function(panel){
-	    	   try{
-	    		   grid.store.reload();
-	    	   }catch(e){
-	    	   }	  
-	       });
+      cmp.on('close',function(panel){
+   	   try{
+   		   grid.store.reload();
+   	   }catch(e){
+   	   }	  
+      });
 
-	       tab = contentPanel.add(cmp);
-	       contentPanel.setActiveTab(tab);
-	       Ext.resumeLayouts(true);
-	       if (cmp.floating) {
-	           cmp.show();
-	       }
-	   }
+      tab = contentPanel.add(cmp);
+      contentPanel.setActiveTab(tab);
+      Ext.resumeLayouts(true);
+      if (cmp.floating) {
+          cmp.show();
+      }
+  }
+		
 
 });

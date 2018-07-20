@@ -30,9 +30,10 @@ Ext.define('KitchenSink.view.trainStudentMg.studentManage', {//项目管理列�
 		items:[
 			{text:Ext.tzGetResourse("TZ_FIRE_VIDEO_COM.TZ_FIRE_PROJ_STD.query","查询"),iconCls:"query",handler:'selectForm'},"-",
 			{text:"编辑",iconCls:"edit",handler:'scoreToCrash'},"-",
-			//{text:"评论管理",iconCls:"edit",handler:'editTeacherInfos'},"-",
-			//{text:"关注学员",iconCls:"edit",handler:'editTeacherInfos'},"-",
-			//{text:"课程级别",iconCls:"edit",handler:'editTeacherInfos'},"-",
+			{text:"评论管理",iconCls:"view",handler:'reviewInfos'},"-",
+			{text:"关注管理",iconCls:"view",handler:'focusInfos'},"-",
+			{text:"课时变动查询",iconCls:"view",handler:'editCourseById'}
+			
 		]}
 		],
     initComponent: function () {   
@@ -74,9 +75,8 @@ Ext.define('KitchenSink.view.trainStudentMg.studentManage', {//项目管理列�
                 dataIndex: 'stuStatusDms',
 				sortable: true,
 				align: 'center',
-				 flex: 1,
-				width: 150
-            },
+				 flex: 1
+            }/*,
             {
                 menuDisabled: true,
                 text:"操作",
@@ -92,7 +92,7 @@ Ext.define('KitchenSink.view.trainStudentMg.studentManage', {//项目管理列�
 					  {iconCls: 'preview',tooltip: '关注老师',handler:'editFocusById'},
 					  {iconCls: 'publish',tooltip: '课时变动查询',handler:'editCourseById'}
  			   ]
-             }
+             }*/
             ],
             buttons: [{
         		text: '关闭',
