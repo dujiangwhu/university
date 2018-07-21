@@ -22,6 +22,7 @@ import com.tranzvision.gd.TZPXBundle.model.PxScheduleCancelT;
 import com.tranzvision.gd.TZPXBundle.model.PxTeaScheduleT;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
+import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
 /**
@@ -53,6 +54,9 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 	
 	@Autowired
 	private PxTeaScheduleTMapper pxTeaScheduleMapper;
+	
+	@Autowired
+	private GetSeqNum getSeqNum;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -226,11 +230,14 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 					errMsg[1] = "保存失败";
 				}else{
 					PxTeaScheduleT pxTeaSchedule=pxTeaScheduleMapper.selectByPrimaryKey(tzScheduleId);
+					//System.out.println();
 					if(pxTeaSchedule==null){
 						errMsg[0] = "1";
 						errMsg[1] = "用户不存在！";
-					}else{
-						pxTeaSchedule.setTzScheduleType("B");
+					}else if(pxTeaSchedule.getTzScheduleType().trim().equals("0")){
+						
+						
+						pxTeaSchedule.setTzScheduleType("1");
 						pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
 						
 						PxScheduleCancelT pxScheduleCancel=new PxScheduleCancelT();
@@ -239,13 +246,14 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 						pxScheduleCancel.setTzCancelDesc(cancelReason);
 						pxScheduleCancel.setTzCancelTime(new Date());
 						//只取消
-						if(pxTeaSchedule.getTzAppStatus()=="A"){
+						if(pxTeaSchedule.getTzAppStatus()=="0"){
 							
 						}else{
 							//pxTeaSchedule.setTzScheduleType("B");
 							//pxTeaSchedule.setOprid(oprid);
 							//pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
-							String newTzScheduleId=new Date().getTime()+"";
+							
+							String newTzScheduleId=String.valueOf(getSeqNum.getSeqNum("PX_TEA_SCHEDULE_T", "TZ_SCHEDULE_ID"));
 							pxTeaSchedule.setTzScheduleId(newTzScheduleId);
 							pxTeaSchedule.setOprid(oprid);
 							pxTeaScheduleMapper.insert(pxTeaSchedule);

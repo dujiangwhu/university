@@ -662,6 +662,10 @@ public class GdKjComServiceImpl extends GdObjectServiceImpl implements GdKjComSe
 			// JSONObject fieldJson;
 			// 结果字段按逗号分隔;
 			String[] aryResult = result.split(",");
+			List<String> resultList=new ArrayList<String>();
+			for(String ary:aryResult){
+				resultList.add(ary);
+			}
 			int resultSelectFldsLen = aryResult.length;
 			if (resultSelectFldsLen == 0) {
 				errMsgArr[0] = "1";
@@ -693,7 +697,7 @@ public class GdKjComServiceImpl extends GdObjectServiceImpl implements GdKjComSe
 			if (list != null) {
 				for (i = 0; i < list.size(); i++) {
 					columnNanme = (String) list.get(i).get("COLUMN_NAME");
-					if (result.contains(columnNanme)) {
+					if (resultList.contains(columnNanme)) {
 						dateType = ((String) list.get(i).get("DATA_TYPE")).toUpperCase();
 
 						if (intTypeString.contains(dateType)) {

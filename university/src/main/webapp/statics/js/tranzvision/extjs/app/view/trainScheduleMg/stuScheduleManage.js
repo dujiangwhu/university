@@ -36,7 +36,11 @@ Ext.define('KitchenSink.view.trainScheduleMg.stuScheduleManage', {//项目管理
 		]}
 		],
     initComponent: function () {   
-		var store = new KitchenSink.view.trainScheduleMg.stuScheduleStore;
+    	var tzScheduleId=this.tzScheduleId==undefined?"":this.tzScheduleId;
+    	var tzStoreParams='{"cfgSrhId":"PX_SCHEDULE_COM.PX_STUSCH_STD.PX_STU_COURSE_V","condition":{'
+    		+'"TZ_SCHEDULE_ID-operator":"01","TZ_SCHEDULE_ID-value":"'+tzScheduleId+'"'
+    		+'}}';
+		var store = new KitchenSink.view.trainScheduleMg.stuScheduleStore({tzStoreParams:tzStoreParams});
         Ext.apply(this, {
         	store: store,
             columns: [{

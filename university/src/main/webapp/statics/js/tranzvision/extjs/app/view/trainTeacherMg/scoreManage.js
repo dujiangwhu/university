@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.scoreManage', {//项目管理列表�
     },
 	style:"margin:8px",
     multiSelect: true,
-    title: "评论信息",
+    title: "积分变动记录",
     viewConfig: {
         enableTextSelection:true
     },

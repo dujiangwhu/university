@@ -60,11 +60,17 @@
                     xtype: 'textfield',
                     fieldLabel: '教师姓名',
                     readOnly:true,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     name: 'name',
                     fieldStyle:'background:#F4F4F4'
                 },{
                     xtype: 'textfield',
                     fieldLabel: '手机号码',
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     readOnly:true,
                     name: 'phone',
                     fieldStyle:'background:#F4F4F4'
@@ -72,6 +78,9 @@
             		xtype: 'combobox',
                     fieldLabel: '性别',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     editable:false,
                     emptyText:'请选择',
                     queryMode: 'remote',
@@ -84,16 +93,25 @@
                     xtype: 'textfield',
                     fieldLabel: '年龄',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     name: 'age'
                 },{
                     xtype: 'textfield',
                     fieldLabel: '身份证号',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     name: 'idCard'
                 },{
             		xtype: 'combobox',
                     fieldLabel: '级别',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     editable:false,
                     emptyText:'请选择',
                     queryMode: 'remote',
@@ -113,6 +131,9 @@
                     xtype: 'textfield',
                     fieldLabel: '教龄',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     name: 'schoolAge'
                 },{
                     xtype: 'textfield',
@@ -122,6 +143,9 @@
             		xtype: 'combobox',
                     fieldLabel: '账户类型',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     editable:false,
                     emptyText:'请选择',
                     queryMode: 'remote',
@@ -133,13 +157,20 @@
                     xtype: 'textfield',
                     fieldLabel: '账户号码',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     name: 'accountNum'
                 },{
                     xtype: 'textfield',
                     fieldLabel: '积分',
-                    //readOnly:true,
+                    readOnly:true,
                     allowBlank: false,
-                    name: 'score'
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
+                    name: 'score',
+                    fieldStyle:'background:#F4F4F4'
                 },{
                     xtype: 'textfield',
                     fieldLabel: 'QQ',
@@ -164,6 +195,9 @@
             		xtype: 'combobox',
                     fieldLabel: '状态信息',
                     allowBlank: false,
+                    afterLabelTextTpl: [
+                                        '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+                                    ],
                     editable:false,
                     emptyText:'请选择',
                     queryMode: 'remote',

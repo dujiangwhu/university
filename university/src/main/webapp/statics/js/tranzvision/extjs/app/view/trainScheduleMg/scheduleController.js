@@ -362,11 +362,21 @@
    },
  //课时变化列表
    addPermission:function(view, rowIndex){
-	   var store = view.findParentByType("grid").store;
-	   var record=store.getAt(rowIndex);
+	 //选中行
+	   	var selList = this.getView().getSelectionModel().getSelection();//返回一个当前被选择的记录的数组
+	   	//选中行长度
+	   	var checkLen = selList.length;
+	   	if(checkLen == 0){
+	   		Ext.Msg.alert("提示","请选择一条记录");   
+			return;
+	   	}
+		var record = selList[0];
+		
+	   //var store = view.findParentByType("grid").store;
+	   //var record=store.getAt(rowIndex);
 	   var tzScheduleType=record.get("tzScheduleType");
-	   alert(tzScheduleType);
-	   if(tzScheduleType!=1){
+	   //alert(tzScheduleType);
+	   if(tzScheduleType!='正常'){
 		   Ext.MessageBox.confirm('确认', '无法撤销：原因为已上课或撤销', function(btnId){
 				/*if(btnId == 'yes'){
 					var store = view.findParentByType("grid").store;
@@ -497,7 +507,7 @@
 						operator:'07',
 						type:'01'	
 					},
-					NAME:{
+					TZ_REALNAME:{
 						desc:'组件名称',
 						operator:'07',
 						type:'01'		
@@ -506,12 +516,12 @@
 			},
 			srhresult:{
 				OPRID: '组件ID',
-				NAME: '组件名称'	
+				TZ_REALNAME: '组件名称'	
 			},
 			multiselect: false,
 			callback: function(selection){
 				form.findField("oprid").setValue(selection[0].data.OPRID);
-				form.findField("name").setValue(selection[0].data.NAME);
+				form.findField("name").setValue(selection[0].data.TZ_REALNAME);
 			}
 		});	
 	}
