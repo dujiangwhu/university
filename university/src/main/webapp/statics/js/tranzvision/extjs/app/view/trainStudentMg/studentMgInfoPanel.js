@@ -64,9 +64,21 @@
                     fieldStyle:'background:#F4F4F4'
                 },{
                     xtype: 'textfield',
+                    fieldLabel: '所属机构',
+                    readOnly:true,
+                    name: 'tzJgName',
+                    fieldStyle:'background:#F4F4F4'
+                },{
+                    xtype: 'textfield',
                     fieldLabel: '手机号码',
                     readOnly:true,
                     name: 'phone',
+                    fieldStyle:'background:#F4F4F4'
+                },{
+                    xtype: 'textfield',
+                    fieldLabel: '剩余课时数',
+                    readOnly:true,
+                    name: 'timecardRemaind',
                     fieldStyle:'background:#F4F4F4'
                 },{
             		xtype: 'combobox',

@@ -11,6 +11,8 @@ Ext.define('KitchenSink.view.trainStudentMg.studentModel', {
 		{name: 'stuEmail'},
 		{name: 'stuRemaindTimeCard'},
 		{name: 'stuStatusDms'},
-		{name: 'tzSexValue'}
+		{name: 'tzSexValue'},
+		{name: 'tzJgName'}
+		
 	]
 });

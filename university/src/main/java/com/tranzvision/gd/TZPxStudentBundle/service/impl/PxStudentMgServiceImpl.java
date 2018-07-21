@@ -15,6 +15,7 @@ import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
+import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseT;
 import com.tranzvision.gd.TZPXBundle.dao.PxStudentTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxStudentT;
 import com.tranzvision.gd.util.base.JacksonUtil;
@@ -64,7 +65,7 @@ public class PxStudentMgServiceImpl extends FrameworkImpl {
 
 			// json数据要的结果字段;
 			String[] resultFldArray = { "OPRID","TZ_JG_ID", "TZ_REALNAME", "SEX","AGE","TZ_MOBILE",
-					"TIMECARD_REMAIND","STU_STATUS","STU_STATUS_DMS","TZ_SEX_VALUE"};
+					"TIMECARD_REMAIND","STU_STATUS","STU_STATUS_DMS","TZ_SEX_VALUE","TZ_JG_NAME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -87,7 +88,8 @@ public class PxStudentMgServiceImpl extends FrameworkImpl {
 					mapList.put("statu", rowList[7]);
 					mapList.put("stuStatusDms", rowList[8]);
 					mapList.put("tzSexValue", rowList[9]);
-			        
+					mapList.put("tzJgName", rowList[10]);
+			       
 					listData.add(mapList);
 				}
 
@@ -169,6 +171,9 @@ public class PxStudentMgServiceImpl extends FrameworkImpl {
 						jsonMap2.put("statu", pxStudent.getStuStatus());
 						jsonMap2.put("timecardRemaind", pxStudent.getTimecardRemaind());
 
+						PsTzJgBaseT psTzJgBaseT=psTzJgBaseTMapper.selectByPrimaryKey(pxStudent.getTzJgId());
+						jsonMap2.put("tzJgName", psTzJgBaseT.getTzJgName());
+						
 						returnJsonMap.replace("formData", jsonMap2);
 					}
 				}

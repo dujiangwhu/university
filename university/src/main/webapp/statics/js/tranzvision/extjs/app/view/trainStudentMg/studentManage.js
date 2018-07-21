@@ -43,9 +43,9 @@ Ext.define('KitchenSink.view.trainStudentMg.studentManage', {//项目管理列�
             columns: [{
             	text:"机构",
                 sortable:true,
-                dataIndex:'orgid',
+                dataIndex:'tzJgName',
                 align: 'center',
-                width:150
+                width:250
             },{
             	text:"姓名",
                 sortable:true,
