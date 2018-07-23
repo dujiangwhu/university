@@ -61,6 +61,7 @@
      	this.editTeacherInfoByRecord(selList[0]);
     },
     editTeacherInfoByRecord:function(record){
+    	Ext.tzSetCompResourses("PX_TEACHER_COM");
     	//是否有访问权限
     	var pageResSet = TranzvisionMeikecityAdvanced.Boot.comRegResourseSet["PX_TEACHER_COM"]["PX_TEA_INFO_STD"];
 		if (pageResSet == "" || pageResSet == undefined) {
@@ -384,6 +385,7 @@
 	   	this.courseLevelInfosByRecord(selList[0]);
 	},
 	courseLevelInfosByRecord: function(record){
+		Ext.tzSetCompResourses("PX_TEACHER_COM");
 				grid = this.getView();
 				var contentPanel,cmp, className, ViewClass, clsProto;
 				var themeName = Ext.themeName;

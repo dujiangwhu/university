@@ -22,9 +22,12 @@
 	   	//console.log(this.getView());
 	   	var checkLen = selList.length;
 	   	if(checkLen == 0){
-	   		Ext.Msg.alert("提示","请选择一条要修改的记录");   
+			Ext.Msg.alert("提示","请选择一条记录");
 			return;
-	   	}
+	   }else if(checkLen >1){
+		   Ext.Msg.alert("提示","只能选择一条记录");
+		   return;
+	   }
 	   	//var store = this.getView().store;
 	   	var removeJson = "";
         var removeRecs = selList;
