@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.focusManage', {//项目管理列表�
     },
 	style:"margin:8px",
     multiSelect: true,
-    title: "评论信息",
+    title: "关注管理",
     viewConfig: {
         enableTextSelection:true
     },

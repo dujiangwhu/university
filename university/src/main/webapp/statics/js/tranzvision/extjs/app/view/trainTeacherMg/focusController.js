@@ -66,7 +66,7 @@
                 grid.commitChanges(grid);
             },"",true,this);
         }else{
-        	Ext.Msg.alert("提示","保存成功");
+        	//Ext.Msg.alert("提示","保存成功");
         }
     },
 

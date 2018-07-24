@@ -14,7 +14,7 @@
         });
     },
     
-    //编辑教师信息
+    //编辑信息
     scoreToCrash: function() {
 		//选中行
 	   	var selList = this.getView().getSelectionModel().getSelection();//返回一个当前被选择的记录的数组
@@ -22,9 +22,12 @@
 	   	//console.log(this.getView());
 	   	var checkLen = selList.length;
 	   	if(checkLen == 0){
-	   		Ext.Msg.alert("提示","请选择一条要修改的记录");   
+			Ext.Msg.alert("提示","请选择一条要修改的记录");   
 			return;
-	   	}
+	    }else if(checkLen >1){
+		   Ext.Msg.alert("提示","只能选择一条要修改的记录");   
+		   return;
+	    }
 	   	this.editTeacherInfoByRecord(selList[0]);
     },
 	//编辑项目（列表）
@@ -217,9 +220,12 @@
 	   	//选中行长度
 	   	var checkLen = selList.length;
 	   	if(checkLen == 0){
-	   		Ext.Msg.alert("提示","请选择一条记录");   
+			Ext.Msg.alert("提示","请选择一条要修改的记录");   
 			return;
-	   	}
+	    }else if(checkLen >1){
+		   Ext.Msg.alert("提示","只能选择一条要修改的记录");   
+		   return;
+	    }
      	this.reviewInfosByRecord(selList[0]);
 	},
 	reviewInfosByRecord: function(record){
@@ -290,9 +296,12 @@
 	   	//选中行长度
 	   	var checkLen = selList.length;
 	   	if(checkLen == 0){
-	   		Ext.Msg.alert("提示","请选择一条记录");   
+			Ext.Msg.alert("提示","请选择一条要修改的记录");   
 			return;
-	   	}
+	    }else if(checkLen >1){
+		   Ext.Msg.alert("提示","只能选择一条要修改的记录");   
+		   return;
+	    }
     	this.focusInfosByRecord(selList[0]);
 	},
 	focusInfosByRecord: function(record){
@@ -364,9 +373,12 @@
 	   	//选中行长度
 	   	var checkLen = selList.length;
 	   	if(checkLen == 0){
-	   		Ext.Msg.alert("提示","请选择一条记录");   
+			Ext.Msg.alert("提示","请选择一条要修改的记录");   
 			return;
-	   	}
+	    }else if(checkLen >1){
+		   Ext.Msg.alert("提示","只能选择一条要修改的记录");   
+		   return;
+	    }
     	this.editCourseByIds(selList[0]);
    },
    editCourseByIds: function(record){
