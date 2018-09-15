@@ -212,7 +212,7 @@ public class TzWebsiteLoginController {
 
 					sql = "SELECT TZ_DLZH_ID,TZ_JG_ID FROM PS_TZ_AQ_YHXX_TBL WHERE TZ_MOBILE=? AND TZ_RYLX=?";
 					List<Map<String, Object>> l = sqlQuery.queryForList(sql, new Object[] { strUserName, "PXXY" });
-					
+
 					if (l != null && l.size() > 0) {
 
 						ArrayList<String> aryErrorMsg = new ArrayList<String>();
@@ -223,11 +223,11 @@ public class TzWebsiteLoginController {
 							map = (Map<String, Object>) objNode;
 							strUserName = map.get("TZ_DLZH_ID").toString();
 							strOrgId = map.get("TZ_JG_ID").toString();
-							System.out.println("strUserName:"+strUserName);
-							System.out.println("strOrgId:"+strOrgId);
+							System.out.println("strUserName:" + strUserName);
+							System.out.println("strOrgId:" + strOrgId);
 							boolResult = tzWebsiteLoginServiceImpl.doLogin(request, response, strOrgId, strSiteId,
 									strUserName, strPassWord, strYzmCode, strLang, LoginType, aryErrorMsg);
-							System.out.println("boolResult:"+boolResult);
+							System.out.println("boolResult:" + boolResult);
 							// 只要有成功的就返回
 							if (boolResult) {
 								break;
@@ -253,11 +253,11 @@ public class TzWebsiteLoginController {
 							if (isMobile) {
 								indexUrl = ctxPath + "/dispatcher?classid=mIndex&siteId=" + strSiteId;
 							} else {
-								indexUrl = ctxPath + "/site/index/"+orgid.toLowerCase()+"/" + strSiteId;
+								indexUrl = ctxPath + "/site/index/" + orgid.toLowerCase() + "/" + strSiteId;
 							}
 
 							jsonMap.put("url", indexUrl);
-							System.out.println("url:"+indexUrl);
+							System.out.println("url:" + indexUrl);
 							TzSession tmpSession = new TzSession(request);
 							tmpSession.addSession("LoginType", LoginType);
 
@@ -297,11 +297,11 @@ public class TzWebsiteLoginController {
 					}
 
 					if (null != strSiteId && !"".equals(strSiteId)) {
-						System.out.println("strUserName:"+strUserName);
+						System.out.println("strUserName:" + strUserName);
 						sql = "SELECT TZ_DLZH_ID FROM PS_TZ_AQ_YHXX_TBL WHERE (TZ_MOBILE=? or TZ_EMAIL=?) AND TZ_RYLX=? AND TZ_JG_ID=?";
-						strUserName = sqlQuery.queryForObject(sql, new Object[] { strUserName,strUserName, "JGJS", strOrgId },
-								"String");
-						System.out.println("strUserName:"+strUserName);
+						strUserName = sqlQuery.queryForObject(sql,
+								new Object[] { strUserName, strUserName, "JGJS", strOrgId }, "String");
+						System.out.println("strUserName:" + strUserName);
 						if (null != strUserName && !"".equals(strUserName)) {
 							ArrayList<String> aryErrorMsg = new ArrayList<String>();
 
@@ -379,17 +379,19 @@ public class TzWebsiteLoginController {
 	@RequestMapping(value = "logout")
 	public String doLogout(HttpServletRequest request, HttpServletResponse response) {
 
-		String orgid = tzCookie.getStringCookieVal(request, tzWebsiteLoginServiceImpl.cookieWebOrgId);
 
-		String siteid = tzCookie.getStringCookieVal(request, tzWebsiteLoginServiceImpl.cookieWebSiteId);
+
+		TzSession tmpSession = new TzSession(request);
+		String LoginType = tmpSession.getSession("LoginType") == null ? "STU"
+				: tmpSession.getSession("LoginType").toString();
+		String redirect = "";
+		if (LoginType.equals("STU")) {
+			redirect = "redirect:" + "/user/login/stuLogin";
+		} else if (LoginType.equals("TEA")) {
+			redirect = "redirect:" + "/user/login/teaLogin";
+		}
 
 		tzWebsiteLoginServiceImpl.doLogout(request, response);
-
-		// String ctx = request.getContextPath();
-
-		orgid = orgid.toLowerCase();
-
-		String redirect = "redirect:" + "/user/login/" + orgid + "/" + siteid;
 
 		return redirect;
 	}

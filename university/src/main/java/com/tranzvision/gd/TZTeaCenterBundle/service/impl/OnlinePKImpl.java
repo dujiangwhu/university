@@ -74,12 +74,27 @@ public class OnlinePKImpl extends FrameworkImpl {
 	 * @return
 	 */
 	private String getPK(int i, String data, Map<String, String> hasmap) {
+
 		String retrunStr = "";
 		String key = data + "@" + String.valueOf(i);
 		if (hasmap.get(key) != null && hasmap.get(key).toString().equals("OK")) {
 			retrunStr = "<font color=\"red\">已排课</font>";
 		} else {
-			retrunStr = "<a href=\"javaScript: void(0)\" onClick='TeaPK(\"" + i + "\",\"" + data + "\")'>排课</a>";
+			// 需要和当前时间做比较
+			String xx = data;
+			if (i < 10) {
+				xx = data + " 0" + String.valueOf(i) + ":00:00";
+			} else {
+				xx = data + " " + String.valueOf(i) + ":00:00";
+			}
+			Date xxD = DateUtil.parseTimeStamp(xx);
+			Date now = new Date();
+			if (xxD.compareTo(now) > 0) {
+				retrunStr = "<a href=\"javaScript: void(0)\" onClick='TeaPK(\"" + i + "\",\"" + data + "\")'>排课</a>";
+			} else {
+				retrunStr = "<font color=\"red\">过期</font>";
+			}
+
 		}
 		return retrunStr;
 	}
@@ -301,7 +316,7 @@ public class OnlinePKImpl extends FrameworkImpl {
 			String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 			jacksonUtil.json2Map(comParams);
 
-			 if ("PK".equals(oprType)) {
+			if ("PK".equals(oprType)) {
 				String hour = jacksonUtil.getString("hour");
 				String starDate = jacksonUtil.getString("starDate");
 				String courseId = jacksonUtil.getString("courseId");
@@ -313,6 +328,19 @@ public class OnlinePKImpl extends FrameworkImpl {
 				if (recExists > 0) {
 					return "{\"pkRs\":\"该时间已经排过课程了，不能重复排课！\"}";
 				} else {
+					String xx = "";
+					int i = Integer.parseInt(hour);
+					if (i < 10) {
+						xx = starDate + " 0" + String.valueOf(i) + ":00:00";
+					} else {
+						xx = starDate + " " + String.valueOf(i) + ":00:00";
+					}
+					Date xxD = DateUtil.parseTimeStamp(xx);
+					Date now = new Date();
+					if (xxD.compareTo(now) < 0) {
+						return "{\"pkRs\":\"时间已经过期，不能排课！\"}";
+					}
+
 					// 插入排课表
 					PxTeaScheduleT pxTeaScheduleT = new PxTeaScheduleT();
 					pxTeaScheduleT.setTzScheduleId("" + getSeqNum.getSeqNum("PX_TEA_SCHEDULE_T", "TZ_SCHEDULE_ID"));

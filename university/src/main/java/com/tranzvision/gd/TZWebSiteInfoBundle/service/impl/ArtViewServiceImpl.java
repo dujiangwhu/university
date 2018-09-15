@@ -41,12 +41,6 @@ public class ArtViewServiceImpl extends FrameworkImpl {
 		String newsiteId = siteId;
 		String newcolumnId = columnId;
 
-		if (siteId != null && (siteId.equals("45") || siteId.equals("46"))) {
-			newsiteId = jdbcTemplate.queryForObject(
-					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT='BASE_SITE'", "String");
-			newcolumnId = jdbcTemplate.queryForObject(
-					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT='BASE_NEWS_COLU'", "String");
-		}
 
 		String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 
