@@ -17,6 +17,7 @@ import com.tranzvision.gd.TZBaseBundle.service.impl.GdObjectServiceImpl;
 import com.tranzvision.gd.TZSitePageBundle.service.TzWebsiteService;
 import com.tranzvision.gd.TZWebSiteUtilBundle.service.impl.SiteRepCssServiceImpl;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.session.TzSession;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
 import com.tranzvision.gd.util.cfgdata.GetHardCodePoint;
@@ -48,12 +49,16 @@ public class TzWebsiteServiceImpl implements TzWebsiteService {
 
 	@Autowired
 	private GetHardCodePoint GetHardCodePoint;
-	
+
 	@Autowired
 	private SiteRepCssServiceImpl siteRepCssServiceImpl;
 
 	@Autowired
 	private SiteRepCssServiceImpl objRep;
+
+	@Autowired
+	private HttpServletRequest request;
+
 	/*
 	 * (non-Javadoc)
 	 * 
@@ -74,7 +79,13 @@ public class TzWebsiteServiceImpl implements TzWebsiteService {
 				// 未传loginOrgid，表明没有登录
 				if (null != loginOrgid && !"".equals(loginOrgid)) {
 					// 若已经登录，则要校验登录的机构和要访问的站点机构是否一致
-					if (!orgid.equals(loginOrgid)) {
+					// 如果是学生 ，不需要这部判断
+
+					TzSession tmpSession = new TzSession(request);
+					String LoginType = tmpSession.getSession("LoginType") == null ? ""
+							: tmpSession.getSession("LoginType").toString();
+
+					if (LoginType.equals("TEA") && !orgid.equals(loginOrgid)) {
 						// 不一致，则不允许访问
 						return false;
 					}
@@ -292,7 +303,7 @@ public class TzWebsiteServiceImpl implements TzWebsiteService {
 	public String getLoginSaveCode(HttpServletRequest request, String orgid, String siteid) {
 		String strRtn = "";
 		try {
-			
+
 			orgid = orgid.toUpperCase();
 
 			Map<String, Object> mapRst = this.checkSiteIdAndGetLang(orgid, siteid);
@@ -438,9 +449,10 @@ public class TzWebsiteServiceImpl implements TzWebsiteService {
 		}
 		return strRtn;
 	}
-	public String getMLoginPublishCode(HttpServletRequest request, String orgid, String siteid, String openid){
-	    String strRtn = "";
-	    try {
+
+	public String getMLoginPublishCode(HttpServletRequest request, String orgid, String siteid, String openid) {
+		String strRtn = "";
+		try {
 			orgid = orgid.toUpperCase();
 			Map<String, Object> mapRst = this.checkSiteIdAndGetLang(orgid, siteid);
 			String siteLang = String.valueOf(mapRst.get("siteLang"));
@@ -455,17 +467,19 @@ public class TzWebsiteServiceImpl implements TzWebsiteService {
 				return strRtn;
 			}
 			String ctxPath = request.getContextPath();
-			//帮助文档
-			String strHelpUrl = ctxPath + "/dispatcher?classid=help_view&operatetype=HTML&siteId=" + siteid + "&areaType=HELP";
-			
-			strRtn = tzGDObject.getHTMLText("HTML.TZMobileSitePageBundle.TzLoginRelease",ctxPath,orgid,siteid,openid,strHelpUrl);
+			// 帮助文档
+			String strHelpUrl = ctxPath + "/dispatcher?classid=help_view&operatetype=HTML&siteId=" + siteid
+					+ "&areaType=HELP";
+
+			strRtn = tzGDObject.getHTMLText("HTML.TZMobileSitePageBundle.TzLoginRelease", ctxPath, orgid, siteid,
+					openid, strHelpUrl);
 			strRtn = objRep.repTitle(strRtn, siteid);
 			strRtn = objRep.repPhoneCss(strRtn, siteid);
 
-	    } catch (Exception e) {
-	    	e.printStackTrace();
-	    	strRtn = "系统异常，请稍后再试。";
-	    }
-	    return strRtn;
+		} catch (Exception e) {
+			e.printStackTrace();
+			strRtn = "系统异常，请稍后再试。";
+		}
+		return strRtn;
 	}
 }

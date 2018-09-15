@@ -1,0 +1,249 @@
+<!DOCTYPE html><html><head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<title>在线排课</title>
+<link href="%bind(:3)" rel="stylesheet" type="text/css">
+<script type="text/javascript">
+	TzUniversityContextPath = "%bind(:7)";
+</script>
+<script type="text/javascript" src="%bind(:7)/statics/js/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript" src="%bind(:7)/statics/js/tranzvision/extjs/app/view/website/set/js/pagefunc.js"></script>
+
+
+<script type="text/javascript">
+
+	var urlBegin="%bind(:2)";
+	$(document).ready(function(){	
+		$("#letf_menu").height(922);
+	});
+	
+	
+	function setTab(m, n) {
+		var menu = document.getElementById("tab" + m)
+				.getElementsByTagName("li");
+		var showdiv = $("#content" + m + " .tab1");
+		for (i = 0; i < menu.length; i++) {
+			menu[i].className = i == n ? "now" : "";
+			showdiv[i].style.display = i == n ? "block" : "none";
+		}
+	}
+     
+	$(document).ready(function(){
+    	 
+		//课程类型和课程联动
+		$('#courseType').on("change",function(){
+    	 	var p1=$(this).children('option:selected').val();
+    	 	console.log(p1);
+    	 	var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_YK_STD","OperateType":"HTML","comParams":{"htmlTpye":"select","courseTypeId":"' + p1+ '"}}';
+    		$.ajax({
+    			type:"POST",
+    			url: urlBegin,
+    			data:{
+    				tzParams:tzParams
+    			},
+    			success:function(response){
+    				console.log(response);
+    				$("#course").append(response);
+    			},
+    			failure: function () {
+    			}    
+    		});
+    	 })
+    	 
+    	 //查询按钮点击事件
+    	 $('#btnpass').on("click",function(){
+    	 	var courseType=$('#courseType').val();
+    	 	var course=$('#course').val();
+    	 	var hour=$('#hour').val();
+    	 	var starDate=$('#starDate').val();
+    	 	console.log(courseType);
+    	 	console.log(course);
+    	 	console.log(hour);
+    	 	console.log(starDate);
+    	 	var flag = true;
+    	 	
+    	 	if (courseType == '') {
+    	 		alert("请选择课程类型");
+    	 		flag = false;
+    	 	}
+    	 	if (flag==true && course == '') {
+    	 		alert("请选择课程");
+    	 		flag = false;
+    	 	}
+    	 	
+    	 	if (flag) {
+    	 		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_PK_STD","OperateType":"PK","comParams":{"courseType":"'+courseType+'","courseId":"' + course+ '","hour":"' + hour + '","starDate":"' + starDate+ '"}}';
+    			$.ajax({
+    				type:"POST",
+    				url: urlBegin,
+    				data:{
+    					tzParams:tzParams
+    				},
+    				success:function(response){
+    					console.log(response);
+    					alert(response.pkRs);
+    					window.location.reload();
+    				},
+    				failure: function () {
+    				}    
+    			});
+    	 	}
+    	 })
+	})
+	
+	
+
+	//排课
+	function TeaPK(hour, starDate){
+		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_PK_STD","OperateType":"HTML","comParams":{"htmlTpye":"PKShow","hour":"' + hour + '","starDate":"' + starDate+ '"}}';
+		$.ajax({
+			type:"POST",
+			url:  TzUniversityContextPath+"/dispatcher",
+			data:{
+				tzParams:tzParams
+			},
+			//dataType:'json',
+			success:function(response){
+				
+				console.log(response);
+				var divhtml='<div class="modal-backdrop fade in"></div>';
+				divhtml +='<div aria-hidden="false" style="display: block;" class="modal fade in" tabindex="-1" role="dialog"> ';
+				divhtml +='	<div class="modal-dialog">    ';
+				divhtml +='		<div class="modal-content">';
+				divhtml +='			<div class="modal-header">';
+				divhtml +='				<span class="close" data-dismiss="modal" aria-hidden="true">×</span>';
+				divhtml +='				<h4 class="modal-title"></h4>';
+				divhtml +='			</div>';
+				divhtml +='			<div class="modal-body">';
+				divhtml +='				<div class="index-bm-notapproved">';
+				divhtml +=response;
+				divhtml +='				</div>';
+				divhtml +='			</div>';
+				divhtml +='		</div> ';
+				divhtml +='	</div>';
+				divhtml +='</div>';
+
+				//$("div#showWindDiv").html();
+				$("div#showWindDiv").html(divhtml);
+				$("div#showWindDiv").show();
+			
+				$("span.close").click(function(){
+					$("div#showWindDiv").hide();
+				});
+					
+			},
+			failure: function () {
+				console.log("111");
+			},
+			error: function (response) {
+				console.log("222");
+			},
+		});
+	}
+
+
+</script>
+
+</head>
+<body style="background:#fff">
+
+<div id="headarea" class="top assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="H" area-type="YT" area-id="">
+		
+<!---  网站标题头 begin--->
+		
+<!---  网站标题头 end--->
+</div>	
+
+		
+
+        </div>
+	<!-- top end -->
+	<!-- content start -->
+<div id="main" class="main">
+ <div  id="letf_menu" class="main_left assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="L" area-type="ZC" area-id="">
+	
+    <div>
+
+            </div>
+
+<!--左侧菜单 begin-->
+
+ <!--左侧菜单 end-->
+</div>
+	<!-- left nav end --><!-- left end -->
+	  <!-- main start -->
+
+	<div class="main_inner">
+			<div class="main_inner_title">
+				<div class="main_inner_title_text_wide">%bind(:4)</div>
+			</div>
+			<div class="mian_inner_nav" id="tab1">
+				<div class="float_left">
+					<ul>
+						<li class="now" onclick="setTab(1,0)">本周排课</li>
+						<li onclick="setTab(1,1)">下周排课</li>
+					</ul>
+				</div>
+			</div>
+
+			<div id="content1">
+				<!--  本周预约 -->
+				<div class="tab1 block">
+					<div class="padding_div_50px"></div>
+					<div class="main_full_line"  style="height:100%;width:100%">%bind(:1)</div>
+
+				</div>
+				<!--  下周预约-->
+				<div class="tab1">
+					<div class="padding_div_50px"></div>
+					<div class="main_full_line"  style="height:100%;width:100%">%bind(:8)</div>
+
+				</div>
+			</div>
+		</div>
+    
+  <!-- main end -->
+</div>
+
+ <div id="footarea" class="foot assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="F" area-type="YW" area-id="">
+         
+<!---替换结尾footer--begin--->
+
+<!---替换结尾footer--end--->
+		</div>
+	
+
+
+	<div id="showWindDiv">
+ 
+	</div>
+
+
+<script type="text/javascript">
+     $(document).ready(function(){
+        LoadHeader("%bind(:5)","%bind(:6)","");
+		LoadMenu("%bind(:5)","%bind(:6)","");
+		LoadFooter("%bind(:5)","%bind(:6)","");
+		LoadWelcome("%bind(:5)","%bind(:6)","");
+
+		$(".active").parent().parent().parent().next("table").find(".index_bd").hide();
+		$(".o-application table tr.index_hd td:first-child").click(function(){
+                    
+                     $(this).toggleClass("active").parent().parent().parent().next("table").find(".index_bd").slideToggle();
+                     if($(this).hasClass("active")){
+                     		 $(this).find("i").removeClass("application_shrink");
+										  	 $(this).find("i").addClass("application_expand");
+                         
+                     }else{
+                         $(this).find("i").removeClass("application_expand");
+												 $(this).find("i").addClass("application_shrink");
+                     }
+               });
+
+	
+	});
+</script>
+
+<input type="hidden" id="siteid" name="siteid" value="%bind(:6)"/>	
+</body>
+</html>

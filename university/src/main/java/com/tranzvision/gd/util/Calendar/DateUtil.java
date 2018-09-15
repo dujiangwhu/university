@@ -24,6 +24,12 @@ public class DateUtil {
 		return cal.getTime();
 	}
 
+	/**
+	 * 本周开始时间
+	 * 
+	 * @param formatString
+	 * @return
+	 */
 	public static String getWeekStartTime(String formatString) {
 		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
 		Calendar cal = Calendar.getInstance();
@@ -35,6 +41,21 @@ public class DateUtil {
 		cal.set(Calendar.HOUR_OF_DAY, 0);
 		cal.set(Calendar.MINUTE, 0);
 		cal.set(Calendar.SECOND, 0);
+		return simpleDateFormat.format(cal.getTime());
+	}
+	
+	/**
+	 * 指定时间加一天返回
+	 * @param time
+	 * @param formatString
+	 * @return
+	 */
+	public static String getAddOneDay(String time, String formatString) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+		Date d = parse(time);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(d);
+		cal.add(Calendar.DATE, 1);
 		return simpleDateFormat.format(cal.getTime());
 	}
 
@@ -54,9 +75,39 @@ public class DateUtil {
 		cal.set(Calendar.SECOND, 59);
 		return simpleDateFormat.format(cal.getTime());
 	}
-	
-	public static Date  getNextWeekEndTime() {
-		//SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+
+	/**
+	 * 下周开始时间
+	 * 
+	 * @param formatString
+	 * @return
+	 */
+	public static String getNextWeekStartTime(String formatString) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(getNextWeekMonday(new java.util.Date()));
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		return simpleDateFormat.format(cal.getTime());
+	}
+
+	/**
+	 * 下周结束时间
+	 * 
+	 * @param formatString
+	 * @return
+	 */
+	public static String getNextWeekEndTime(String formatString) {
+		SimpleDateFormat simpleDateFormat = new SimpleDateFormat(formatString);
+		Calendar cal = Calendar.getInstance();
+		cal.setTime(getNextWeekEndTime());
+		return simpleDateFormat.format(cal.getTime());
+	}
+
+	public static Date getNextWeekEndTime() {
+		// SimpleDateFormat simpleDateFormat = new
+		// SimpleDateFormat(formatString);
 		Calendar cal = Calendar.getInstance();
 		int day_of_week = cal.get(Calendar.DAY_OF_WEEK) - 1;
 		if (day_of_week == 0) {
@@ -235,9 +286,12 @@ public class DateUtil {
 		// } catch (InterruptedException ex) {
 		// }
 		System.out.println("----end----");
+		String v = "yyyy-MM-dd";
+		System.out.println(getWeekStartTime(v));
+		System.out.println(getWeekEndTime(v));
+		System.out.println(getNextWeekStartTime(v));
+		System.out.println(getAddOneDay("2018-09-30",v));
 
-		System.out.println(getNextWeekEndTime());
-		
 		StringBuffer selectDate = new StringBuffer();
 		// 首先计算结束日
 		Calendar cd = Calendar.getInstance();
@@ -265,7 +319,7 @@ public class DateUtil {
 			selectDate.append("\n");
 		} while (!(_year == year && _month == month && day == _day));
 		System.out.println(selectDate.toString());
-		//System.out.println(getWeekStartTime(a));
+		// System.out.println(getWeekStartTime(a));
 		// System.out.println(formatLongDate(new
 		// java.util.Date(System.currentTimeMillis())));
 		// System.out.println(Date.parse("2002-10-10"));

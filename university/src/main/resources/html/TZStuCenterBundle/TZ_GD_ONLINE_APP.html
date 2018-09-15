@@ -1,7 +1,7 @@
 <!DOCTYPE html><html><head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
 <meta http-equiv="X-UA-Compatible" content="IE=edge" >
-<title></title>
+<title>在线预约</title>
 <link href="%bind(:3)" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 	TzUniversityContextPath = "%bind(:7)";
@@ -12,60 +12,131 @@
 
 <script type="text/javascript">
 
-     var urlBegin="%bind(:2)";
-     $(document).ready(function(){	
-
+	var urlBegin="%bind(:2)";
+	$(document).ready(function(){	
 		$("#letf_menu").height(922);
-    });
-     
-   //报名人选择可以报名的班级;
-     function viewClass(siteId,language,viewType){
-    	 var tzParams = '{"ComID":"TZ_ZLSQ_JD_COM","PageID":"TZ_ZLSQ_JD_PAGE","OperateType":"HTML","comParams":{"viewType":"' + viewType+ '","siteId":"' + siteId+ '","language":"' + language+ '","oprate":"R"}}';
-
-    	 $.ajax({
- 					type:"POST",
- 					url: urlBegin,
- 					data:{
- 						tzParams:tzParams
- 					},
- 					success:function(response){
- 						$("div#showWindDiv").html(response);
- 						$("div#showWindDiv").show();
- 	
- 						$("span.close").click(function(){
- 							$("div#showWindDiv").hide();
- 						});
- 					
- 					},
-	 		    	failure: function () {
-	 				  		
-	 		    	}    
- 			});
-     }
-
-
-   function viewJd(classId, instanceId,language,viewType){
-        var tzParams = '{"ComID":"TZ_ZLSQ_JD_COM","PageID":"TZ_ZLSQ_JD_PAGE","OperateType":"HTML","comParams":{"bmClassId":"' + classId + '","instanceId":"' + instanceId+ '","viewType":"' + viewType+ '","language":"' + language+ '","oprate":"R"}}';
-        $.ajax({
-					type:"POST",
-					url: urlBegin,
-					data:{
-						tzParams:tzParams
-					},
-					success:function(response){
-						$("div#showWindDiv").html(response);
-						$("div#showWindDiv").show();
+	});
 	
-						$("span.close").click(function(){
-							$("div#showWindDiv").hide();
-						});
-					
-					},
-		    	failure: function () {
-				  		
-		    	}    
-			});
-    	}
+     
+	$(document).ready(function(){
+    	 
+		//课程类型和课程联动
+		$('#courseType').change(function(){
+    	 	var p1=$(this).children('option:selected').val();
+    	 	console.log(p1);
+    	 	var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_YK_STD","OperateType":"HTML","comParams":{"htmlTpye":"select","courseTypeId":"' + p1+ '"}}';
+    		$.ajax({
+    			type:"POST",
+    			url: urlBegin,
+    			data:{
+    				tzParams:tzParams
+    			},
+    			success:function(response){
+    				console.log(response);
+    				$("#course").append(response);
+    			},
+    			failure: function () {
+    			}    
+    		});
+    	 })
+    	 
+    	 //查询按钮点击事件
+    	 $('#btnpass').click(function(){
+    	 	var courseType=$('#courseType').val();
+    	 	var course=$('#course').val();
+    	 	var yydate=$('#yydate').val();
+    	 	console.log(courseType);
+    	 	console.log(course);
+    	 	console.log(yydate);
+    	 	var flag = true;
+    	 	
+    	 	if (courseType == '') {
+    	 		alert("请选择课程类型");
+    	 		flag = false;
+    	 	}
+    	 	if (flag==true && course == '') {
+    	 		alert("请选择课程");
+    	 		flag = false;
+    	 	}
+    	 	if (flag==true && yydate == '') {
+    	 		alert("请选择日期");
+    	 		flag = false;
+    	 	}
+    	 	
+    	 	if (flag) {
+    	 		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_YK_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","courseId":"' + course+ '","date":"' + yydate+ '"}}';
+    			$.ajax({
+    				type:"POST",
+    				url: urlBegin,
+    				data:{
+    					tzParams:tzParams
+    				},
+    				success:function(response){
+    					$("#loadXK").html(response);
+    				},
+    				failure: function () {
+    				}    
+    			});
+    	 	}
+    	 })
+	})
+
+	
+	//显示教师信息
+	function showT(OPRID) {
+		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_YK_STD","OperateType":"HTML","comParams":{"htmlTpye":"selectTE","tcOPRID":"' + OPRID+ '"}}';
+		$.ajax({
+			type:"POST",
+			url: urlBegin,
+			data:{
+				tzParams:tzParams
+			},
+			success:function(response){
+				var divhtml='<div class="modal-backdrop fade in"></div>';
+				divhtml +='<div aria-hidden="false" style="display: block;" class="modal fade in" tabindex="-1" role="dialog"> ';
+				divhtml +='	<div class="modal-dialog">    ';
+				divhtml +='		<div class="modal-content">';
+				divhtml +='			<div class="modal-header">';
+				divhtml +='				<span class="close" data-dismiss="modal" aria-hidden="true">×</span>';
+				divhtml +='				<h4 class="modal-title"></h4>';
+				divhtml +='			</div>';
+				divhtml +='			<div class="modal-body">';
+				divhtml +='				<div class="index-bm-notapproved">';
+				divhtml +=response;
+				divhtml +='				</div>';
+				divhtml +='			</div>';
+				divhtml +='		</div> ';
+				divhtml +='	</div>';
+				divhtml +='</div>';
+				$("div#showWindDiv").html(divhtml);
+				$("div#showWindDiv").show();
+
+				$("span.close").click(function(){
+					$("div#showWindDiv").hide();
+				});
+			},
+			failure: function () {
+			}    
+		});	
+	}
+
+	//在线预约
+	function yuyue(KKID) {
+		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_YK_STD","OperateType":"onLineApp","comParams":{"TZ_SCHEDULE_ID":"' + KKID+ '"}}';
+		$.ajax({
+			type:"POST",
+			url: urlBegin,
+			data:{
+				tzParams:tzParams
+			},
+			success:function(response){
+				console.log(response);
+				alert(response.yyRs);
+			},
+			failure: function () {
+			}    
+		});	
+	}
 
 </script>
 
@@ -125,7 +196,7 @@
 				<div class="main_full_line">
 					<div class="main_full_line_left">日期：</div>
 					<div class="main_full_line_right">
-						<select name="course" id="course" class="combox">
+						<select name="yydate" id="yydate" class="combox">
 							%bind(:8)
 						</select>
 					</div>
@@ -171,7 +242,7 @@
 		LoadFooter("%bind(:5)","%bind(:6)","");
 		LoadWelcome("%bind(:5)","%bind(:6)","");
 
-		$(".active").parent().parent().parent().next("table").find(".index_bd").hide();
+		/*$(".active").parent().parent().parent().next("table").find(".index_bd").hide();
 		$(".o-application table tr.index_hd td:first-child").click(function(){
                     
                      $(this).toggleClass("active").parent().parent().parent().next("table").find(".index_bd").slideToggle();
@@ -183,7 +254,7 @@
                          $(this).find("i").removeClass("application_expand");
 												 $(this).find("i").addClass("application_shrink");
                      }
-               });
+               }); */
 
 	
 	});

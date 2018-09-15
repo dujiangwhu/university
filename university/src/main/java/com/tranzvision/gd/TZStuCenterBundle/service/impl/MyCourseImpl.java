@@ -9,6 +9,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.TransactionStatus;
 
 import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
@@ -60,56 +61,72 @@ public class MyCourseImpl extends FrameworkImpl {
 
 		jacksonUtil.json2Map(strParams);
 
-		// 查询类型：0所有查询 1预约课程 2正在上课 3上完课程 4即将开课 5取消课程
-		String opType = "";
+		String htmlTpye = "";
 
-		if (jacksonUtil.containsKey("opType")) {
-			opType = jacksonUtil.getString("opType");
+		if (jacksonUtil.containsKey("htmlTpye")) {
+			htmlTpye = jacksonUtil.getString("htmlTpye");
 		}
 
-		if (opType == null || "".equals(opType)) {
-			opType = request.getParameter("opType");
-		}
+		if (htmlTpye != null && htmlTpye.equals("search")) {
+			String opType = jacksonUtil.getString("opType");
+			return this.getTable(opType, oprid);
+		} else {
 
-		String strSiteId = jdbcTemplate.queryForObject(
-				"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?", new Object[] { "TZ_STU_MH" },
-				"String");
+			// 查询类型：0所有查询 1 即将上课 2正在上课 3上完课程 4取消课程
+			String opType = "";
 
-		String str_jg_id = "";
-		String strCssDir = "";
-		String siteSQL = "select TZ_JG_ID,TZ_SKIN_STOR,TZ_SITE_LANG from PS_TZ_SITEI_DEFN_T where TZ_SITEI_ID=?";
-		Map<String, Object> siteMap = jdbcTemplate.queryForMap(siteSQL, new Object[] { strSiteId });
-		if (siteMap != null) {
-			str_jg_id = (String) siteMap.get("TZ_JG_ID");
-			String skinstor = (String) siteMap.get("TZ_SKIN_STOR");
-			String websitePath = getSysHardCodeVal.getWebsiteCssPath();
-
-			String strRandom = String.valueOf(10 * Math.random());
-			if ("".equals(skinstor) || skinstor == null) {
-				strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
-						+ "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
-			} else {
-				strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
-						+ "/" + skinstor + "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
+			if (jacksonUtil.containsKey("opType")) {
+				opType = jacksonUtil.getString("opType");
 			}
-		}
 
-		String table = this.getTable(opType, oprid);
-		// 通用链接;
-		String ZSGL_URL = request.getContextPath() + "/dispatcher";
-		String classSelectHtml = "";
-		try {
-			classSelectHtml = tzGDObject.getHTMLText("HTML.TZApplicationCenterBundle.TZ_GD_My_COURSE", true, table,
-					ZSGL_URL, strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath());
-		} catch (TzSystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "无法获取相关数据";
+			if (opType == null || "".equals(opType)) {
+				opType = request.getParameter("opType");
+			}
+
+			if (opType == null || "".equals(opType)) {
+				opType = "0";
+			}
+
+			String strSiteId = jdbcTemplate.queryForObject(
+					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
+					new Object[] { "TZ_STU_MH" }, "String");
+
+			String str_jg_id = "";
+			String strCssDir = "";
+			String siteSQL = "select TZ_JG_ID,TZ_SKIN_STOR,TZ_SITE_LANG from PS_TZ_SITEI_DEFN_T where TZ_SITEI_ID=?";
+			Map<String, Object> siteMap = jdbcTemplate.queryForMap(siteSQL, new Object[] { strSiteId });
+			if (siteMap != null) {
+				str_jg_id = (String) siteMap.get("TZ_JG_ID");
+				String skinstor = (String) siteMap.get("TZ_SKIN_STOR");
+				String websitePath = getSysHardCodeVal.getWebsiteCssPath();
+
+				String strRandom = String.valueOf(10 * Math.random());
+				if ("".equals(skinstor) || skinstor == null) {
+					strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
+							+ "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
+				} else {
+					strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
+							+ "/" + skinstor + "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
+				}
+			}
+
+			String table = this.getTable(opType, oprid);
+			// 通用链接;
+			String ZSGL_URL = request.getContextPath() + "/dispatcher";
+			String classSelectHtml = "";
+			try {
+				classSelectHtml = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_GD_My_COURSE", true, table,
+						ZSGL_URL, strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath());
+			} catch (TzSystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "无法获取相关数据";
+			}
+			applicationCenterHtml = classSelectHtml;
+			applicationCenterHtml = siteRepCssServiceImpl.repTitle(applicationCenterHtml, strSiteId);
+			applicationCenterHtml = siteRepCssServiceImpl.repCss(applicationCenterHtml, strSiteId);
+			return applicationCenterHtml;
 		}
-		applicationCenterHtml = classSelectHtml;
-		applicationCenterHtml = siteRepCssServiceImpl.repTitle(applicationCenterHtml, strSiteId);
-		applicationCenterHtml = siteRepCssServiceImpl.repCss(applicationCenterHtml, strSiteId);
-		return applicationCenterHtml;
 	}
 
 	/**
@@ -144,7 +161,8 @@ public class MyCourseImpl extends FrameworkImpl {
 		String sql = "";
 		try {
 			switch (opType) {
-			// 0所有查询 1预约课程 2正在上课 3上完课程 4即将开课 5取消课程 6 缺课
+			// 查询类型：0所有查询 1 即将上课 2正在上课 3上完课程 4取消课程
+			// 上完课的课程的状态 有后台crontab执行状态修改
 			case "0":
 				sql = tzGDObject.getSQLText("SQL.TZStuCenterBundle.TZ_GETALLPK");
 				l = jdbcTemplate.queryForList(sql, new Object[] { oprid });
@@ -188,6 +206,7 @@ public class MyCourseImpl extends FrameworkImpl {
 				sb.append(
 						"<td colspan=\"5\" valign=\"middle\" width=\"100%\" align=\"left\" style=\"padding-left:5px;\" >没有数据</td>");
 				sb.append("</tr>");
+				sb.append("</tbody></table>");
 			} else {
 				String KCJB = "";
 				String SKSJ = "";
@@ -234,7 +253,7 @@ public class MyCourseImpl extends FrameworkImpl {
 						if (starDate.compareTo(now) <= 0 && endDate.compareTo(now) > 0) {
 							sb.append(
 									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='shangK(\""
-											+ oprid + "\",\"" + KKID + "\")'>正在上课</a></td>");
+											+ KKID + "\")'>正在上课</a></td>");
 						} else
 						// 开始时间 大于当前时间，开始时间小于当前时间+N小时 即将开课
 						if (starDate.compareTo(now) > 0 && starDate.compareTo(date) < 0) {
@@ -281,10 +300,7 @@ public class MyCourseImpl extends FrameworkImpl {
 			String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 			jacksonUtil.json2Map(comParams);
 
-			if ("search".equals(oprType)) {
-				String opType = jacksonUtil.getString("opType");
-				strRet = this.getTable(opType, oprid);
-			} else if ("cancel".equals(oprType)) {
+			if ("cancel".equals(oprType)) {
 				// 预约取消
 
 				String kkid = jacksonUtil.getString("kkid");
@@ -316,62 +332,76 @@ public class MyCourseImpl extends FrameworkImpl {
 				Date endDate = DateUtil.parse(TZ_CLASS_END_TIME);
 
 				if (starDate.compareTo(now) <= 0 && endDate.compareTo(now) > 0) {
-					strRet = "{\"success\":\"正在上课前不可取消\"}";
+					strRet = "{\"cancelRs\":\"正在上课前不可取消\"}";
 				} else if (starDate.compareTo(now) > 0 && starDate.compareTo(date) < 0) {
-					strRet = "{\"success\":\"上课前" + limitHour + "小时不可取消\"}";
+					strRet = "{\"cancelRs\":\"上课前" + limitHour + "小时不可取消\"}";
 				} else
 				// 已经上过课了，不可取消
 				if (endDate.compareTo(now) <= 0) {
-					strRet = "{\"success\":\"该课程已经完结不可取消\"}";
+					strRet = "{\"cancelRs\":\"该课程已经完结不可取消\"}";
 				} else {
 					sql = "SELECT TZ_APP_STATUS FROM PX_STU_APP_COURSE_T WHERE OPRID=? AND TZ_SCHEDULE_ID=?";
 					String TZ_APP_STATUS = jdbcTemplate.queryForObject(sql, new Object[] { oprid, kkid }, "String");
 					// 0 正常 1 撤销 2已上课
 					if (TZ_APP_STATUS != null && TZ_APP_STATUS.equals("1")) {
-						strRet = "{\"success\":\"已经取消不可以重复取消\"}";
+						strRet = "{\"cancelRs\":\"已经取消不可以重复取消\"}";
 					} else if (TZ_APP_STATUS != null && TZ_APP_STATUS.equals("2")) {
-						strRet = "{\"success\":\"已经上过课不可取消\"}";
+						strRet = "{\"cancelRs\":\"已经上过课不可取消\"}";
 					} else {
-						jdbcTemplate.update(
-								"UPDATE PX_STU_APP_COURSE_T SET TZ_APP_STATUS=?  WHERE OPRID=? AND TZ_SCHEDULE_ID=?",
-								new Object[] { "1", oprid, kkid });
+
 						// 修改学生剩余课时卡
 						sql = "SELECT TIMECARD_REMAIND FROM PX_STUDENT_T WHERE OPRID=?";
 
 						int tzBeforeChange = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "Integer");
 
-						jdbcTemplate.update(
-								"UPDATE PX_STUDENT_T SET TIMECARD_REMAIND=TIMECARD_REMAIND+1  WHERE OPRID=?",
-								new Object[] { oprid });
+						TransactionStatus status = tzGDObject.getTransaction();
 
-						int tzAfterChange = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "Integer");
+						try {
 
-						// 插入学生剩余课时卡变动情况表
-						PkStuCourseChangeT pkStuCourseChangeT = new PkStuCourseChangeT();
-						pkStuCourseChangeT
-								.setTzChangeId("" + getSeqNum.getSeqNum("PK_STU_COURSE_CHANGE_T", "TZ_CHANGE_ID"));
-						pkStuCourseChangeT.setOprid(oprid);
-						pkStuCourseChangeT.setTzBeforeChange(tzBeforeChange);
-						pkStuCourseChangeT.setTzAfterChange(tzAfterChange);
-						pkStuCourseChangeT.setTzChangeType("2");
-						pkStuCourseChangeT.setTzChange(new Integer(1));
-						pkStuCourseChangeT.setTzChangeTime(new Date());
-						pkStuCourseChangeT.setTzScheduleId(kkid);
-						pkStuCourseChangeT.setRowLastmantOprid(oprid);
-						pkStuCourseChangeT.setRowLastmantDttm(new Date());
-						pkStuCourseChangeTMapper.insert(pkStuCourseChangeT);
+							jdbcTemplate.update(
+									"UPDATE PX_STU_APP_COURSE_T SET TZ_APP_STATUS=?  WHERE OPRID=? AND TZ_SCHEDULE_ID=?",
+									new Object[] { "1", oprid, kkid });
 
-						// 修改教师排课表预约状态
+							jdbcTemplate.update(
+									"UPDATE PX_STUDENT_T SET TIMECARD_REMAIND=TIMECARD_REMAIND+1  WHERE OPRID=?",
+									new Object[] { oprid });
 
-						int count = jdbcTemplate.queryForObject(
-								"SELECT COUNT(1) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS=0",
-								new Object[] { kkid }, "Integer");
-						if (count < 1) {
-							jdbcTemplate.update("UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=0  WHERE TZ_SCHEDULE_ID=? ",
-									new Object[] { kkid });
+							int tzAfterChange = tzBeforeChange + 1;
+
+							// 插入学生剩余课时卡变动情况表
+							PkStuCourseChangeT pkStuCourseChangeT = new PkStuCourseChangeT();
+							pkStuCourseChangeT
+									.setTzChangeId("" + getSeqNum.getSeqNum("PK_STU_COURSE_CHANGE_T", "TZ_CHANGE_ID"));
+							pkStuCourseChangeT.setOprid(oprid);
+							pkStuCourseChangeT.setTzBeforeChange(tzBeforeChange);
+							pkStuCourseChangeT.setTzAfterChange(tzAfterChange);
+							pkStuCourseChangeT.setTzChangeType("2");
+							pkStuCourseChangeT.setTzChange(new Integer(1));
+							pkStuCourseChangeT.setTzChangeTime(new Date());
+							pkStuCourseChangeT.setTzScheduleId(kkid);
+							pkStuCourseChangeT.setRowLastmantOprid(oprid);
+							pkStuCourseChangeT.setRowLastmantDttm(new Date());
+							pkStuCourseChangeTMapper.insert(pkStuCourseChangeT);
+
+							// 修改教师排课表预约状态
+
+							int count = jdbcTemplate.queryForObject(
+									"SELECT COUNT(1) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS=0",
+									new Object[] { kkid }, "Integer");
+							if (count < 1) {
+								jdbcTemplate.update(
+										"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=0  WHERE TZ_SCHEDULE_ID=? ",
+										new Object[] { kkid });
+							}
+							// 提交事务
+							tzGDObject.commit(status);
+							strRet = "{\"cancelRs\":\"取消成功\"}";
+						} catch (Exception e) {
+							// 回滚事务
+							tzGDObject.rollback(status);
+							strRet = "{\"cancelRs\":\"取消失败，错误原因:" + e + "\"}";
 						}
 
-						strRet = "{\"success\":\"取消成功\"}";
 					}
 
 				}

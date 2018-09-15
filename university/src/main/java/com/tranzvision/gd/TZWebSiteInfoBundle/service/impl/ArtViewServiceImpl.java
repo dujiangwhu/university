@@ -37,9 +37,19 @@ public class ArtViewServiceImpl extends FrameworkImpl {
 		String columnId = request.getParameter("columnId");
 		String artId = request.getParameter("artId");
 		String from = request.getParameter("from");
-		
+
+		String newsiteId = siteId;
+		String newcolumnId = columnId;
+
+		if (siteId != null && (siteId.equals("45") || siteId.equals("46"))) {
+			newsiteId = jdbcTemplate.queryForObject(
+					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT='BASE_SITE'", "String");
+			newcolumnId = jdbcTemplate.queryForObject(
+					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT='BASE_NEWS_COLU'", "String");
+		}
+
 		String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
-	
+
 		// 校验 用户是否已经登录，如果未登录 则 跳到登录页面，用户登录完成以后在跳转回来 by caoy 2017-3-3
 
 		if (siteId != null && !siteId.equals("")) {
@@ -59,7 +69,6 @@ public class ArtViewServiceImpl extends FrameworkImpl {
 				// classid=art_view&operatetype=HTML&siteId=72&columnId=417&artId=518
 				String code = "classid=art_view___" + columnId + "___" + artId;
 
-				
 				contextUrl = contextUrl + "?" + code;
 				StringBuffer html = new StringBuffer();
 				html.append("<html><head><title></title></head>");
@@ -75,7 +84,7 @@ public class ArtViewServiceImpl extends FrameworkImpl {
 
 			// 检查是否有听众控制Mabc2017.02.09
 			String AudError = "N";
-			//查询语句修改，卢艳，2017-12-1
+			// 查询语句修改，卢艳，2017-12-1
 			String sqlAud = "SELECT C.TZ_PROJECT_LIMIT,(SELECT 'Y' FROM PS_TZ_ART_AUDIENCE_T A,PS_TZ_AUD_LIST_T B WHERE A.TZ_ART_ID=C.TZ_ART_ID AND A.TZ_AUD_ID=B.TZ_AUD_ID AND B.TZ_DXZT='A' AND B.OPRID=? LIMIT 0,1) AUDFLG FROM PS_TZ_ART_REC_TBL C WHERE C.TZ_ART_ID=?";
 			Map<String, Object> mapAud = jdbcTemplate.queryForMap(sqlAud, new Object[] { oprid, artId });
 			if (mapAud != null) {
@@ -112,23 +121,24 @@ public class ArtViewServiceImpl extends FrameworkImpl {
 						} else {
 							strRet = "<script type=\"text/javascript\">;location.href=\"" + outurl + "\"</script>";
 						}
-					}else{
-						/* 不需要根据发布时间顾虑*/
+					} else {
+						/* 不需要根据发布时间顾虑 */
 						String htmlSQL = "select TZ_ART_NEWS_DT,TZ_ART_CONENT_SCR,TZ_ART_CONENT_SCR,TZ_ART_SJ_CONT_SCR from PS_TZ_LM_NR_GL_T where TZ_SITE_ID=? and TZ_COLU_ID=? and TZ_ART_ID=?";
-						Map< String, Object> contentMap = jdbcTemplate.queryForMap(htmlSQL,new Object[]{siteId,columnId,artId});
-						if(contentMap == null){
+						Map<String, Object> contentMap = jdbcTemplate.queryForMap(htmlSQL,
+								new Object[] { newsiteId, newcolumnId, artId });
+						if (contentMap == null) {
 							strRet = "当前时间不可查看该内容";
-						}else{
-							if("m".equals(from)){
+						} else {
+							if ("m".equals(from)) {
 								strRet = (String) contentMap.get("TZ_ART_SJ_CONT_SCR");
-							}else{
+							} else {
 								strRet = (String) contentMap.get("TZ_ART_CONENT_SCR");
 							}
-							
+
 						}
 					}
-					
-				}else{
+
+				} else {
 					strRet = "参数错误，请联系系统管理员";
 				}
 			}

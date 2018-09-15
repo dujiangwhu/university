@@ -1,174 +1,264 @@
-<!DOCTYPE html><html><head>
+<!DOCTYPE html>
+<html>
+<head>
 <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-<meta http-equiv="X-UA-Compatible" content="IE=edge" >
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
 <title></title>
 <link href="%bind(:3)" rel="stylesheet" type="text/css">
 <script type="text/javascript">
 	TzUniversityContextPath = "%bind(:7)";
 </script>
-<script type="text/javascript" src="%bind(:7)/statics/js/lib/jquery/jquery.min.js"></script>
-<script type="text/javascript" src="%bind(:7)/statics/js/tranzvision/extjs/app/view/website/set/js/pagefunc.js"></script>
+<script type="text/javascript"
+	src="%bind(:7)/statics/js/lib/jquery/jquery.min.js"></script>
+<script type="text/javascript"
+	src="%bind(:7)/statics/js/tranzvision/extjs/app/view/website/set/js/pagefunc.js"></script>
 
 
 <script type="text/javascript">
-
-     var urlBegin="%bind(:2)";
-     $(document).ready(function(){	
+	var urlBegin = "%bind(:2)";
+	$(document).ready(function() {
 
 		$("#letf_menu").height(922);
-    });
-     
-   //报名人选择可以报名的班级;
-     function viewClass(siteId,language,viewType){
-    	 var tzParams = '{"ComID":"TZ_ZLSQ_JD_COM","PageID":"TZ_ZLSQ_JD_PAGE","OperateType":"HTML","comParams":{"viewType":"' + viewType+ '","siteId":"' + siteId+ '","language":"' + language+ '","oprate":"R"}}';
+	});
 
-    	 $.ajax({
- 					type:"POST",
- 					url: urlBegin,
- 					data:{
- 						tzParams:tzParams
- 					},
- 					success:function(response){
- 						$("div#showWindDiv").html(response);
- 						$("div#showWindDiv").show();
- 	
- 						$("span.close").click(function(){
- 							$("div#showWindDiv").hide();
- 						});
- 					
- 					},
-	 		    	failure: function () {
-	 				  		
-	 		    	}    
- 			});
-     }
+	function setTab(m, n) {
+		var menu = document.getElementById("tab" + m)
+				.getElementsByTagName("li");
+		var showdiv = $("#content" + m + " .tab1");
+		for (i = 0; i < menu.length; i++) {
+			menu[i].className = i == n ? "now" : "";
+			showdiv[i].style.display = i == n ? "block" : "none";
+		}
+		//加载关注的老师
+		if (n == 1) {
+			var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"HTML","comParams":{"htmlTpye":"SearchFouse","opType":"1"}}';
 
-
-   function viewJd(classId, instanceId,language,viewType){
-        var tzParams = '{"ComID":"TZ_ZLSQ_JD_COM","PageID":"TZ_ZLSQ_JD_PAGE","OperateType":"HTML","comParams":{"bmClassId":"' + classId + '","instanceId":"' + instanceId+ '","viewType":"' + viewType+ '","language":"' + language+ '","oprate":"R"}}';
-        $.ajax({
-					type:"POST",
-					url: urlBegin,
-					data:{
-						tzParams:tzParams
-					},
-					success:function(response){
-						$("div#showWindDiv").html(response);
-						$("div#showWindDiv").show();
-	
-						$("span.close").click(function(){
-							$("div#showWindDiv").hide();
-						});
-					
-					},
-		    	failure: function () {
-				  		
-		    	}    
+			$.ajax({
+				type : "POST",
+				url : urlBegin,
+				data : {
+					tzParams : tzParams
+				},
+				success : function(response) {
+					$("#FouseTE").html(response);
+				},
+				failure : function() {
+				}
 			});
-    	}
+		}
+	}
 
+	//关注老师
+	function focusT(tcOPRID) {
+		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"focusT","comParams":{"tcOPRID":"'
+				+ tcOPRID + '"}}';
+		$.ajax({
+			type : "POST",
+			url : urlBegin,
+			data : {
+				tzParams : tzParams
+			},
+			success : function(response) {
+				console.log(response);
+				alert(response.fouseRs);
+				window.location.reload();
+			},
+			failure : function() {
+			}
+		});
+	}
+
+	//取消关注老师
+	function focusTcancel(tcOPRID) {
+		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"focusTcancle","comParams":{"tcOPRID":"'
+				+ tcOPRID + '"}}';
+		$.ajax({
+			type : "POST",
+			url : urlBegin,
+			data : {
+				tzParams : tzParams
+			},
+			success : function(response) {
+				console.log(response);
+				alert(response.cancelRs);
+			},
+			failure : function() {
+			}
+		});
+	}
+
+	//显示教师信息
+	function showT(OPRID) {
+		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","tcOPRID":"'
+				+ OPRID + '"}}';
+		$.ajax({
+			type : "POST",
+			url : urlBegin,
+			data : {
+				tzParams : tzParams
+			},
+			success : function(response) {
+				var divhtml='<div class="modal-backdrop fade in"></div>';
+				divhtml +='<div aria-hidden="false" style="display: block;" class="modal fade in" tabindex="-1" role="dialog"> ';
+				divhtml +='	<div class="modal-dialog">    ';
+				divhtml +='		<div class="modal-content">';
+				divhtml +='			<div class="modal-header">';
+				divhtml +='				<span class="close" data-dismiss="modal" aria-hidden="true">×</span>';
+				divhtml +='				<h4 class="modal-title"></h4>';
+				divhtml +='			</div>';
+				divhtml +='			<div class="modal-body">';
+				divhtml +='				<div class="index-bm-notapproved">';
+				divhtml +=response;
+				divhtml +='				</div>';
+				divhtml +='			</div>';
+				divhtml +='		</div> ';
+				divhtml +='	</div>';
+				divhtml +='</div>';
+				$("div#showWindDiv").html(divhtml);
+				$("div#showWindDiv").show();
+
+				$("span.close").click(function() {
+					$("div#showWindDiv").hide();
+				});
+			},
+			failure : function() {
+			}
+		});
+	}
+
+	//显示评论窗体
+	function PL(OPRID) {
+		var displayURL = '/dispatcher?tzParams={"PageID":"PX_STU_TEA_STD","comParams":{"htmlTpye":"PLHTML","tcOPRID":"'
+				+ OPRID + '"},"ComID":"PX_STU_CENTER_COM","OperateType":"HTML"}';
+		var cover = document.createElement("div");
+		cover.className = "cover";
+		cover.style.cssText = "background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);height: 100%;left: 0;position: fixed;top: 0;width: 100%;z-index: 10000;";
+		cover.innerHTML = "<div style='margin:-110px auto 0; z-index:10000;width: 700px;padding-bottom: 20px;'><iframe src='"
+				+ displayURL
+				+ "' style='border: 0 none;width: 100%;padding: 0;height: 800px;' on></iframe></div>";
+		document.body.appendChild(cover);
+	}
+	
+	  function tz_close_float_iframe_apply(){
+		    var cover = $(".cover");
+		    cover.remove();
+		    $("#cwin").attr("src",$("#cwin").attr("src") + "&1=1");
+		  }
 </script>
 
 </head>
-<body style="background:#fff">
+<body style="background: #fff">
 
-<div id="headarea" class="top assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="H" area-type="YT" area-id="">
-		
-<!---  网站标题头 begin--->
-		
-<!---  网站标题头 end--->
-</div>	
+	<div id="headarea" class="top assdiv" area-add="false" area-edit="true"
+		area-del="false" area-copy="false" area-moveup="false"
+		area-movedown="false" area-postion="H" area-type="YT" area-id="">
 
-		
+		<!---  网站标题头 begin--->
 
-        </div>
+		<!---  网站标题头 end--->
+	</div>
+
+
+
+	</div>
 	<!-- top end -->
 	<!-- content start -->
-<div id="main" class="main">
- <div  id="letf_menu" class="main_left assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="L" area-type="ZC" area-id="">
-	
-    <div>
+	<div id="main" class="main">
+		<div id="letf_menu" class="main_left assdiv" area-add="false"
+			area-edit="true" area-del="false" area-copy="false"
+			area-moveup="false" area-movedown="false" area-postion="L"
+			area-type="ZC" area-id="">
 
-            </div>
+			<div></div>
 
-<!--左侧菜单 begin-->
+			<!--左侧菜单 begin-->
 
- <!--左侧菜单 end-->
-</div>
-	<!-- left nav end --><!-- left end -->
-	  <!-- main start -->
+			<!--左侧菜单 end-->
+		</div>
+		<!-- left nav end -->
+		<!-- left end -->
+		<!-- main start -->
 
-	<div class="main_inner">
-            <div class="main_inner_title">
-                    <div class="main_inner_title_text_wide">
-                            %bind(:4)
-                     </div>
-              </div>
-              <div class="mian_inner_nav" id="tab1">
-					<div class="float_left">
-						<ul>
-							<li class="now" onclick="setTab(1,0)">上课老师</li>
-							<li onclick="setTab(1,1)">我关注的老师</li>
-						</ul>
-					</div>
-			   </div>
-              
-			 <div id="content1">
-			 	<!--  上课老师 -->
+		<div class="main_inner">
+			<div class="main_inner_title">
+				<div class="main_inner_title_text_wide">%bind(:4)</div>
+			</div>
+			<div class="mian_inner_nav" id="tab1">
+				<div class="float_left">
+					<ul>
+						<li class="now" onclick="setTab(1,0)">上课老师</li>
+						<li onclick="setTab(1,1)">我关注的老师</li>
+					</ul>
+				</div>
+			</div>
+
+			<div id="content1">
+				<!--  上课老师 -->
 				<div class="tab1 block">
 					<div class="padding_div_50px"></div>
+					<div class="main_full_line" style="height:100%;width:100%">%bind(:1)</div>
 
 				</div>
 				<!--  我关注的老师-->
 				<div class="tab1">
 					<div class="padding_div_50px"></div>
-					
+					<div class="main_full_line" id="FouseTE" style="height:100%;width:100%"></div>
+
 				</div>
 			</div>
-	</div>
-    
-  <!-- main end -->
-</div>
-
- <div id="footarea" class="foot assdiv" area-add="false" area-edit="true" area-del="false" area-copy="false" area-moveup="false" area-movedown="false" area-postion="F" area-type="YW" area-id="">
-         
-<!---替换结尾footer--begin--->
-
-<!---替换结尾footer--end--->
 		</div>
-	
 
+		<!-- main end -->
+	</div>
 
-	<div id="showWindDiv">
- 
+	<div id="footarea" class="foot assdiv" area-add="false"
+		area-edit="true" area-del="false" area-copy="false"
+		area-moveup="false" area-movedown="false" area-postion="F"
+		area-type="YW" area-id="">
+
+		<!---替换结尾footer--begin--->
+
+		<!---替换结尾footer--end--->
 	</div>
 
 
-<script type="text/javascript">
-     $(document).ready(function(){
-        LoadHeader("%bind(:5)","%bind(:6)","");
-		LoadMenu("%bind(:5)","%bind(:6)","");
-		LoadFooter("%bind(:5)","%bind(:6)","");
-		LoadWelcome("%bind(:5)","%bind(:6)","");
 
-		$(".active").parent().parent().parent().next("table").find(".index_bd").hide();
-		$(".o-application table tr.index_hd td:first-child").click(function(){
-                    
-                     $(this).toggleClass("active").parent().parent().parent().next("table").find(".index_bd").slideToggle();
-                     if($(this).hasClass("active")){
-                     		 $(this).find("i").removeClass("application_shrink");
-										  	 $(this).find("i").addClass("application_expand");
-                         
-                     }else{
-                         $(this).find("i").removeClass("application_expand");
-												 $(this).find("i").addClass("application_shrink");
-                     }
-               });
+	<div id="showWindDiv"></div>
 
-	
-	});
-</script>
 
-<input type="hidden" id="siteid" name="siteid" value="%bind(:6)"/>	
+	<script type="text/javascript">
+		$(document).ready(
+				function() {
+					LoadHeader("%bind(:5)", "%bind(:6)", "");
+					LoadMenu("%bind(:5)", "%bind(:6)", "");
+					LoadFooter("%bind(:5)", "%bind(:6)", "");
+					LoadWelcome("%bind(:5)", "%bind(:6)", "");
+
+					/*$(".active").parent().parent().parent().next("table").find(
+							".index_bd").hide();
+					$(".o-application table tr.index_hd td:first-child").click(
+							function() {
+
+								$(this).toggleClass("active").parent().parent()
+										.parent().next("table").find(
+												".index_bd").slideToggle();
+								if ($(this).hasClass("active")) {
+									$(this).find("i").removeClass(
+											"application_shrink");
+									$(this).find("i").addClass(
+											"application_expand");
+
+								} else {
+									$(this).find("i").removeClass(
+											"application_expand");
+									$(this).find("i").addClass(
+											"application_shrink");
+								}
+							}); */
+
+				});
+	</script>
+
+	<input type="hidden" id="siteid" name="siteid" value="%bind(:6)" />
 </body>
 </html>

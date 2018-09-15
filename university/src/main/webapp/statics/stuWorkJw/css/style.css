@@ -1,0 +1,1516 @@
+@charset "UTF-8";
+/* login */
+.filebtn-org {
+    width: 100%;
+    height: 42px;
+    line-height: 42px;
+    text-align: center;
+    color: #fff;
+    background: #cba258;
+    border-radius: 5px;
+    cursor: pointer;           
+   }
+.filebtn {
+    position: relative;
+    width: 60px;
+    margin: 5px 0;
+    opacity: 1;
+   display:inline-block;
+}
+.filebtn-orgtext {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    opacity: 0;
+    filter: alpha(opacity=0);
+    -moz-opacity: 0;
+    cursor: pointer;
+}
+.but3 {
+    display: inline-block;
+    font-size: 12px;
+    /*margin-left: 10px;*/
+    color: #9b0000;
+    border: none;
+    background: none;
+    cursor: pointer;
+    outline: none;
+}
+.background{
+    background: url(/statics/stuWorkJw/images/login-bg.jpg) center center no-repeat;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+}
+.background .con{
+    width: 1024px;
+    margin: 0 auto;
+    height: 100%;
+    position: relative;
+}
+.background .con .layout2{
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    height: 400px;
+    margin-top: -200px;
+    margin-left: -192px;
+}
+.background .con .layout2 .list-box{
+    display: inline-block;
+    width: 385px;
+    height: auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px 0;
+}
+
+.background .con .layout2 .list-box .login-frame{
+    width: 385px;
+    position: relative;
+}
+.background .con .layout2 .list-box .login-frame .title{
+    position: relative;
+    padding: 0 20px;
+    height: 90px;
+}
+.background .con .layout2 .list-box .login-frame .title .logo{
+    background: url(/statics/stuWorkJw/images/logo1.png) top center no-repeat;
+    width: 345px;
+    height: 64px;
+    margin-top: 10px;
+}
+.background .con .layout2 .list-box .login-frame .title .use-name{
+    text-align: center;
+    background: url(/statics/stuWorkJw/images/line.png) center center no-repeat;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #999;
+    font-weight: bold;
+}
+.background .con .layout2 .list-box .login-frame .title p{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.background .con .layout2 .list-box .login-frame .title p a{
+    color: #82308e;
+    font-size: 14px;
+    font-weight: bold;
+}
+.background .con .layout2 .list-box .input-frame{
+    padding: 10px 20px 0 20px;
+
+}
+.background .con .layout2 .list-box .input-frame .text-box{
+    margin-top: 20px;
+    position: relative;
+    width: 343px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    border-radius: 4px;
+    height: 48px;
+}
+.background .con .layout2 .list-box .input-frame .text-box .text1{
+    font-size: 14px;
+    color: #969696;
+    position: absolute;
+    left: 1;
+    right: 1px;
+    border:none;
+    height: 46px;
+    line-height: 46px;
+    background:#fff;
+    width: 341px;
+    border-radius: 4px;
+    text-indent: 5px;
+}
+.background .con .layout2 .list-box .input-frame .btn-box{
+    margin-top: 20px;
+}
+.background .con .layout2 .list-box .input-frame .btn-box .btn{
+    width: 345px;
+    height: 50px;
+    background: #82308e;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+.background .con .layout2 .list-box .password-box{
+    margin-top: 10px;
+    position: relative;
+    height: 20px;
+}
+.background .con .layout2 .list-box .password-box .password-left{
+    position: absolute;
+    left: 0;
+}
+.background .con .layout2 .list-box .password-box .password-right{
+    position: absolute;
+    right: 0;
+}
+.background .con .layout2 .list-box .password-box .password-right .title p{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.background .con .layout2 .list-box .password-box .password-right p a{
+    color: #82308e;
+    font-size: 14px;
+}
+
+.background .con .layout2 .list-box .password-box .password-left .checkbox{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.background .con .layout2 .list-box .password-box .password-left p{
+    font-size: 14px;
+    color: #666;
+    vertical-align: top;
+    display: inline-block;
+    line-height: 26px;
+}
+
+.tishi{
+    color: #ed0000;
+    font-size: 14px;
+    text-align: right;
+    margin-top: 0.5px;
+}
+
+
+.background1{
+    background: url(/statics/stuWorkJw/images/color.jpg) top center no-repeat;
+    width: 100%;
+    height: 100%;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+}
+.background1 .con{
+    width: 1024px;
+    margin: 0 auto;
+    position: relative;
+    height: 100%;
+}
+.background1 .con .layout1{
+    background: url(/statics/stuWorkJw/images/pic1.png) top center no-repeat;
+    width: 338px;
+    height: 275px;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    margin-top: -137px;
+}
+.background1 .con .layout2{
+    position: absolute;
+    top: 50%;
+    right: 0;
+    margin-top: -200px;
+}
+.background1 .con .layout2 .title{
+    background: url(/statics/stuWorkJw/images/gongxi.png) top center no-repeat;
+    width: 600px;
+    height: 150px;
+}
+.background1 .con .layout2 p{
+    font-size: 14px;
+    line-height: 28px;
+    color: #fff;
+    text-indent: 36px;
+    text-align: left;
+    margin-top:20px;
+    width: 600px;
+}
+.background1 .con .layout2 .btn-box{
+    margin-top: 20px;
+    text-align: center;
+    width: 600px;
+}
+.background1 .con .layout2 .btn-box .btn{
+    width: 345px;
+    height: 50px;
+    background: #24d2b0;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+}
+
+
+/* index */
+
+.index-header{
+    position: fixed;
+    top: 0;
+    left: 0;
+    height: 60px;
+    width: 100%;
+    z-index: 99;
+    background-color: #fff;
+    box-shadow: 0 2px 3px #ddd;
+}
+.index-header .left{
+    margin-left: 20px;
+    display: inline-block;
+    float: left;
+}
+.index-header .left .logo{
+    height: 40px;
+    margin-top: 10px;
+}
+.index-header .left .logo img{
+   height: 40px;
+}
+.index-header .right{
+    float: right;
+    margin-right: 20px;
+    line-height: 60px;
+    display: inline-block;
+}
+.index-header .right .out{
+    background: url(/statics/stuWorkJw/images/out.png) top center no-repeat;
+    width: 23px;
+    height: 24px;
+    display: inline-block;
+    float: left;
+    margin-right: 20px;
+    margin-top: 18px;
+    cursor:pointer;
+}
+.index-header .right .sit{
+    background: url(/statics/stuWorkJw/images/sit.png) top center no-repeat;
+    width: 24px;
+    height: 24px;
+    display: inline-block;
+    float: left;
+    margin-right: 20px;
+    margin-top: 18px;
+}
+.index-header .right .toux{
+    float: left;
+    margin-right: 20px;
+}
+.index-header .right .toux .name{
+    font-size: 14px;
+    color: #666;
+    display: inline-block;
+}
+.index-header .right .toux .name:hover{
+    font-size: 14px;
+    color: #82308e;
+}
+.index-header .right .toux .head-pic{
+    border-radius: 100%;
+    width: 38px;
+    height: 38px;
+    margin-top: 12px;
+    margin-right: 10px;
+    display: inline-block;
+    vertical-align: top;
+}
+.index-header .right .toux .head-pic img{
+    width: 38px;
+    height: 38px;
+    display: inline-block;
+    vertical-align: top;
+}
+
+
+
+.nav-left{
+    background: #cba258;
+    width: 180px;
+    position: absolute;
+    top:0;
+    left: 0;
+    bottom: 0;
+}
+.nav-left-bg{
+    background: #cba258;
+    width: 180px;
+    position: fixed;
+    top:0;
+    left: 0;
+    bottom: 0;
+}
+.nav-left .nav-left-menu{
+    padding: 80px 10px 70px 10px;
+    background: #cba258;
+     position: fixed;
+}
+
+.nav-left .nav-left-menu ul li  p{
+    font-size: 14px;
+    color: #ddd;
+    display: inline-block;
+    line-height: 50px;
+}
+.nav-left .nav-left-menu ul li .icon-eject{
+    background: url(/statics/stuWorkJw/images/+.png) center center no-repeat;
+    width: 10px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+    float: right;
+}
+
+
+.nav-left .nav-left-menu ul li  .icon-box1{
+    background: url(/statics/stuWorkJw/images/home.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li  .icon-box2{
+    background: url(/statics/stuWorkJw/images/personal.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li  .icon-box3{
+    background: url(/statics/stuWorkJw/images/book.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li  .icon-box4{
+    background: url(/statics/stuWorkJw/images/documents.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li  .icon-box5{
+    background: url(/statics/stuWorkJw/images/laba.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li  .icon-box6{
+    background: url(/statics/stuWorkJw/images/links.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+
+
+.nav-left .nav-left-menu ul li .inactives  .icon-box1{
+    background: url(/statics/stuWorkJw/images/home1.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li .inactives .icon-box2{
+    background: url(/statics/stuWorkJw/images/personal1.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li .inactives .icon-box3{
+    background: url(/statics/stuWorkJw/images/book1.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li .inactives .icon-box4{
+    background: url(/statics/stuWorkJw/images/documents1.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li .inactives .icon-box5{
+    background: url(/statics/stuWorkJw/images/laba1.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li .inactives .icon-box6{
+    background: url(/statics/stuWorkJw/images/links1.png) center center no-repeat;
+    width: 30px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li.bck1{
+    background: #a5354d;
+    border-radius: 10px;
+}
+.nav-left .nav-left-menu ul li .inactives p{
+    font-weight: bold;
+    color: #fff;
+} 
+.nav-left .nav-left-menu ul li .inactives .icon-eject{
+    background: url(/statics/stuWorkJw/images/-.png) center center no-repeat;
+    width: 10px;
+    height: 50px;
+    padding: 0 10px;
+    display: inline-block;
+}
+.nav-left .nav-left-menu ul li ul{
+    padding-left: 70px;
+}
+.nav-left .nav-left-menu ul li ul li ul{
+    padding-left:20px; 
+}
+.content{
+    padding: 80px 20px 70px 280px;
+}
+.bc1{
+    background-color: #b53e3e;
+}
+.bc2{
+    background-color: #4d73c9;
+}
+.bc3{
+    background-color: #3894d7;
+}
+.bc4{
+    background-color: #e77e4d;
+}
+.bc5{
+    background-color: #aa4bb5;
+}
+.bc6{
+    background-color: #c06d29;
+}
+.bc7{
+    background-color: #49afaa;
+}
+.bc8{
+    background-color: #33b372;
+}
+.content .con-entrance{
+    position: relative;
+    padding: 0 40px 40px 40px;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 3px #ddd;
+}
+.content .con-entrance ul li{
+    width: 22%;
+    display: inline-block;
+    text-align: center;
+    height: 98px;
+    margin: 40px 1% 0 1%;
+    border-radius: 10px;
+}
+.content .con-entrance ul li .icon1{
+    background: url(/statics/stuWorkJw/images/calendar.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.content .con-entrance ul li  p{
+    font-size: 14px;
+    color: #fff;
+}
+.content .con-entrance ul li .icon2{
+    background: url(/statics/stuWorkJw/images/email.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.content .con-entrance ul li .icon3{
+    background: url(/statics/stuWorkJw/images/news.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.content .con-entrance ul li .icon4{
+    background: url(/statics/stuWorkJw/images/events.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.content .con-entrance ul li .icon5{
+    background: url(/statics/stuWorkJw/images/course.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.content .con-entrance ul li .icon6{
+    background: url(/statics/stuWorkJw/images/advisor.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.content .con-entrance ul li .icon7{
+    background: url(/statics/stuWorkJw/images/thesis.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.content .con-entrance ul li .icon8{
+    background: url(/statics/stuWorkJw/images/scholarship.png) center center no-repeat;
+    width: 100%;
+    height: 48px;
+    display: inline-block;
+    margin-top: 15px;
+}
+.news-box{
+    position: relative;
+    margin-top: 20px;
+}
+.news{
+    width: 49%;
+    margin-right: 2%;
+    background: #fff;
+     box-shadow: 0 2px 3px #ddd;
+     float: left;
+     border-radius: 10px;
+}
+.news .title{
+    border-bottom: 1px solid #ddd;
+    margin:  0 20px;
+    padding: 10px 0;
+    line-height: 32px;
+
+}
+.news .title .icon9{
+   background: url(/statics/stuWorkJw/images/news3.png) #3894d7 center center no-repeat;
+   width: 32px;
+   height: 32px;
+   border-radius: 4px;
+   display: inline-block;
+   margin-right: 10px;
+}
+.news .title p{
+    display: inline-block;
+    font-size: 16px;
+    color: #444;
+}
+.news .title .more{
+    font-size: 14px;
+    float: right;
+    color: #999;
+}
+.news ul{
+    margin:  0 20px 20px 20px;
+}
+.news ul li{
+    margin-top: 20px;
+}
+.news ul li p{
+    display: inline-block;
+    width: 75%;
+    font-size: 14px;
+    color: #666;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.news ul li p:hover{
+    text-decoration: underline;
+    color: #82308e;
+    cursor: pointer;
+}
+.news ul li .data{
+    display: inline-block;
+    float: right;
+    color: #999;
+    font-size:14px;
+}
+
+
+
+.events{
+    width: 49%;
+     float: left;
+    background: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 3px #ddd;
+}
+.events .title{
+    border-bottom: 1px solid #ddd;
+    margin:  0 20px;
+    padding: 10px 0;
+    line-height: 32px;
+
+}
+.events .title .icon10{
+   background: url(/statics/stuWorkJw/images/actives.png) #e77e4d center center no-repeat;
+   width: 32px;
+   height: 32px;
+   border-radius: 4px;
+   display: inline-block;
+   margin-right: 10px;
+}
+.events .title p{
+    display: inline-block;
+    font-size: 16px;
+    color: #444;
+}
+.events .title .more{
+    font-size: 14px;
+    float: right;
+    color: #999;
+}
+.events ul{
+    margin:  0 20px 20px 20px;
+}
+.events ul li{
+    margin-top: 20px;
+}
+.events ul li p{
+    display: inline-block;
+    width: 75%;
+    font-size: 14px;
+    color: #666;
+    overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+}
+.events ul li p:hover{
+    text-decoration: underline;
+    color: #82308e;
+    cursor: pointer;
+}
+.events ul li .data{
+    display: inline-block;
+    float: right;
+    color: #999;
+    font-size:14px;
+}
+
+/*内页详细页*/
+.content-deta{
+     background: #fff;
+     box-shadow: 0 2px 3px #ddd;
+     border-radius: 10px;
+     padding:20px;
+     margin-left:-80px;
+}
+.content-deta .layout{
+    width: 100%;
+    height: auto;
+    margin-bottom: 20px;
+}
+.content-deta .layout .layout1{
+    width: 49%;
+    margin-right: 2%;
+    float: left;
+}
+.content-deta .layout .layout2{
+    width: 49%;
+    float: left;
+}
+.content-deta .layout .layout1 .title{
+    font-size: 14px;
+    padding-left: 14px;
+    border-left: 4px solid #82308e;
+    line-height: 24px;
+    margin-bottom: 20px;
+    color: #444;
+}
+.content-deta .layout .layout1 ul{
+    padding-left: 14px;
+}
+.content-deta .layout .layout1 ul li{
+    font-size: 16px;
+    color: #999;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+.content-deta .layout .layout1 ul li p{
+    display: inline-block;
+    width: 140px;
+    margin-right: 20px;
+    text-align: right;
+}
+.content-deta .layout .layout1 ul li .go-icon{
+    background: url(/statics/stuWorkJw/images/go.png) center center no-repeat;
+    width: 12px;
+    height: 22px;
+    display: inline-block;
+}
+.content-deta .layout .layout1 ul li .link{
+    text-decoration: underline;
+    font-size: 16px;
+    color: #82308e;
+    display: inline-block;
+}
+
+.content-deta .layout .layout2 .title{
+    font-size: 14px;
+    padding-left: 14px;
+    border-left: 4px solid #82308e;
+    line-height: 24px;
+    margin-bottom: 20px;
+    color: #444;
+}
+.content-deta .layout .layout2 ul{
+    padding-left: 14px;
+}
+.content-deta .layout .layout2 ul li{
+    font-size: 16px;
+    color: #999;
+    line-height: 24px;
+    margin-bottom: 20px;
+}
+.content-deta .layout .layout2 ul li p{
+    display: inline-block;
+    width: 140px;
+    margin-right: 20px;
+    text-align: right;
+}
+.content-deta .layout .layout2 ul li .go-icon{
+    background: url(/statics/stuWorkJw/images/go.png) center center no-repeat;
+    width: 12px;
+    height: 22px;
+    display: inline-block;
+}
+.content-deta .layout .layout2 ul li .link{
+    text-decoration: underline;
+    font-size: 16px;
+    color: #82308e;
+    display: inline-block;
+}
+.content-deta .layout .layout1 ul li .text-list{
+    display: inline-block;
+}
+.content-deta .layout .layout2 ul li .text-list{
+    display: inline-block;
+}
+.content-deta .layout .layout1 ul li .text-list .text2{
+    width:80%;
+    height: 36px;
+    text-indent: 10px;
+    line-height: 36px;
+    color: #999;
+    font-size: 14px;
+    border:1px solid #ddd;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+.content-deta .layout .layout2 ul li .text-list .text2{
+    width:80%;
+    height: 36px;
+    text-indent: 10px;
+    line-height: 36px;
+    color: #999;
+    font-size: 14px;
+    border:1px solid #ddd;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+/*activities*/
+.content-deta  .content-menu{
+    border-bottom: 1px solid #ddd;
+    padding-bottom: 20px;
+    margin-bottom: 20px;
+}
+.content-deta  .content-menu ul li{
+    display: inline-block;
+    margin-right: 20px;
+    background: #999;
+    text-align: center;
+    height: 42px;
+    border-radius: 20px;
+    width: 146px;
+    line-height: 42px;
+    color: #fff;
+    font-size: 16px;
+}
+.content-deta  .content-menu ul li:hover{
+    background: #82308e;
+}
+.content-deta  .content-menu ul li.hover{
+    background: #82308e;
+}
+.content-deta  .activities-con ul li{
+    display: inline-block;
+    border-bottom:1px solid #ddd;
+    margin-bottom: 20px;
+    width: 100%;
+    padding-bottom: 10px;
+}
+.content-deta  .activities-con ul li p samp{
+    font-size: 16px;
+    color: #999;
+    line-height: 22px;
+   overflow: hidden;
+    text-overflow:ellipsis;
+    white-space: nowrap;
+    width: 80%;
+    float: left;
+}
+.content-deta  .activities-con ul li p samp a{
+    color: #999;
+}
+.content-deta  .activities-con ul li p samp a:hover{
+    color: #82308e;
+    text-decoration: underline;
+}
+.content-deta  .activities-con ul li p span{
+    float: right;
+    color: #999;
+    font-size: 14px;
+}
+.but{
+    display: inline-block;
+    margin-right: 20px;
+    background: #cba258;
+    text-align: center;
+    height: 42px;
+    border-radius: 20px;
+    padding: 0 20px;
+    line-height: 42px;
+    color: #fff;
+    font-size: 16px;
+    cursor: pointer;
+}
+/*password*/
+.content-deta .password-con ul li{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.content-deta .password-con  ul li p{
+    display: inline-block;
+    line-height: 38px;
+    width: 180px;
+    text-align: right;
+    font-size: 14px;
+    color: #999;
+    margin-right: 20px
+}
+.password{
+    margin-left: 200px;
+}
+.content-deta .password-con  ul li .text2{
+    width:60%;
+    height: 36px;
+    text-indent: 10px;
+    line-height: 36px;
+    color: #999;
+    font-size: 14px;
+    border:1px solid #ddd;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+
+/*scholarship*/
+.content-deta .scholarship-con .title{
+    padding-left: 14px;
+    font-size: 16px;
+    line-height: 24px;
+    border-left: 4px solid #cba258;
+    margin-bottom: 20px;
+}
+.content-deta .scholarship-con .title span{
+    color: #82308e;
+}
+.content-deta .scholarship-con .title a{
+    color: #82308e;
+    text-decoration: underline;
+}
+.content-deta .scholarship-con .bulletin{
+    margin-bottom: 20px;
+}
+.content-deta .scholarship-con .bulletin .bulletin-title{
+    background: #82308e;
+    line-height: 40px;
+    border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    color: #fff;
+    font-size: 14px;
+    padding-left: 20px;  
+}
+.content-deta .scholarship-con .bulletin .bulletin-con{
+    border:1px solid #ddd;
+    border-top:none;
+    padding:20px;
+    font-size: 14px;
+    color: #999;
+}
+.content-deta .scholarship-con .search-box  {
+    margin-bottom: 20px;
+}
+.content-deta .scholarship-con .search-box .text-box{
+    display: inline-block;
+    margin-right: 20px;
+    position: relative;
+}
+.content-deta .scholarship-con .search-box .text-box .text2{
+    width: 160px;
+    height: 40px;
+    border-radius: 10px;
+    border:1px solid #ddd;
+    font-size: 14px;
+    text-indent: 10px;
+    color: #999;
+     line-height: 40px;
+}
+.content-deta .scholarship-con .search-box .text-box .text3{
+    width: 400px;
+    height: 40px;
+    border-radius: 10px;
+    border:1px solid #ddd;
+    font-size: 14px;
+    text-indent: 10px;
+    color: #999;
+     line-height: 40px;
+}
+.content-deta .scholarship-con .search-box .text-box .data-con{
+    position: absolute;
+    background: url(/statics/stuWorkJw/images/date.png) center center no-repeat;
+    width: 24px;
+    height: 24px;
+    top: 8px;
+    right: 10px;
+}
+.content-deta .scholarship-con .search-box  p{
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 14px;
+    color: #999;
+}
+.content-deta  table {
+    width: 100%;
+}
+.content-deta  table thead{
+    background: #cba258 ;
+}
+.content-deta  table thead tr th{
+    border-right: 1px solid #ddd;
+    text-align: center;
+    padding: 4px 1px;
+    color: #fff;
+    font-size: 14px;
+}
+.content-deta  table tbody{
+    border: 1px solid #ddd;
+    border-top: none;
+    border-right: 0;
+}
+.content-deta  table tbody tr td{
+    border-right: 1px solid #ddd;
+    text-align: center;
+    padding: 20px 10px;
+    border-bottom: 1px solid #ddd;
+    color: #999;
+    font-size: 14px;
+}
+.content-deta  table tbody tr td a{
+    color: #82308e;
+    text-decoration: underline;
+}
+.content-deta .scholarship-con .search-box .text-box select{
+    width: 160px;
+    height: 40px;
+    border-radius: 10px;
+    border:1px solid #ddd;
+    font-size: 14px;
+    text-indent: 10px;
+    line-height: 40px;
+    color: #999;
+}
+.content-deta .scholarship-con .search-box .text-box select option{
+    height: 40px;
+    line-height: 40px;
+}
+.red{
+    color: #e50032;
+}
+.black{
+    color: #000000;
+}
+.green{
+    color: #14d068;
+}
+.advisor-menu{
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 20px;
+}
+.advisor-menu ul {
+    font-size: 0;
+}
+.advisor-menu ul li{
+    display: inline-block;
+    border: 2px solid #999;
+    margin-right: 20px;
+    height: 42px;
+    margin-bottom: 20px;
+    border-radius: 10px;
+    vertical-align: top;
+}
+.advisor-menu ul li p{
+    font-size: 14px;
+    line-height: 16px;
+    color: #999;
+    padding:5px 10px;
+    width: 160px;
+    display: inline-block;
+}
+.advisor-menu ul li .right{
+    background: url(/statics/stuWorkJw/images/true.png)  #999 center center no-repeat;
+    width: 36px;
+    height: 42px;
+    border-top-right-radius: 7px;
+     border-bottom-right-radius: 7px;
+     display: inline-block;
+}
+.advisor-menu ul li:hover{
+    border-color:#82308e;
+    cursor: pointer;
+}
+.advisor-menu ul li:hover p{
+    color: #82308e;
+}
+.advisor-menu ul li:hover .right{
+    background: url(/statics/stuWorkJw/images/true.png)  #82308e center center no-repeat;
+}
+.save{
+    margin-top: 20px;
+    border-top: 1px solid #ddd;
+    padding-top: 20px;
+}
+.content-deta .layout .text-box1 {
+    margin-bottom: 20px;
+    vertical-align: top;
+}
+.content-deta .layout .text-box1 .text-list{
+    display: inline-block;
+}
+.content-deta .layout .text-box1 p{
+    display: inline-block;
+    width: 140px;
+    margin-right: 20px;
+    text-align: right;
+    color: #999;
+    font-size: 16px;
+    line-height: 24px;
+    vertical-align: top;
+}
+.content-deta .layout .text-box1 .text-p{
+    display: inline-block;
+    margin-right: 20px;
+    text-align: right;
+    color: #999;
+    font-size: 16px;
+    line-height: 24px;
+}
+.content-deta .layout .text-box1 .link{
+    display: inline-block;
+    margin-right: 20px;
+    text-align: right;
+    color: #999;
+    font-size: 16px;
+    line-height: 24px;
+}
+
+.content-deta .layout .text-box1 .textarea1{
+    color: #999;
+    border: 1px solid #ddd;
+    line-height: 24px;
+    width: 60%; 
+    display: inline-block;
+    height: 120px;
+    font-size: 14px;
+}
+.content-deta .text-box-list .text-wenben{
+    border-bottom: 1px solid #ddd;
+}
+.content-deta .text-box-list .text-wenben p{
+    color: #999;
+    line-height: 28px;
+    font-size: 14px;
+    text-indent: 32px;
+        margin-bottom: 20px;
+}
+.content-deta  .ready {
+    text-align: center;
+    line-height: 42px;
+    margin-top: 20px;
+}
+.content-deta  .ready .checkbox-box{
+    margin-top: 10px;
+    display: inline-block;
+}
+.content-deta  .ready .checkbox1{
+    display: inline-block;
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+}
+.content-deta  .ready  p{
+    display: inline-block;
+    color: #999;
+    font-size: 14px;
+    margin-right: 20px;
+}
+.eject{
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0,0,0,0.3);
+    z-index: 999;
+    text-align: center;
+}
+.eject .eject-box{
+    width: 50%;
+    display: inline-block;
+    position: absolute;
+    top:50%;
+    left: 50%;
+    margin-left: -25%;
+     margin-top: -200px;
+}
+.eject .eject-box .title{
+    position: relative;
+    height: 40px;
+    background: #82308e;
+    border-top-left-radius: 10px;
+     border-top-right-radius: 10px;
+}
+.eject .eject-box .title p{
+    text-align: left;
+    line-height: 40px;
+    font-size: 18px;
+    color: #fff;
+    margin-left: 20px;
+    font-weight: bold;
+}
+.eject .eject-box .title .quxiao-icon{
+    background: url(/statics/stuWorkJw/images/X.png) center center no-repeat;
+    width: 17px;
+    height: 15px;
+    position: absolute;
+    top: 12px;
+    right: 20px;
+}
+.eject .eject-box .con{
+    background: #fff;
+    padding: 20px;
+     border-bottom-left-radius: 10px;
+     border-bottom-right-radius: 10px;
+     text-align: left;
+     height: 300px;
+     overflow-y: scroll;
+}
+.eject .eject-box .con p{
+        color: #999;
+    line-height: 28px;
+    font-size: 14px;
+    text-indent: 32px;
+        margin-bottom: 20px;
+}
+
+.mb40{
+    margin-bottom: 40px
+}
+
+/*forgot*/
+.background .con .layout3{
+    position: absolute;
+    top: 50%;
+    left: 31%;
+    height: 400px;
+    margin-top: -200px;
+    margin-left: -120px;
+}
+.background .con .layout3 .list-box{
+    display: inline-block;
+    width: 600px;
+    height: auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px 0;
+}
+
+.background .con .layout3 .list-box .forgot-frame{
+    width: 600px;
+    position: relative;
+}
+.background .con .layout3 .list-box .forgot-frame .title{
+    position: relative;
+    padding: 0 20px;
+    height: 50px;
+}
+.background .con .layout3 .list-box .forgot-frame .title .maintitle{
+    margin-top: 15px;
+    font-size: 18px;
+	line-height: 18px;
+    color: #999;
+    font-weight: bold;
+	float:left;
+}
+.background .con .layout3 .list-box .forgot-frame .title .secondtitle{
+    margin-top: 21px;
+    font-size: 12px;
+	line-height: 12px;
+    color: #999;
+    font-weight: bold;
+	float:left;
+}
+.background .con .layout3 .list-box .forgot-frame .title .back{
+    margin-top: 23px;
+    font-size: 10px;
+	line-height: 10px;
+    color: #82308e;
+    font-weight: bold;
+	float:right;
+}
+.background .con .layout3 .list-box .forgot-frame .title p{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.background .con .layout3 .list-box .forgot-frame .title p a{
+    color: #9b1e39;
+    font-size: 14px;
+    font-weight: bold;
+}
+.background .con .layout3 .list-box .input-frame{
+    padding: 10px 20px 0 20px;
+
+}
+.background .con .layout3 .list-box .input-frame .text-box{
+    margin-top: 20px;
+    position: relative;
+    width: 561px;
+    border: 1px solid #ddd;
+    background: #f9f9f9;
+    border-radius: 4px;
+    height: 48px;
+}
+.background .con .layout3 .list-box .input-frame .text-box .text1{
+    font-size: 14px;
+    color: #969696;
+    position: absolute;
+    left: 1;
+    right: 1px;
+    border:none;
+    height: 46px;
+    line-height: 46px;
+    background:#fff;
+    width: 560px;
+    border-radius: 4px;
+    text-indent: 5px;
+	font-family:Georgia;
+}
+.background .con .layout3 .list-box .input-frame .btn-box{
+    margin-top: 20px;
+}
+.background .con .layout3 .list-box .input-frame .btn-box .btn{
+    width: 560px;
+    height: 50px;
+    background: #82308e;
+    color: #fff;
+    font-size: 14px;
+    border: none;
+    border-radius: 4px;
+    outline: none;
+    cursor: pointer;
+	font-family:Georgia;
+}
+
+.background .con .layout3 .list-box .password-box{
+    margin-top: 10px;
+    position: relative;
+    height: 20px;
+}
+.background .con .layout3 .list-box .password-box .password-left{
+    position: absolute;
+    left: 0;
+}
+.background .con .layout3 .list-box .password-box .password-right{
+    position: absolute;
+    right: 0;
+}
+.background .con .layout3 .list-box .password-box .password-right .title p{
+    position: absolute;
+    top: 20px;
+    right: 20px;
+}
+.background .con .layout3 .list-box .password-box .password-right p a{
+    color: #9b1e39;
+    font-size: 14px;
+}
+
+.background .con .layout3 .list-box .password-box .password-left .checkbox{
+    width: 20px;
+    height: 20px;
+    display: inline-block;
+}
+.background .con .layout3 .list-box .password-box .password-left p{
+    font-size: 14px;
+    color: #666;
+    vertical-align: top;
+    display: inline-block;
+    line-height: 26px;
+}
+/*passwordset*/
+.passwordbg{
+    background: url(../images/login-bg.jpg) center center no-repeat;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    position: fixed;
+    top: 0;
+    bottom: 0;
+    z-index: 1;
+}
+.passwordbg .con{
+    width: 1024px;
+    margin: 0 auto;
+    height: 100%;
+    position: relative;
+}
+.passwordbg .con .layout{
+   position: absolute;
+    top: 50%;
+    left: 32%;
+    height: 400px;
+    margin-top: -200px;
+    margin-left: -120px;
+}
+.passwordbg .con .layout .passwordset-con{
+    display: inline-block;
+    width: 588px;
+    height: auto;
+    background: #fff;
+    border-radius: 8px;
+    padding: 20px 0;
+}
+.passwordbg .con .layout .passwordset-con .title{
+    position: relative;
+    padding: 0 20px;
+    height: 50px;
+}
+.passwordbg .con .layout .passwordset-con .title .maintitle{
+    margin-top: 15px;
+    font-size: 18px;
+	line-height: 18px;
+    color: #999;
+    font-weight: bold;
+	float:left;
+}
+.con .passwordset-con ul li{
+    width: 100%;
+    margin-bottom: 20px;
+}
+.con .passwordset-con  ul li p{
+    display: inline-block;
+    line-height: 38px;
+    width: 180px;
+    text-align: right;
+    font-size: 14px;
+    color: #999;
+    margin-right: 20px
+}
+.passwordset{
+    margin-left: 200px;
+}
+.con .passwordset-con  ul li .text2{
+    width:60%;
+    height: 36px;
+    text-indent: 10px;
+    line-height: 36px;
+    color: #999;
+    font-size: 14px;
+    border:1px solid #ddd;
+    border-radius: 10px;
+    display: inline-block;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
