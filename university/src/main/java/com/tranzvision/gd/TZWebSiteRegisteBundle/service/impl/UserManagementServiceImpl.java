@@ -1134,7 +1134,6 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 			String imgPath = getSysHardCodeVal.getWebsiteSkinsImgPath();
 			imgPath = contextPath + imgPath + "/" + skinId;
 
-
 			String sql = "SELECT TZ_REG_FIELD_ID,TZ_FIELD_TYPE FROM PS_TZ_REG_FIELD_T WHERE TZ_ENABLE='Y' AND TZ_SITEI_ID=? ORDER BY TZ_ORDER ASC";
 			List<Map<String, Object>> list = jdbcTemplate.queryForList(sql, new Object[] { siteId });
 
@@ -1146,7 +1145,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					if ("TZ_MSSQH".equals(regFieldId) || "TZ_PROJECT".equals(regFieldId)) {
 						continue;
 					}
-					//邮箱不在这里取
+					// 邮箱不在这里取
 					if (regFieldId != null && !"".equals(regFieldId) && !"TZ_EMAIL".equals(regFieldId)
 							&& !"TZ_MOBILE".equals(regFieldId) && !"TZ_PASSWORD".equals(regFieldId)
 							&& !"TZ_REPASSWORD".equals(regFieldId)) {
@@ -1166,7 +1165,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 
 			Map<String, Object> returnMap = new HashMap<>();
 			String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
-			System.out.println("fields:"+fields);
+			System.out.println("fields:" + fields);
 			if (fields != null && !"".equals(fields)) {
 				String fieldsValueSQL = "SELECT " + fields + " FROM PS_TZ_REG_USER_T WHERE OPRID=?";
 				returnMap = jdbcTemplate.queryForMap(fieldsValueSQL, new Object[] { oprid });
@@ -1196,9 +1195,6 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 				returnMap.put("userEmail", yhxxMap.get("TZ_EMAIL"));
 				returnMap.put("userMoblie", yhxxMap.get("TZ_MOBILE"));
 			}
-
-			
-			
 
 			// 绑定/解除绑定邮箱;
 			String BindEmail = commonUrl;
@@ -1300,10 +1296,10 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 			String updateRegSql = "";
 
 			String TZ_REALNAME = "";
-			String TZ_EMAIL = "";
+			// String TZ_EMAIL = "";
 			String TZ_GENDER = "";
 			String NATIONAL_ID = "";
-			//String TZ_SCH_CNAME = "";
+			// String TZ_SCH_CNAME = "";
 			String TZ_HIGHEST_EDU = "";
 			String TZ_COMMENT1 = "";
 			String TZ_COMMENT2 = "";
@@ -1334,9 +1330,8 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 							regFieldYsmc = regFieldName;
 						}
 					}
-					// 邮箱可以编辑
-					if (regFieldId != null && !"".equals(regFieldId) // &&
-																		// !"TZ_EMAIL".equals(regFieldId)
+					
+					if (regFieldId != null && !"".equals(regFieldId)  && !"TZ_EMAIL".equals(regFieldId)
 							&& !"TZ_MOBILE".equals(regFieldId) && !"TZ_PASSWORD".equals(regFieldId)
 							&& !"TZ_REPASSWORD".equals(regFieldId)) {
 						field = jacksonUtil.getString(regFieldId);
@@ -1351,8 +1346,8 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 						}
 
 						if ("TZ_EMAIL".equals(regFieldId)) {
-							TZ_EMAIL = field;
-							strUserEmail = TZ_EMAIL;
+							// TZ_EMAIL = field;
+							// strUserEmail = TZ_EMAIL;
 						}
 
 						if ("TZ_GENDER".equals(regFieldId)) {
@@ -1398,7 +1393,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 						if ("TZ_COMMENT8".equals(regFieldId)) {
 							TZ_COMMENT8 = field;
 						}
-						
+
 						if ("TZ_COMMENT9".equals(regFieldId)) {
 							TZ_COMMENT9 = field;
 						}
@@ -1429,10 +1424,10 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 							updateRegSql = updateRegSql + "," + schCountryField + " = ?";
 							String schCountryValue = jacksonUtil.getString(schCountryField);
 							updateList.add(schCountryValue);
-							//TZ_SCH_CNAME = schCountryValue;
+							// TZ_SCH_CNAME = schCountryValue;
 						}
 					}
-
+					System.out.println("strUserEmail:" + strUserEmail);
 					if ("TZ_EMAIL".equals(regFieldId) && (strUserEmail == null || "".equals(strUserEmail))) {
 						return tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_GD_USERMG_JSON",
 								regFieldYsmc + " " + strBlankTips);
@@ -1483,13 +1478,16 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 			String LoginType = tmpSession.getSession("LoginType") == null ? ""
 					: tmpSession.getSession("LoginType").toString();
 			if (LoginType.equals("STU")) {
-				//学生信息
+				
+				 updateYhxxSQL = "UPDATE PS_TZ_AQ_YHXX_TBL SET TZ_EMAIL=? WHERE OPRID=?";
+				jdbcTemplate.update(updateYhxxSQL, new Object[] { strUserEmail, oprid });
+				// 学生信息
 				// 教师信息
-				String stujgid=tzLoginServiceImpl.getLoginedManagerOrgid(request);
-				//PxStudentTKey key = new PxStudentTKey();
-				//key.setOprid(oprid);
-				//key.setTzJgId(stujgid);
-				PxStudentT pxStudentT  = pxStudentTMapper.selectByPrimaryKey(oprid);
+				String stujgid = tzLoginServiceImpl.getLoginedManagerOrgid(request);
+				// PxStudentTKey key = new PxStudentTKey();
+				// key.setOprid(oprid);
+				// key.setTzJgId(stujgid);
+				PxStudentT pxStudentT = pxStudentTMapper.selectByPrimaryKey(oprid);
 
 				if (pxStudentT == null) {
 					pxStudentT = new PxStudentT();
@@ -1500,7 +1498,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					pxStudentT.setContact(TZ_COMMENT3);
 					pxStudentT.setContactPhone(TZ_COMMENT4);
 					pxStudentT.setContactAddress(TZ_COMMENT5);
-					pxStudentT.setEmail(TZ_EMAIL);
+					pxStudentT.setEmail(strUserEmail);
 					try {
 						pxStudentT.setAge(Integer.valueOf(TZ_COMMENT1));
 
@@ -1509,14 +1507,14 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					}
 					pxStudentTMapper.insertSelective(pxStudentT);
 				} else {
-					//pxStudentT.setOprid(oprid);
-					//pxStudentT.setTzJgId(stujgid);
+					// pxStudentT.setOprid(oprid);
+					// pxStudentT.setTzJgId(stujgid);
 					pxStudentT.setSex(TZ_GENDER);
 					pxStudentT.setQq(TZ_COMMENT2);
 					pxStudentT.setContact(TZ_COMMENT3);
 					pxStudentT.setContactPhone(TZ_COMMENT4);
 					pxStudentT.setContactAddress(TZ_COMMENT5);
-					pxStudentT.setEmail(TZ_EMAIL);
+					pxStudentT.setEmail(strUserEmail);
 					try {
 						pxStudentT.setAge(Integer.valueOf(TZ_COMMENT1));
 
@@ -1543,7 +1541,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					pxTeacher.setContactorAddress(TZ_COMMENT6);
 					pxTeacher.setIdCard(NATIONAL_ID);
 					pxTeacher.setQq(TZ_COMMENT3);
-					pxTeacher.setEmail(TZ_EMAIL);
+					// pxTeacher.setEmail(strUserEmail);
 					try {
 						pxTeacher.setAge(Integer.valueOf(TZ_COMMENT1));
 						pxTeacher.setSchoolAge(Integer.valueOf(TZ_COMMENT2));
@@ -1564,7 +1562,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					pxTeacher.setContactorAddress(TZ_COMMENT6);
 					pxTeacher.setIdCard(NATIONAL_ID);
 					pxTeacher.setQq(TZ_COMMENT3);
-					pxTeacher.setEmail(TZ_EMAIL);
+					// pxTeacher.setEmail(strUserEmail);
 					try {
 						pxTeacher.setAge(Integer.valueOf(TZ_COMMENT1));
 						pxTeacher.setSchoolAge(Integer.valueOf(TZ_COMMENT2));
