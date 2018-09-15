@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no" />
+	<title>兴语文化</title>
+	<!-- <link rel="shortcut icon" type="image/x-icon" href="%bind(:1)/statics/stuWorkJw/images/favicon.ico" media="screen" />
+	<link rel="stylesheet" type="text/css" href="%bind(:1)/statics/stuWorkJw/css/common.pc.css"/> -->
+	<link rel="stylesheet" type="text/css" href="%bind(:1)/statics/xycw/style.css"/>
+</head>
+<body>
+	<div class="header">
+		<div class="wrapper">
+			<a href="/" class="logo"><img src="%bind(:1)/statics/xycw/images/logo.png" /></a>
+			<div class="nav-buttons">
+				<a href="" class="nav-btn">在线咨询</a>
+				<a href="" class="nav-btn">帮助中心</a>
+			</div>
+			<div class="clearfix"></div>
+		</div>
+	</div>
+
+	<div class="login-main">
+		<div class="wrapper">
+			<form class="login-form login-form-purple">
+				<h3>学员请进教室</h3>
+				<div class="login-item">
+				<input type="hidden" id="proName" value="%bind(:1)">
+					<label>学员昵称<i class="iconfont icon-user"></i></label>
+					<input type="text" class="login-input" placeholder="学员昵称" id="username"/>
+				</div>
+				<div class="login-item">
+					<label>教室密码<i class="iconfont icon-password"></i></label>
+					<input type="password" class="login-input" placeholder="教室密码" id="password"/>
+				</div>
+					<button type="submit" class="btn-login" onclick="stuLogin()"></button>
+			</form>
+			<div class="login-qrcode"><img src="%bind(:1)/statics/xycw/images/qrcode.png" /></div>
+		</div>
+	</div>
+	<div class="footer">
+		<p>
+			<a href="" target="_blank">关于我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+			<a href="" target="_blank">常见问题</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+			<a href="" target="_blank">关注我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+			<a href="" target="_blank">联系我们</a>&nbsp;&nbsp;|&nbsp;&nbsp;
+		</p>
+		<p>
+			南京兴语传文信息科技有限公司  兴语传文系统  投诉与建议信箱： htf@xingyuchuanwen.com
+		</p>
+		<p>
+			备案号：<a href="" target="_blank">苏ICP备18046337号-1</a>
+		</p>
+	</div>
+</body>
+<script type="text/javascript">
+	//从cookie中取出账号
+	/*$(document).ready(function () {
+		//$(".background").css("opacity","1");
+		getRememberMe();
+	});
+	function getRememberMe() {
+	    if ($.cookie("rmbStuUser")=='YES') {
+	        $('#checkbox1').attr("checked", true);
+	        $("#username").val($.cookie('stuname'));
+	    }
+	}
+	
+	//记住账号
+	function rememberMe() {
+		var username=$("#username").val();
+		if($('#checkbox1').prop("checked")){
+			 $.cookie('rmbStuUser', 'YES', {expires: 7});
+		     $.cookie('stuname', username, {expires: 7});
+		}else{
+	        $.cookie('rmbStuUser', 'NO');
+	        $.cookie('stuname', null);
+	    }
+	}*/
+	var TzUniversityContextPath = $("#proName").val();
+	function stuLogin(){
+		var username=$("#username").val();
+		var password=$("#password").val();
+		if(username==""||password==""){
+			
+			alert("用户名或密码不能为空");
+		}
+	$.ajax({
+		type:"post",
+		url:TzUniversityContextPath+"/stuLogin",
+		data:{strUsername:username,strPassword:password,strType:"STU"},
+		dataType:"json",
+		success:function(date){
+			if(!date.strFlag){
+				//$(".tishi").html(date.strErrorMessage);
+				alert(date.strErrorMessage);
+			}else{
+				 //rememberMe();
+				 window.location.href = TzUniversityContextPath
+					+ "/coureStuHtml";
+				//$("body").html(date.reHtml);
+			}
+		}
+	});
+}
+	/*function forgetPassword(){
+		window.location.href = TzUniversityContextPath
+		+ "/forgetPassword";
+	} */
+	
+</script>
+</html>

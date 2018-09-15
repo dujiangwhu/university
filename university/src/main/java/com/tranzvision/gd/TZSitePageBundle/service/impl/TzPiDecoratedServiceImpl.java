@@ -17,6 +17,7 @@ import com.tranzvision.gd.TZAuthBundle.service.impl.TzWebsiteLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.session.TzSession;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
 
@@ -100,9 +101,15 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 				m_curOPRID = tzWebsiteLoginServiceImpl.getLoginedUserOprid(request);
 			}
 
-			if (!m_curOrgID.equals(orgId)) {
-				// 如果当前用户登录的机构与请求的机构不一致，则返回空
-				return "";
+			// 如果当前用户登录的机构与请求的机构不一致，则返回空,如果是学生，不判断这个
+			TzSession tmpSession = new TzSession(request);
+			String LoginType = tmpSession.getSession("LoginType") == null ? ""
+					: tmpSession.getSession("LoginType").toString();
+			if (!LoginType.equals("STU")) {
+				if (!m_curOrgID.equals(orgId)) {
+
+					return "";
+				}
 			}
 
 			// 处理头像部分 - 开始
@@ -139,12 +146,12 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 			String TZ_DLZH_ID = "";
 			String TZ_REALNAME = "";
 			if (map != null) {
-				TZ_RYLX = map.get("TZ_RYLX") == null ? "" : String.valueOf(mapSiteiInfo.get("TZ_RYLX"));
-				TZ_DLZH_ID = map.get("TZ_DLZH_ID") == null ? "" : String.valueOf(mapSiteiInfo.get("TZ_DLZH_ID"));
-				TZ_REALNAME = map.get("TZ_REALNAME") == null ? "" : String.valueOf(mapSiteiInfo.get("TZ_REALNAME"));
+				TZ_RYLX = map.get("TZ_RYLX") == null ? "" : String.valueOf(map.get("TZ_RYLX"));
+				TZ_DLZH_ID = map.get("TZ_DLZH_ID") == null ? "" : String.valueOf(map.get("TZ_DLZH_ID"));
+				TZ_REALNAME = map.get("TZ_REALNAME") == null ? "" : String.valueOf(map.get("TZ_REALNAME"));
 			}
 			int tz_fld_num = 0;
-
+			System.out.println("TZ_RYLX:" + TZ_RYLX);
 			String strResult_fld = "";
 			String strResult_fld_aleft = ""; // 样式为左对齐对应的html
 			// 学生
@@ -175,7 +182,7 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "手机号码",
 						TZ_DLZH_ID, String.valueOf(td_long));
 
-				int sy = sqlQuery.queryForObject("SELECT SCORE FROM  PX_TEACHER_T where OPRID=? limit 1",
+				int sy = sqlQuery.queryForObject("SELECT ifnull(SCORE,0) FROM  PX_TEACHER_T where OPRID=? limit 1",
 						new Object[] { m_curOPRID }, "Integer");
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "剩余积分",
 						String.valueOf(sy), String.valueOf(td_long));

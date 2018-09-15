@@ -1,0 +1,249 @@
+html, body, div, span, applet, object, iframe, h1, h2, h3,
+h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address,
+big, cite, code, del, dfn, em, font, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var, dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend, table, caption, tbody, tfoot,
+thead, tr, th, td {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    outline: 0;
+    font-weight: inherit;
+    font-style: inherit;
+    font-size: 12px;
+    line-height: 1.5;
+    vertical-align: baseline;
+    color: #666666;
+    font-family: "Chinese Quote", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "Helvetica Neue", Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+}
+
+:focus {
+    outline: 0;
+}
+
+table {
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+caption, th, td {
+    text-align: left;
+    font-weight: normal;
+}
+
+a img, iframe {
+    border: none;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+input, textarea, select, button {
+    font-size: 100%;
+    font-family: inherit;
+}
+
+select {
+    margin: inherit;
+}
+
+/* Fixes incorrect placement of numbers in olâ€™s in IE6/7 */
+ol {
+    margin-left: 2em;
+}
+
+/* == clearfix == */
+.clearfix:after {
+    content: ".";
+    display: block;
+    height: 0;
+    clear: both;
+    visibility: hidden;
+}
+
+.clearfix {
+    display: inline-block;
+}
+
+* html .clearfix {
+    height: 1%;
+}
+
+.clearfix {
+    display: block;
+}
+
+
+/** icons **/
+
+@font-face {font-family: "iconfont";
+  src: url('fonts/iconfont.eot?t=1535025033189'); /* IE9*/
+  src: url('fonts/iconfont.eot?t=1535025033189#iefix') format('embedded-opentype'), /* IE6-IE8 */
+  url('data:application/x-font-woff;charset=utf-8;base64,d09GRgABAAAAAAWYAAsAAAAACEAAAQAAAAAAAAAAAAAAAAAAAAAAAAAAAABHU1VCAAABCAAAADMAAABCsP6z7U9TLzIAAAE8AAAARAAAAFY8fEoiY21hcAAAAYAAAABgAAABnLWmIVtnbHlmAAAB4AAAAaQAAAH0G2FyDmhlYWQAAAOEAAAALwAAADYSasUPaGhlYQAAA7QAAAAeAAAAJAfgA8lobXR4AAAD1AAAABAAAAAQEEQAAGxvY2EAAAPkAAAACgAAAAoBZACwbWF4cAAAA/AAAAAfAAAAIAERAFFuYW1lAAAEEAAAAUUAAAJtPlT+fXBvc3QAAAVYAAAAPgAAAFDYSjjLeJxjYGRgYOBikGPQYWB0cfMJYeBgYGGAAJAMY05meiJQDMoDyrGAaQ4gZoOIAgCKIwNPAHicY2BkEWScwMDKwMHUyXSGgYGhH0IzvmYwYuRgYGBiYGVmwAoC0lxTGByesb2QZ27438AQw9zA0AAUZgTJAQDlmwwbeJztkMENgCAMRV8BCTHuwAIejXdW8eTkhC2wFA8O4W9e0/40PXxgAbyyKwHkRhi61BXzPav5gVP3pOWgxlpa7v07mcQukk5ufpDIr8368W5+pDaxLMtk+C1PkAdeVxLKeJwdkM1u00AQx2dm7aRpHdexvbtSqzXEaj6ISA+pY6utaWuJC08QiQOX0OXiqOmNY0SPPaBeK048BPQheBZ4AMCwm5n9mP/M7zAzgAD//rB75sBrALygIj/HmUxICinara37+IyETFDGCq0euMPRcDTP5hdY5JeUW7X1Ise34WTMJSdzx5Mw8ToOCzpBN2K09+GNFF5A6O8fNU/N09G+jxR4QvY/7xGLugZjTsejb0KFjus6oRJpMZ5OBtFBLJ1w53LaFZ6Kdv3DJBZoTMTJob8bKU90+WIndGR8EA0m03EBZGb66hB7DzG8AHBT21xQ5EX+3I4V2KlYat/Y6pmtZJah/qf1qjK2WqN7s7qqqqvVzd1HvTw3ttS/TFCWJnhXVfUtuuvaEvW6+X1bVxX7Up4t9U99fVqWp9cmWJ6VAMz0smGPbAM96MPU7hgLs0t+Mj/GkY9tfuL201a7Z3J9U+odI8atdPgKs3wmOGpaVNWCNHuo6wemCf5mQiEqQT+2f/NdvVTm0MZQhtXaYAbWmRINcItwAqGaDVeKPwqlxH84TVe8eJxjYGRgYADiyB9/t8Xz23xl4GZhAIHrSw50Iuj/DSxMzA1ALgcDE0gUAG8gDE8AeJxjYGRgYG7438AQw+LCAAQsTAyMDKiABQBN1AKzAAAEAAAABAAAAAREAAAEAAAAAAAAAABqALAA+gAAeJxjYGRgYGBhcGVgZgABJiDmAkIGhv9gPgMAD7gBYwB4nGWPTU7DMBCFX/oHpBKqqGCH5AViASj9EatuWFRq911036ZOmyqJI8et1ANwHo7ACTgC3IA78EgnmzaWx9+8eWNPANzgBx6O3y33kT1cMjtyDRe4F65TfxBukF+Em2jjVbhF/U3YxzOmwm10YXmD17hi9oR3YQ8dfAjXcI1P4Tr1L+EG+Vu4iTv8CrfQ8erCPuZeV7iNRy/2x1YvnF6p5UHFockikzm/gple75KFrdLqnGtbxCZTg6BfSVOdaVvdU+zXQ+ciFVmTqgmrOkmMyq3Z6tAFG+fyUa8XiR6EJuVYY/62xgKOcQWFJQ6MMUIYZIjK6Og7VWb0r7FDwl57Vj3N53RbFNT/c4UBAvTPXFO6stJ5Ok+BPV8bUnV0K27LnpQ0kV7NSRKyQl7WtlRC6gE2ZVeOEXpc0Yk/KGdI/wAJWm7IAAAAeJxjYGKAAC4G7ICFkYmRmZGFkZWBvTg1tbQ4tUgwN7UkIz9FN6UosVw3MzcxPZWjPD8lNRfIZGAAAAavDR4AAA==') format('woff'),
+  url('fonts/iconfont.ttf?t=1535025033189') format('truetype'), /* chrome, firefox, opera, Safari, Android, iOS 4.2+*/
+  url('fonts/iconfont.svg?t=1535025033189#iconfont') format('svg'); /* iOS 4.1- */
+}
+
+.iconfont {
+  font-family:"iconfont" !important;
+  font-size:16px;
+  font-style:normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-user:before { content: "\e81f"; }
+
+.icon-method-draw-image:before { content: "\e606"; }
+
+.icon-password:before { content: "\e641"; }
+
+.wrapper{
+    width:1200px;
+    margin:0 auto;
+}
+
+.header{
+    border-top:3px solid #e60012;
+    border-bottom:5px solid #e60012;
+}
+
+.header .logo{
+    width:256px;
+    height:151px;
+    display: block;
+    float:left;
+}
+.header .nav-buttons{
+    float:right;
+    margin-right:40px;
+    margin-top:57px;
+}
+.header .nav-btn{
+    text-decoration: none;
+    background:#efefef;
+    border-radius:5px;
+    display: inline-block;
+    font-size:18px;
+    height:36px;
+    line-height: 36px;
+    width:120px;
+    text-align: center;
+    margin-right:15px;
+    font-weight: 500;
+}
+.login-main{
+    background: url("images/login_bg.jpg") no-repeat center center;
+    height:789px;
+}
+
+.login-main .wrapper{
+    position: relative;
+    height:789px;
+}
+
+.login-main .login-qrcode{
+    position: absolute;
+    bottom:80px;
+    right:100px;
+}
+
+.login-main .login-qrcode img{
+    width:180px;
+    height:190px;
+}
+
+.login-main .login-form{
+    position: absolute;
+    top:100px;
+    left:300px;
+    width:420px;
+    height:295px;
+    background:url("images/form_bg_purple.png") no-repeat;
+    background-size: 100% 100%;
+
+    padding:40px;
+}
+
+.login-main .login-form h3{
+    text-align: center;
+    font-size:18px;
+    letter-spacing: 3px;
+    color:#8d52d6;
+}
+
+.login-main .login-form .login-item{
+    border:2px solid #8d52d6;
+    width:300px;
+    margin:25px auto 0 auto;
+    background: #ecdcfb;
+    height:32px;
+}
+ 
+.login-main .login-form .login-item label{
+    border-right:2px solid #8d52d6;
+    padding:8px;
+    font-size:14px;
+    line-height: 30px;
+    height:30px;
+}
+.login-main .login-form .login-item input{
+    height:30px;
+    line-height: 30px;
+    font-size:14px;
+    background: none;
+    border:none;
+    padding-left:10px;
+    width:180px;
+}
+
+.login-main  .btn-login{
+    background:url(images/btn_login_purple.png) no-repeat;
+    width:300px;
+    margin:40px auto 0 auto;
+    height:37px;
+    border:none;
+    display: block;;
+    cursor: pointer;
+}
+
+.login-form-blue{
+     background:url("images/form_bg_blue.png") no-repeat !important;
+     background-size: 100% 100% !important;
+}
+
+.login-form-blue  .btn-login{
+    background:url(images/btn_login_blue.png) no-repeat;
+}
+
+.login-form-blue .login-item{
+    border-color:#2989cc !important;
+    background: #ebf5f8 !important;
+}
+
+.login-form-blue h3{
+    color:#2989cc !important;
+}
+
+.login-form-blue .login-item label{
+    border-color:#2989cc !important;
+}
+
+.footer{
+    background:#e60012;
+    padding: 20px 0 45px 0;
+    text-align: center;
+    line-height: 28px;
+    color:#fff;
+    font-size:14px;
+}
+.footer p{
+    line-height: 28px;
+    color:#fff;
+    font-size:14px;
+}
+.footer a{
+    text-decoration: none;
+    color:#fff;
+}

@@ -8,4 +8,4 @@ from
 where 
 	TZ_DLZH_ID=? 
 	and TZ_JG_ID=? 
-	and TZ_RYLX='PXXY'
+	and TZ_RYLX=?

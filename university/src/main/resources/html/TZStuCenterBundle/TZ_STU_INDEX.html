@@ -1,0 +1,150 @@
+<!DOCTYPE html >
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+<meta name="renderer" content="webkit" />
+<script type="text/javascript" src="%bind(:1)/statics/stuWorkJw/js/jquery-1.11.1.min.js" ></script>
+<script type="text/javascript" src="%bind(:1)/statics/stuWorkJw/js/jquery.cookie.js"></script>
+<title>兴语文化</title>
+<link rel="shortcut icon" type="image/x-icon" href="%bind(:1)/statics/stuWorkJw/images/favicon.ico" media="screen" />
+<link rel="stylesheet" type="text/css" href="%bind(:1)/statics/stuWorkJw/css/common.pc.css"/>
+<link rel="stylesheet" type="text/css" href="%bind(:1)/statics/stuWorkJw/css/style.css"/>
+<style>
+.apply-popover {
+	z-index: 999999;
+	position: absolute;
+	/*top: 50%;
+	left: 50%;*/
+	width: 100%;
+	height:100%;
+	/*max-height: 519px; 
+	margin: -180px 0 0 -330px;*/
+	border-radius: 5px;
+	border: solid 2px #666;
+	background-color: #fff;
+	box-shadow: 0 0 10px #666;
+}
+
+.apply-poptit {
+	border-bottom: 1px solid #ddd;
+	padding: 1px;
+	position: relative;
+	line-height: 40px;
+	height: 40px;
+}
+
+.apply-poptit a {
+	color: #0088DB;
+	text-decoration: none;
+	cursor: pointer
+}
+
+.apply-poptit a:hover {
+	color: #2A5E8E
+}
+
+.apply-poptit a:focus {
+	outline: none
+}
+
+.apply-poptit h3 {
+	font-size: 16px;
+	padding-left: 15px;
+}
+
+.apply-poptit .close {
+	float: right;
+	color: #999;
+	padding: 5px;
+	margin: -2px;
+	font: bold 18px/18px simsun;
+	text-shadow: 0 1px 0 #ddd
+}
+
+.apply-poptit .close:hover {
+	color: #444;
+}
+
+.apply-popbody {
+	/* padding: 60px 15px;
+	max-height: 325px; */
+	margin-bottom: 30px;
+	color: #444;
+	overflow: auto;
+	margin: 0 auto;
+	text-align: center;
+	width: 100%;
+	height: 100%;
+}
+
+
+		
+	</style>
+</head>
+<body>
+
+	<div class="background" id="background">
+	<input type="hidden" id="proName" value="%bind(:1)">
+		<div class="con">
+			<div class="layout2">
+				<div class="list-box" style="position: absolute;z-index: 0;">
+					<div class="login-frame">
+						<div class="title">
+							<div class="logo"></div>
+							<div class="use-name">学员:%bind(:2),你好</div>
+						</div>
+					</div>
+					<div class="input-frame">
+						<div class="btn-box">
+							<button type="submit" onclick="stuLogin()" class="btn">进入课堂</button>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</body>
+<script type="text/javascript">
+
+function tz_show_float_iframe_apply(displayURL){
+	var cover=document.createElement("div");
+	cover.className="cover";
+	cover.style.cssText="background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);height: 100%;left: 0;position: fixed;top: 0;width: 100%;z-index: 10000;";
+	
+	var htmlcode = "<div style='/*margin:-110px auto 0;*/ z-index:10000;width: 100%;padding-bottom: 20px;'>";
+	htmlcode = htmlcode +"<div class='apply-popover'><!--<div class='apply-poptit'>";
+	htmlcode = htmlcode +"<a href='javascript:;' title='关闭' class='close' onclick='tz_close_float_iframe_apply();'>×</a>"
+	htmlcode= htmlcode +"<h3>上课</h3></div> -->";
+	htmlcode= htmlcode +"<div class='apply-popbody'><iframe id='mainframe' allow='camera;microphone;autoplay' name='mainframe'  frameborder='0' src='" + displayURL + "' style='border: 0 none;width: 100%;padding: 0;height: 100%;' on></iframe></div>"
+	htmlcode= htmlcode +"</div></div>";    	
+	cover.innerHTML=htmlcode;
+	document.body.appendChild(cover);
+}
+
+	function tz_close_float_iframe_apply(){
+		var cover = $(".cover");
+		cover.remove();
+		//$("#cwin").attr("src",$("#cwin").attr("src") + "&1=1");
+	}
+
+	var TzUniversityContextPath = $("#proName").val();
+	
+	function stuLogin(){
+	$.ajax({
+		type:"post",
+		url:TzUniversityContextPath+"/stuToClass",
+		data:{strType:"STU"},
+		dataType:"json",
+		success:function(date){
+			if(!date.strFlag){
+				$(".tishi").html(date.strErrorMessage);
+			}else{
+				tz_show_float_iframe_apply(date.SKurl);
+			}
+		}
+	});
+}
+	
+</script>
+</html>

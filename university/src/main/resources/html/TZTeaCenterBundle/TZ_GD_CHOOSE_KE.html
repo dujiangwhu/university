@@ -1,0 +1,26 @@
+<div class="main_full_line">
+					<div class="main_full_line_left">课程类型：</div>
+					<div class="main_full_line_right">
+							<select name="courseType" id="courseType" class="combox">
+								<option value ="">请选择</option>
+								%bind(:1)
+							</select>
+							<input name="hour" id="hour" value="%bind(:3)" type="hidden">
+							<input name="starDate" id="starDate" value="%bind(:4)" type="hidden">
+					</div>
+				</div>
+				<div class="main_full_line">
+					<div class="main_full_line_left">课程：</div>
+					<div class="main_full_line_right">
+						<select name="course" id="course" class="combox">
+							<option value ="">请选择</option>
+						</select>
+					</div>
+				</div>
+				<div class="main_article_nav">
+					<div class="center_bt">
+						<div class="bt_blue" id="btnpass">确定选择
+						</div>
+					</div>
+				</div>
+</div>

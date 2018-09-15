@@ -14,59 +14,30 @@
 
      var urlBegin="%bind(:2)";
      $(document).ready(function(){	
-
 		$("#letf_menu").height(922);
     });
      
-   //报名人选择可以报名的班级;
-     function viewClass(siteId,language,viewType){
-    	 var tzParams = '{"ComID":"TZ_ZLSQ_JD_COM","PageID":"TZ_ZLSQ_JD_PAGE","OperateType":"HTML","comParams":{"viewType":"' + viewType+ '","siteId":"' + siteId+ '","language":"' + language+ '","oprate":"R"}}';
-
-    	 $.ajax({
- 					type:"POST",
- 					url: urlBegin,
- 					data:{
- 						tzParams:tzParams
- 					},
- 					success:function(response){
- 						$("div#showWindDiv").html(response);
- 						$("div#showWindDiv").show();
- 	
- 						$("span.close").click(function(){
- 							$("div#showWindDiv").hide();
- 						});
- 					
- 					},
-	 		    	failure: function () {
-	 				  		
-	 		    	}    
- 			});
-     }
-
-
-   function viewJd(classId, instanceId,language,viewType){
-        var tzParams = '{"ComID":"TZ_ZLSQ_JD_COM","PageID":"TZ_ZLSQ_JD_PAGE","OperateType":"HTML","comParams":{"bmClassId":"' + classId + '","instanceId":"' + instanceId+ '","viewType":"' + viewType+ '","language":"' + language+ '","oprate":"R"}}';
-        $.ajax({
-					type:"POST",
-					url: urlBegin,
-					data:{
-						tzParams:tzParams
-					},
-					success:function(response){
-						$("div#showWindDiv").html(response);
-						$("div#showWindDiv").show();
-	
-						$("span.close").click(function(){
-							$("div#showWindDiv").hide();
-						});
-					
-					},
-		    	failure: function () {
-				  		
-		    	}    
-			});
-    	}
-
+ 	//变换课程类型
+ 	function changK(m,n,viewType){
+ 		var menu = document.getElementById("tab" + m).getElementsByTagName("li");
+		for (i = 0; i < menu.length; i++) {
+			menu[i].className = i == n ? "now" : "";
+		}
+ 		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_XZ_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","opType":"' + viewType+ '"}}';
+ 		$.ajax({
+ 			type:"POST",
+ 			url: urlBegin,
+ 			data:{
+ 				tzParams:tzParams
+ 			},
+ 			success:function(response){
+ 				console.log(response);
+ 				$("#loadXK").html(response);
+ 			},
+ 			failure: function () {
+ 			}    
+ 		});		
+ 	}
 </script>
 
 </head>
@@ -104,18 +75,23 @@
                             %bind(:4)
                      </div>
               </div>
+			   <div class="mian_inner_nav" id="tab1">
+				<div class="float_left" style="width:100%">
+				<ul>
+					<li class="now" onclick="changK(1,0,1)">预约课程</li>
+					<li onclick="changK(1,1,2)">正在上课</li>
+					<li onclick="changK(1,2,3)">正常结束</li>
+					<li onclick="changK(1,3,6)">学生缺席</li>
+					<li onclick="changK(1,4,4)">即将开课</li>
+				</ul>
+				</div>
+			</div>
+              
+              
+ 
 			 <div id="content1">
                     <div class="index-bmclass-noprocess">
                     	<div class="o-application">
-                    		<div class="screen">
-								<ul>
-									<li style="background: rgb(255, 255, 255); color: rgb(102, 102, 102);"><a href="javaScript: void(0)" onClick='changK("1")'>预约课程</a></li> <!--0：未上课 -->
-									<li style="background: rgb(255, 255, 255); color: rgb(102, 102, 102);"><a href="javaScript: void(0)" onClick='changK("2")'>正在上课</a></li> <!--1：正在上课，会有链接 -->
-									<li style="background: rgb(255, 255, 255); color: rgb(102, 102, 102);"><a href="javaScript: void(0)" onClick='changK("3")'>正常结束</a></li> <!--2：正常结束 -->
-									<li style="background: rgb(255, 255, 255); color: rgb(102, 102, 102);"><a href="javaScript: void(0)" onClick='changK("6")'>学生缺席</a></li> <!--3：学生缺席 -->
-									<li style="background: rgb(255, 255, 255); color: rgb(102, 102, 102);"><a href="javaScript: void(0)" onClick='changK("4")'>即将开课</a></li> <!--4：即将开课无法取消 -->
-								</ul>
-							</div>
 							<div id="loadXK">
 							%bind(:1)
 							</div>
@@ -148,7 +124,7 @@
 		LoadFooter("%bind(:5)","%bind(:6)","");
 		LoadWelcome("%bind(:5)","%bind(:6)","");
 
-		$(".active").parent().parent().parent().next("table").find(".index_bd").hide();
+		/*$(".active").parent().parent().parent().next("table").find(".index_bd").hide();
 		$(".o-application table tr.index_hd td:first-child").click(function(){
                     
                      $(this).toggleClass("active").parent().parent().parent().next("table").find(".index_bd").slideToggle();
@@ -160,7 +136,7 @@
                          $(this).find("i").removeClass("application_expand");
 												 $(this).find("i").addClass("application_shrink");
                      }
-               });
+               }); */
 
 	
 	});

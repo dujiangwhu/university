@@ -31,7 +31,7 @@ public interface TzWebsiteLoginService {
 	 * @return
 	 */
 	public boolean doLogin(HttpServletRequest request, HttpServletResponse response, String orgid, String siteid,
-			String userName, String userPwd, String code, String language, ArrayList<String> errorMsg);
+			String userName, String userPwd, String code, String language,String type, ArrayList<String> errorMsg);
 
 	/**
 	 * 切换系统语言

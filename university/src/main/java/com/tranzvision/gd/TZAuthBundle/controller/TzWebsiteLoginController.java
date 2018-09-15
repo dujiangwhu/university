@@ -5,6 +5,7 @@ package com.tranzvision.gd.TZAuthBundle.controller;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import javax.servlet.http.HttpServletRequest;
@@ -28,6 +29,7 @@ import com.tranzvision.gd.util.cookie.TzCookie;
 import com.tranzvision.gd.util.encrypt.DESUtil;
 import com.tranzvision.gd.util.httpclient.CommonUtils;
 import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
+import com.tranzvision.gd.util.session.TzSession;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
 import com.tranzvision.gd.util.cfgdata.GetHardCodePoint;
@@ -64,28 +66,25 @@ public class TzWebsiteLoginController {
 	private TzWebsiteServiceImpl tzWebsiteServiceImpl;
 
 	@Autowired
-	private PsTzOpenidTblMapper psTzOpenidTblMapper;
+	private GetHardCodePoint getHardCodePoint;
 
-	@Autowired
-	private GetHardCodePoint GetHardCodePoint;
-
-	// 学生登录 包含培训机构ID
-	@RequestMapping(value = { "/stu/{orgid}/" }, produces = "text/html;charset=UTF-8")
+	/**
+	 * 学生登录页面，登录页面并没有机构ID和站点ID，站点ID是配置在Hcode里面的，机构ID写死，应为站点的机构ID 是一样的
+	 * 
+	 * @param request
+	 * @param response
+	 * @param orgid
+	 * @return
+	 */
+	@RequestMapping(value = { "/stuLogin" }, produces = "text/html;charset=UTF-8")
 	@ResponseBody
-	public String stuLoginWebsite(HttpServletRequest request, HttpServletResponse response,
-			@PathVariable(value = "orgid") String orgid) {
+	public String stuLoginWebsite(HttpServletRequest request, HttpServletResponse response) {
 
 		String strRet = "";
-
+		String siteid = getHardCodePoint.getHardCodePointVal("TZ_STU_MH");
+		String orgid = getHardCodePoint.getHardCodePointVal("TZ_SITE_JGID");
 		try {
 			orgid = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(orgid).toUpperCase();
-
-			String neworgid = "ADMIN";
-
-			// siteid =
-			// tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(siteid);
-			// 学生站点固定
-			String siteid = "45";
 
 			if (null != orgid && !"".equals(orgid) && null != siteid && !"".equals(siteid)) {
 
@@ -96,10 +95,10 @@ public class TzWebsiteLoginController {
 					if (openid == null) {
 						openid = "";
 					}
-					loginHtml = tzWebsiteServiceImpl.getMLoginPublishCode(request, neworgid, siteid, openid);
+					loginHtml = tzWebsiteServiceImpl.getMLoginPublishCode(request, orgid, siteid, openid);
 					strRet = loginHtml;
 				} else {
-					loginHtml = tzWebsiteServiceImpl.getLoginPublishCode(request, neworgid, siteid);
+					loginHtml = tzWebsiteServiceImpl.getLoginPublishCode(request, orgid, siteid);
 					strRet = loginHtml;
 				}
 				strRet = loginHtml;
@@ -121,48 +120,64 @@ public class TzWebsiteLoginController {
 
 	}
 
-	// @RequestMapping(value = { "/{orgid}/{siteid}" }, produces =
-	// "text/html;charset=UTF-8")
-	// @ResponseBody
-	/*
-	 * public String userLoginWebsite(HttpServletRequest request,
-	 * HttpServletResponse response,
+	/**
+	 * 教师登录页面 登录页面并没有机构ID和站点ID，站点ID是配置在Hcode里面的，机构ID写死，应为站点的机构ID 是一样的
 	 * 
-	 * @PathVariable(value = "orgid") String orgid, @PathVariable(value =
-	 * "siteid") String siteid) {
-	 * 
-	 * String strRet = "";
-	 * 
-	 * try { orgid =
-	 * tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(orgid).
-	 * toUpperCase();
-	 * 
-	 * siteid =
-	 * tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(siteid);
-	 * 
-	 * if (null != orgid && !"".equals(orgid) && null != siteid &&
-	 * !"".equals(siteid)) {
-	 * 
-	 * String loginHtml = ""; Boolean isMobile = CommonUtils.isMobile(request);
-	 * if (isMobile) { String openid = request.getParameter("OPENID"); if
-	 * (openid == null) { openid = ""; } loginHtml =
-	 * tzWebsiteServiceImpl.getMLoginPublishCode(request, orgid, siteid,
-	 * openid); strRet = loginHtml; } else { loginHtml =
-	 * tzWebsiteServiceImpl.getLoginPublishCode(request, orgid, siteid); strRet
-	 * = loginHtml; } strRet = loginHtml; } else {
-	 * 
-	 * strRet = gdObjectServiceImpl.getMessageTextWithLanguageCd(request, "",
-	 * "", "", "访问站点异常，请检查您访问的地址是否正确。",
-	 * "Can not visit the site.Please check the url.");
-	 * 
-	 * } } catch (Exception e) { e.printStackTrace(); strRet =
-	 * gdObjectServiceImpl.getMessageTextWithLanguageCd(request, "", "", "",
-	 * "访问站点异常，请检查您访问的地址是否正确。", "Can not visit the site.Please check the url.");
-	 * }
-	 * 
-	 * return strRet; }
+	 * @param request
+	 * @param response
+	 * @return
 	 */
+	@RequestMapping(value = { "/teaLogin" }, produces = "text/html;charset=UTF-8")
+	@ResponseBody
+	public String teaLoginWebsite(HttpServletRequest request, HttpServletResponse response) {
 
+		String strRet = "";
+
+		try {
+			String siteid = getHardCodePoint.getHardCodePointVal("TZ_TEA_MH");
+			String orgid = getHardCodePoint.getHardCodePointVal("TZ_SITE_JGID");
+
+			if (null != orgid && !"".equals(orgid) && null != siteid && !"".equals(siteid)) {
+
+				String loginHtml = "";
+				Boolean isMobile = CommonUtils.isMobile(request);
+				if (isMobile) {
+					String openid = request.getParameter("OPENID");
+					if (openid == null) {
+						openid = "";
+					}
+					loginHtml = tzWebsiteServiceImpl.getMLoginPublishCode(request, orgid, siteid, openid);
+					strRet = loginHtml;
+				} else {
+					loginHtml = tzWebsiteServiceImpl.getLoginPublishCode(request, orgid, siteid);
+					strRet = loginHtml;
+				}
+				strRet = loginHtml;
+				strRet = strRet.replace("aabbccddeaccf", orgid);
+
+			} else {
+
+				strRet = gdObjectServiceImpl.getMessageTextWithLanguageCd(request, "", "", "", "访问站点异常，请检查您访问的地址是否正确。",
+						"Can not visit the site.Please check the url.");
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			strRet = gdObjectServiceImpl.getMessageTextWithLanguageCd(request, "", "", "", "访问站点异常，请检查您访问的地址是否正确。",
+					"Can not visit the site.Please check the url.");
+		}
+
+		return strRet;
+
+	}
+
+	/**
+	 * 教师和学生登录处理
+	 * 
+	 * @param request
+	 * @param response
+	 * @return
+	 */
 	@RequestMapping(value = "dologin", produces = "text/html;charset=UTF-8")
 	@ResponseBody
 	public String doLogin(HttpServletRequest request, HttpServletResponse response) {
@@ -174,77 +189,129 @@ public class TzWebsiteLoginController {
 		String LoginType = mapData.get("LoginType") == null ? "" : String.valueOf(mapData.get("LoginType"));
 
 		System.out.println("LoginType：" + LoginType);
-		String strOrgId = mapData.get("orgid") == null ? "" : String.valueOf(mapData.get("orgid"));
+
 		String strUserName = mapData.get("userName") == null ? "" : String.valueOf(mapData.get("userName")).trim();
 		String strPassWord = mapData.get("passWord") == null ? "" : String.valueOf(mapData.get("passWord"));
 		String strYzmCode = mapData.get("yzmCode") == null ? "" : String.valueOf(mapData.get("yzmCode"));
 		String strLang = mapData.get("lang") == null ? "" : String.valueOf(mapData.get("lang"));
 		String strSiteId = mapData.get("siteid") == null ? "" : String.valueOf(mapData.get("siteid"));
 
-		String openid = request.getParameter("OPENID");
-
 		Map<String, Object> jsonMap = new HashMap<String, Object>();
-
+		String orgid = getHardCodePoint.getHardCodePointVal("TZ_SITE_JGID");
 		try {
 			if (LoginType.equals("STU")) {
+
+				String sql = "";
+
+				if (!"".equals(strUserName)) {
+					strUserName = strUserName.toLowerCase();
+
+				}
+
+				if (null != strSiteId && !"".equals(strSiteId)) {
+
+					sql = "SELECT TZ_DLZH_ID,TZ_JG_ID FROM PS_TZ_AQ_YHXX_TBL WHERE TZ_MOBILE=? AND TZ_RYLX=?";
+					List<Map<String, Object>> l = sqlQuery.queryForList(sql, new Object[] { strUserName, "PXXY" });
+					
+					if (l != null && l.size() > 0) {
+
+						ArrayList<String> aryErrorMsg = new ArrayList<String>();
+						Map<String, Object> map = null;
+						boolean boolResult = false;
+						String strOrgId = "";
+						for (Object objNode : l) {
+							map = (Map<String, Object>) objNode;
+							strUserName = map.get("TZ_DLZH_ID").toString();
+							strOrgId = map.get("TZ_JG_ID").toString();
+							System.out.println("strUserName:"+strUserName);
+							System.out.println("strOrgId:"+strOrgId);
+							boolResult = tzWebsiteLoginServiceImpl.doLogin(request, response, strOrgId, strSiteId,
+									strUserName, strPassWord, strYzmCode, strLang, LoginType, aryErrorMsg);
+							System.out.println("boolResult:"+boolResult);
+							// 只要有成功的就返回
+							if (boolResult) {
+								break;
+							}
+						}
+
+						String loginStatus = aryErrorMsg.get(0);
+						String errorMsg = aryErrorMsg.get(1);
+						if (boolResult) {
+							jsonMap.put("success", "true");
+						} else {
+							jsonMap.put("success", "false");
+						}
+
+						jsonMap.put("errorCode", loginStatus);
+						jsonMap.put("errorDesc", errorMsg);
+
+						if (boolResult) {
+							String ctxPath = request.getContextPath();
+							String indexUrl = "";
+							Boolean isMobile = CommonUtils.isMobile(request);
+
+							if (isMobile) {
+								indexUrl = ctxPath + "/dispatcher?classid=mIndex&siteId=" + strSiteId;
+							} else {
+								indexUrl = ctxPath + "/site/index/"+orgid.toLowerCase()+"/" + strSiteId;
+							}
+
+							jsonMap.put("url", indexUrl);
+							System.out.println("url:"+indexUrl);
+							TzSession tmpSession = new TzSession(request);
+							tmpSession.addSession("LoginType", LoginType);
+
+							tmpSession.addSession("STUJG", strOrgId);
+						}
+
+					} else {
+
+						int errorCode = 2;
+						String strErrorDesc = gdObjectServiceImpl.getMessageTextWithLanguageCd(request,
+								"TZGD_FWINIT_MSGSET", "TZGD_FWINIT_00103", strLang, "登录失败，请确认用户名是否存在。",
+								"Login failed, whether the username exists.");
+						jsonMap.put("success", "false");
+						jsonMap.put("errorCode", errorCode);
+						jsonMap.put("errorDesc", strErrorDesc);
+
+					}
+
+				} else {
+					int errorCode = 5;
+					String strErrorDesc = gdObjectServiceImpl.getMessageTextWithLanguageCd(request, "TZ_SITE_MESSAGE",
+							"44", strLang, "站点异常", "The website is abnormal .");
+					jsonMap.put("success", "false");
+					jsonMap.put("errorCode", errorCode);
+					jsonMap.put("errorDesc", strErrorDesc);
+				}
+
+			} else if (LoginType.equals("TEA")) {
+				String strOrgId = "ADMIN";
 				if (null != strOrgId && !"".equals(strOrgId)) {
 					strOrgId = strOrgId.toUpperCase();
 					String sql = "";
 
 					if (!"".equals(strUserName)) {
 						strUserName = strUserName.toLowerCase();
-					
+
 					}
 
 					if (null != strSiteId && !"".equals(strSiteId)) {
-
-						sql = "SELECT TZ_DLZH_ID FROM PS_TZ_AQ_YHXX_TBL WHERE TZ_MOBILE=? AND TZ_RYLX=? AND TZ_JG_ID=?";
-						strUserName = sqlQuery.queryForObject(sql, new Object[] { strUserName, "PXXY", strOrgId },
+						System.out.println("strUserName:"+strUserName);
+						sql = "SELECT TZ_DLZH_ID FROM PS_TZ_AQ_YHXX_TBL WHERE (TZ_MOBILE=? or TZ_EMAIL=?) AND TZ_RYLX=? AND TZ_JG_ID=?";
+						strUserName = sqlQuery.queryForObject(sql, new Object[] { strUserName,strUserName, "JGJS", strOrgId },
 								"String");
-
+						System.out.println("strUserName:"+strUserName);
 						if (null != strUserName && !"".equals(strUserName)) {
 							ArrayList<String> aryErrorMsg = new ArrayList<String>();
 
 							boolean boolResult = tzWebsiteLoginServiceImpl.doLogin(request, response, strOrgId,
-									strSiteId, strUserName, strPassWord, strYzmCode, strLang, aryErrorMsg);
+									strSiteId, strUserName, strPassWord, strYzmCode, strLang, LoginType, aryErrorMsg);
 
 							String loginStatus = aryErrorMsg.get(0);
 							String errorMsg = aryErrorMsg.get(1);
 							if (boolResult) {
 								jsonMap.put("success", "true");
-
-								/********************
-								 * 记录openid绑定账户关系*张浪添加
-								 ***********************/
-								// 记录openid绑定账户关系
-								if (!"".equals(openid) && openid != null) {
-									PsTzOpenidTblKey psTzOpenidTblKey = new PsTzOpenidTblKey();
-									psTzOpenidTblKey.setOpenid(openid);
-									psTzOpenidTblKey.setTzDlzhId(strUserName);
-									psTzOpenidTblKey.setTzJgId(strOrgId);
-									psTzOpenidTblKey.setTzSiteiId(strSiteId);
-									PsTzOpenidTbl psTzOpenidTbl = psTzOpenidTblMapper
-											.selectByPrimaryKey(psTzOpenidTblKey);
-									if (psTzOpenidTbl != null) {
-										psTzOpenidTbl.setTzDelFlg("N");
-										psTzOpenidTblMapper.updateByPrimaryKey(psTzOpenidTbl);
-									} else {
-										psTzOpenidTbl = new PsTzOpenidTbl();
-										psTzOpenidTbl.setOpenid(openid);
-										psTzOpenidTbl.setTzDlzhId(strUserName);
-										psTzOpenidTbl.setTzJgId(strOrgId);
-										psTzOpenidTbl.setTzSiteiId(strSiteId);
-										psTzOpenidTbl.setTzDelFlg("N");
-										psTzOpenidTblMapper.insert(psTzOpenidTbl);
-									}
-
-									String tmpOpenIDKey = "TZGD_@_!_*_20170420_Tranzvision";
-									openid = DESUtil.encrypt(openid, tmpOpenIDKey);
-									tzCookie.addCookie(response, "TZGD_WECHART_OPENID", openid);
-								}
-								/********************
-								 * 记录openid绑定账户关系*张浪添加
-								 ***********************/
 							} else {
 								jsonMap.put("success", "false");
 							}
@@ -266,6 +333,8 @@ public class TzWebsiteLoginController {
 								}
 
 								jsonMap.put("url", indexUrl);
+								TzSession tmpSession = new TzSession(request);
+								tmpSession.addSession("LoginType", LoginType);
 
 							}
 
@@ -297,21 +366,13 @@ public class TzWebsiteLoginController {
 					jsonMap.put("errorCode", errorCode);
 					jsonMap.put("errorDesc", strErrorDesc);
 				}
-			} else if (LoginType.equals("TEA")) {
-				int errorCode = 2;
-				String strErrorDesc = gdObjectServiceImpl.getMessageTextWithLanguageCd(request, "TZGD_FWINIT_MSGSET",
-						"TZGD_FWINIT_00103", strLang, "登录失败，请确认用户名是否存在。", "Login failed, whether the username exists.");
-				jsonMap.put("success", "false");
-				jsonMap.put("errorCode", errorCode);
-				jsonMap.put("errorDesc", strErrorDesc);
 			}
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-
-		// {"success":"%bind(:1)","error":"%bind(:2)","indexUrl":"%bind(:3)"}
-
+		System.out.println(jsonMap.get("url"));
+		System.out.println(jsonMap.get("success"));
 		return jacksonUtil.Map2json(jsonMap);
 	}
 

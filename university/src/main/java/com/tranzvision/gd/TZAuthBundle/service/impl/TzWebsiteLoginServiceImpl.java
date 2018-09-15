@@ -133,7 +133,8 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 	 */
 	@Override
 	public boolean doLogin(HttpServletRequest request, HttpServletResponse response, String orgid, String siteid,
-			String userName, String userPwd, String code, String language, ArrayList<String> errorMsg) {
+			String userName, String userPwd, String code, String language, String LoginType,
+			ArrayList<String> errorMsg) {
 		// 20170222，yuds，手机版暂不进行验证码校验
 		boolean isMobile = CommonUtils.isMobile(request);
 		if (!isMobile) {
@@ -146,14 +147,6 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 				return false;
 			}
 		}
-		// 校验验证码
-		/*
-		 * Patchca patchca = new Patchca(); if (!patchca.verifyToken(request,
-		 * code)) { errorMsg.add("3");
-		 * errorMsg.add(gdObjectServiceImpl.getMessageTextWithLanguageCd(
-		 * request, "TZGD_FWINIT_MSGSET", "TZGD_FWINIT_00040", language,
-		 * "输入的验证码不正确。", "Security code is incorrect.")); return false; }
-		 */
 
 		try {
 
@@ -166,24 +159,22 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 				return false;
 			}
 
-			//sql = "select TZ_SITEI_ENABLE from PS_TZ_SITEI_DEFN_T where TZ_JG_ID=? and TZ_SITEI_ID=?";
-			//String tzSiteEffStu = sqlQuery.queryForObject(sql, new Object[] { orgid, siteid }, "String");
-			//if (!"Y".equals(tzSiteEffStu)) {
-			//	errorMsg.add("2");
-			//	errorMsg.add("登录失败，无效的站点。");
-			//	return false;
-			//}
-
 			Map<String, Object> dataMap;
 			// 校验用户名
-			Object[] args = new Object[] { userName, orgid };
+			Object[] args = null;
+			if (LoginType.equals("STU")) {
+				args = new Object[] { userName, orgid, "PXXY" };
+			} else if (LoginType.equals("TEA")) {
+				args = new Object[] { userName, orgid, "JGJS" };
+			}
 
 			dataMap = sqlQuery.queryForMap(tzSQLObject.getSQLText("SQL.TZAuthBundle.TzGetWebsiteUserOpridByID"), args);
 
 			if (null == dataMap) {
 				errorMsg.add("2");
-				errorMsg.add(gdObjectServiceImpl.getMessageTextWithLanguageCd(request,"TZGD_FWINIT_MSGSET", 
-						"TZGD_FWINIT_00103", language, "登录失败，请确认用户名是否存在。","Login failed, whether the username exists."));
+				errorMsg.add(gdObjectServiceImpl.getMessageTextWithLanguageCd(request, "TZGD_FWINIT_MSGSET",
+						"TZGD_FWINIT_00103", language, "登录失败，请确认用户名是否存在。",
+						"Login failed, whether the username exists."));
 				return false;
 			}
 
@@ -197,7 +188,8 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 
 			// 校验用户名、密码
 			args = new Object[] { dataMap.get("OPRID"), DESUtil.encrypt(userPwd, "TZGD_Tranzvision") };
-			String strFlag = sqlQuery.queryForObject(tzSQLObject.getSQLText("SQL.TZAuthBundle.TzCheckManagerPwd"), args, "String");
+			String strFlag = sqlQuery.queryForObject(tzSQLObject.getSQLText("SQL.TZAuthBundle.TzCheckManagerPwd"), args,
+					"String");
 
 			if (!"Y".equals(strFlag)) {
 				errorMsg.add("2");
@@ -230,9 +222,18 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 			String ctxPath = request.getContextPath();
 			String strLoginUrl = "";
 			if (ctxPath != null && !"".equals(ctxPath)) {
-				strLoginUrl = ctxPath + "/user/login/" + orgid.toLowerCase() + "/" + siteid;
+				if (LoginType.equals("STU")) {
+					strLoginUrl = ctxPath + "/user/login/stuLogin";
+				} else {
+					strLoginUrl = ctxPath + "/user/login/teaLogin";
+				}
+
 			} else {
-				strLoginUrl = "/user/login/" + orgid.toLowerCase() + "/" + siteid;
+				if (LoginType.equals("STU")) {
+					strLoginUrl = "/user/login/stuLogin";
+				} else {
+					strLoginUrl = "/user/login/teaLogin";
+				}
 			}
 			tzCookie.addCookie(response, cookieWebLoginUrl, strLoginUrl);
 
@@ -384,14 +385,18 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 
 						Patchca patchca = new Patchca();
 						String tmpTokenValue = patchca.getToken(request);
+						TzSession tmpSession = new TzSession(request);
 						if (tmpTokenValue == null) {
 							tmpTokenValue = "AbCd";
-							TzSession tmpSession = new TzSession(request);
+
 							tmpSession.addSession(patchca.getTokenName(), tmpTokenValue);
 						}
 
+						String LoginType = tmpSession.getSession("LoginType") == null ? ""
+								: tmpSession.getSession("LoginType").toString();
+
 						boolean boolResult = doLogin(request, response, tmpOrgId, tmpSiteId, tmpUserDlzh, password,
-								tmpTokenValue, "ZHS", aryErrorMsg);
+								tmpTokenValue, "ZHS", LoginType, aryErrorMsg);
 
 						if (boolResult == false) {
 							if (mbaIndexM) {
@@ -520,9 +525,12 @@ public class TzWebsiteLoginServiceImpl implements TzWebsiteLoginService {
 						if (tmpTokenValue == null) {
 							tmpTokenValue = "AbCd";
 						}
+						TzSession tmpSession = new TzSession(request);
+						String LoginType = tmpSession.getSession("LoginType") == null ? ""
+								: tmpSession.getSession("LoginType").toString();
 
 						boolean boolResult = doLogin(request, response, orgId, siteId, tmpUserDlzh, password,
-								tmpTokenValue, "ZHS", aryErrorMsg);
+								tmpTokenValue, "ZHS", LoginType, aryErrorMsg);
 						if (boolResult) {
 							logoutFlag = false;
 						}
