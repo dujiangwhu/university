@@ -291,22 +291,25 @@ body, button, input, select, textarea {
 
 		/*提交事件*/
 		function tz_apply_float_iframe_submit() {
-
-			
-			var type =cmbcgbyyValueReplace($("#pytype").value());
-			var desc = cmbcgbyyValueReplace($("#desc").value());
-			var code = cmbcgbyyValueReplace($("#tz_regCode").value());
-			var tcOPRID= cmbcgbyyValueReplace($("#tcOPRID").value());
+			var applyURL = "%bind(:4)";
+			//console.log($("#desc").value());
+			//console.log(desc);
+			//console.log(code);
+			//console.log(tcOPRID);
+			var type =cmbcgbyyValueReplace($("#pytype").val());
+			var desc = cmbcgbyyValueReplace($("#desc").val());
+			var code = cmbcgbyyValueReplace($("#tz_regCode").val());
+			var tcOPRID= cmbcgbyyValueReplace($("#tcOPRID").val());
 			console.log(type);
 			console.log(desc);
 			console.log(code);
 			console.log(tcOPRID);
 			
-			var strParam = "{\"PJTYPE\":\"" + type + "\",,\"\PJDESC":\"" + desc + "\",\"CODE\":\"" + code + "\",\"TOPRID\":\"" + tcOPRID + "\"}";
+			var strParam = '{"PJTYPE":"' + type + '","PJDESC":"' + desc + '","CODE":"' + code + '","TOPRID":"' + tcOPRID + '"}';
 			//"comParams":{"TZ_APPLY_ID":"1293","TZ_CYR_NAME":"1","TZ_ZY_SJ":"111","TZ_ZY_EMAIL":"11@11.com","TZ_ZXBM_XXX_001":"11","tz_regCode":"7ubr"}}
 
-			strComParams = "{\"ComID\":\"PX_STU_TEA_STD\",\"PageID\":\"PX_STU_TEA_STD\",\"OperateType\":\"EJSON\",\"comParams\":"
-					+ strParam + "}";
+			strComParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"EJSON","comParams":'
+					+ strParam + '}';
 
 			// strComParams = $.parseJSON(strComParams);
 			// console.log(strComParams);
@@ -317,6 +320,7 @@ body, button, input, select, textarea {
 				// data: {"tzParams":strComParams},
 				dataType : "json",
 				success : function(data) {
+					console.log(data);
 					var result = data.comContent.result;
 					var resultDesc = data.comContent.resultDesc;
 					if (result == "1") {

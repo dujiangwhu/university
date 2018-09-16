@@ -17,6 +17,10 @@
 		$("#letf_menu").height(922);
     });
 	
+	function selectRadioClassId(num){
+		$("input[name='classidradio']").eq(num).click();
+	}
+	
 	
 	//变换课程类型
 	function changK(m,n,viewType){
@@ -40,14 +44,9 @@
 	}
 	
 	//上课,需要调用接口，目前没有
-	function shangK(KKID){
-		alert("上"+KKID+"课程");
-		
-	}
-	
-	//取消约课
-	function cancel(KKID){
-		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_COURSE_STD","OperateType":"cancel","comParams":{"kkid":"' + KKID+ '"}}';
+	function TeashangK(KKID){
+		//alert("上"+KKID+"课程");
+		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_COURSE_STD","OperateType":"HTML","comParams":{"htmlTpye":"showFile","SCHEDULE_ID":"' + KKID+ '"}}';
 		$.ajax({
 			type:"POST",
 			url: urlBegin,
@@ -55,12 +54,67 @@
 				tzParams:tzParams
 			},
 			success:function(response){
+				var divhtml='<div class="modal-backdrop fade in"></div>';
+				divhtml +='<div aria-hidden="false" style="display: block;" class="modal fade in" tabindex="-1" role="dialog"> ';
+				divhtml +='	<div class="modal-dialog">    ';
+				divhtml +='		<div class="modal-content">';
+				divhtml +='			<div class="modal-header">';
+				divhtml +='				<span class="close" data-dismiss="modal" aria-hidden="true">×</span>';
+				divhtml +='				<h4 class="modal-title">选择授课课件</h4>';
+				divhtml +='			</div>';
+				divhtml +='			<div class="modal-body">';
+				divhtml +='				<div class="index-bm-notapproved">';
+				divhtml +=response;
+				divhtml +='				</div>';
+				divhtml +='			</div>';
+				divhtml +='		</div> ';
+				divhtml +='	</div>';
+				divhtml +='</div>';
+				$("div#showWindDiv").html(divhtml);
+				$("div#showWindDiv").show();
+			
+				$("span.close").click(function(){
+					$("div#showWindDiv").hide();
+				});
+			},
+			failure: function () {
+			}    
+		});		
+		
+	}
+	
+	function addBmb(){
+		var classidVale = $('input[name="classidradio"]:checked ').val();
+		var course  = $('#course').val();
+		console.log(classidVale);
+		console.log(course);
+		if(classidVale == null || classidVale == ""){
+			alert("请选择文件");
+		}else{
+			//打开新页面。去课程可以
+			alert("打开新页面");
+			
+		}
+	}
+	
+	//取消约课
+	function Teacancel(KKID){
+		alert("课程取消请联系管理员");
+		/*var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_COURSE_STD","OperateType":"cancel","comParams":{"kkid":"' + KKID+ '"}}';
+		$.ajax({
+			type:"POST",
+			url: urlBegin,
+			data:{
+				tzParams:tzParams
+			},
+			dataType: "JSON",
+			success:function(response){
 				console.log(response);
 				alert(response.cancelRs);
 			},
 			failure: function () {
 			}    
-		});	
+		});	 */
 	}
 </script>
 

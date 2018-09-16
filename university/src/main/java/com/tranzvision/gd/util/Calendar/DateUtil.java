@@ -278,8 +278,8 @@ public class DateUtil {
 	}
 
 	public static void main(String[] args) {
-		String a = "yyyyMMddHHmmss";
-		System.out.println(a.substring(0, 6));
+		String a = "2018-09-16 09:00:01";
+		System.out.println(a.substring(0, 16));
 		System.out.println("----begin----");
 		// try {
 		// java.lang.Thread.sleep(100000);

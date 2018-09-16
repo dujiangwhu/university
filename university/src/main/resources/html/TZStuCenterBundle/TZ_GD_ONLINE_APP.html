@@ -32,7 +32,7 @@
     				tzParams:tzParams
     			},
     			success:function(response){
-    				console.log(response);
+    				//console.log(response);
     				$("#course").append(response);
     			},
     			failure: function () {
@@ -129,9 +129,10 @@
 			data:{
 				tzParams:tzParams
 			},
+			dataType: "JSON",
 			success:function(response){
 				console.log(response);
-				alert(response.yyRs);
+				alert(response.comContent.yyRs);
 			},
 			failure: function () {
 			}    
@@ -210,8 +211,9 @@
 						</div>
 					</div>
 				</div>
-				
+				<div class="o-application">
 				<div id="loadXK">
+				</div>
 				</div>
 
 				

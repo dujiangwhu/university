@@ -27,6 +27,7 @@ import com.tranzvision.gd.util.Calendar.DateUtil;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.TzSystemException;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
@@ -70,6 +71,10 @@ public class OnlineAPPImpl extends FrameworkImpl {
 	private PxTeaScheduleTMapper pxTeaScheduleTMapper;
 	@Autowired
 	private PxTeacherMapper pxTeacherMapper;
+	
+	@Autowired
+	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
+
 
 	@Override
 	public String tzGetHtmlContent(String strParams) {
@@ -95,6 +100,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 			String contextPath = request.getContextPath();
 			// 查看教师信息和评论
 			String tcOPRID = jacksonUtil.getString("tcOPRID");
+			tcOPRID = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(tcOPRID);
 			// 教师信息
 			PxTeacher pxTeacher = pxTeacherMapper.selectByPrimaryKey(tcOPRID);
 
@@ -182,9 +188,20 @@ public class OnlineAPPImpl extends FrameworkImpl {
 					}
 				}
 				try {
+					String EDUCATION_BG = "";
+					if (pxTeacher.getEducationBg() != null) {
+						EDUCATION_BG = pxTeacher.getEducationBg();
+						if (EDUCATION_BG.equals("D")) {
+							EDUCATION_BG = "博士";
+						} else if (EDUCATION_BG.equals("S")) {
+							EDUCATION_BG = "硕士";
+						} else if (EDUCATION_BG.equals("X")) {
+							EDUCATION_BG = "学士";
+						}
+					}
 					strRet = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_GD_SHOW_TAR", true, userPhoto,
 							pxTeacher.getName(), sex, String.valueOf(pxTeacher.getAge()), pxTeacher.getLevel(),
-							pxTeacher.getSchool(), pxTeacher.getEducationBg(), String.valueOf(pxTeacher.getSchoolAge()),
+							pxTeacher.getSchool(), EDUCATION_BG, String.valueOf(pxTeacher.getSchoolAge()),
 							pxTeacher.getTeacherCard(), pxTeacher.getIntroduce(), PLTable, pxTeacher.getIdCard());
 				} catch (TzSystemException e) {
 					// TODO Auto-generated catch block
@@ -196,6 +213,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 		} else if (htmlTpye != null && htmlTpye.equals("select")) {
 			// 根据课程类型，获取课程列表
 			String courseTypeId = jacksonUtil.getString("courseTypeId");
+			courseTypeId = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(courseTypeId);
 			String sql = "SELECT TZ_COURSE_ID,TZ_COURSE_NAME FROM PX_COURSE_T WHERE TZ_COURSE_TYPE_ID=?";
 
 			List<Map<String, Object>> l = jdbcTemplate.queryForList(sql, new Object[] { courseTypeId });
@@ -309,36 +327,39 @@ public class OnlineAPPImpl extends FrameworkImpl {
 	 * @return
 	 */
 	private String getTable(String courseId, String oprid, String date) {
-
+		// String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 		// 指定时间 所有已经 排这本课程的老师列表
 		String starDate = date + " 00:00:00";
 		String endDate = date + " 23:59:59";
 
 		StringBuffer sb = new StringBuffer();
-		sb.append("SELECT ");
-		sb.append("	A.TZ_SCHEDULE_ID, ");
-		sb.append("	A.OPRID, ");
-		sb.append("	date_format(A.TZ_CLASS_START_TIME,'%Y-%m-%d %H:%I:%S') AS A.TZ_CLASS_START_TIME, ");
-		sb.append("	date_format(A.TZ_CLASS_END_TIME,'%Y-%m-%d %H:%I:%S') AS A.TZ_CLASS_END_TIME, ");
-		sb.append("	B.TZ_REALNAME, ");
-		sb.append("	C.SCHOOL_AGE, ");
-		sb.append("	C.EDUCATION_BG ");
-		sb.append("FROM ");
-		sb.append("	PX_TEA_SCHEDULE_T A ");
-		sb.append("LEFT JOIN PS_TZ_AQ_YHXX_TBL B ON A.OPRID = B.OPRID ");
-		sb.append("LEFT JOIN PX_TEACHER_T C ON A.OPRID = C.OPRID ");
-		sb.append("WHERE ");
-		sb.append(" A.TZ_COURSE_ID =? ");
-		sb.append("AND A.TZ_SCHEDULE_TYPE = ? ");
-		sb.append("AND A.TZ_CLASS_START_TIME >=? ");
-		sb.append("AND A.TZ_CLASS_START_TIME <=? ");
+		StringBuffer sql = new StringBuffer();
+		sql.append("SELECT ");
+		sql.append("	A.TZ_SCHEDULE_ID, ");
+		sql.append("	A.OPRID, ");
+		sql.append("	date_format(A.TZ_CLASS_START_TIME,'%Y-%m-%d %H:%i:%S') AS TZ_CLASS_START_TIME, ");
+		sql.append("	date_format(A.TZ_CLASS_END_TIME,'%Y-%m-%d %H:%i:%S') AS TZ_CLASS_END_TIME, ");
+		sql.append("	B.TZ_REALNAME, ");
+		sql.append("	C.SCHOOL_AGE, ");
+		sql.append("	C.EDUCATION_BG ");
+		sql.append("FROM ");
+		sql.append("	PX_TEA_SCHEDULE_T A ");
+		sql.append("LEFT JOIN PS_TZ_AQ_YHXX_TBL B ON A.OPRID = B.OPRID ");
+		sql.append("LEFT JOIN PX_TEACHER_T C ON A.OPRID = C.OPRID ");
+		sql.append("WHERE ");
+		sql.append(" A.TZ_COURSE_ID =? ");
+		sql.append("AND A.TZ_SCHEDULE_TYPE = ? ");
+		sql.append("AND A.TZ_CLASS_START_TIME >=? ");
+		sql.append("AND A.TZ_CLASS_START_TIME <=? ");
 
-		String sql = "SELECT COUNT(*) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS='0'";
+		String sqlxx = "SELECT COUNT(*) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS='0' AND OPRID=?";
 
 		try {
-
-			List<Map<String, Object>> l = jdbcTemplate.queryForList(sb.toString(),
-					new Object[] { courseId, '0', starDate, endDate });
+			System.out.println(courseId);
+			System.out.println(starDate);
+			System.out.println(endDate);
+			List<Map<String, Object>> l = jdbcTemplate.queryForList(sql.toString(),
+					new Object[] { courseId, "0", starDate, endDate });
 			sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"index-bm-border\">");
 			sb.append("<tbody><tr class=\"index_hd\">");
 			sb.append("<td valign=\"middle\" width=\"15%\" align=\"left\" style=\"padding-left:5px;\" >授课教师</td>");
@@ -364,8 +385,18 @@ public class OnlineAPPImpl extends FrameworkImpl {
 				String OPRID = "";
 				for (int i = 0; i < l.size(); i++) {
 					TZ_REALNAME = (String) l.get(i).get("TZ_REALNAME");
-					SCHOOL_AGE = (String) l.get(i).get("SCHOOL_AGE");
+					SCHOOL_AGE = l.get(i).get("SCHOOL_AGE").toString();
 					EDUCATION_BG = (String) l.get(i).get("EDUCATION_BG");
+					if (EDUCATION_BG != null) {
+						if (EDUCATION_BG.equals("D")) {
+							EDUCATION_BG = "博士";
+						} else if (EDUCATION_BG.equals("S")) {
+							EDUCATION_BG = "硕士";
+						} else if (EDUCATION_BG.equals("X")) {
+							EDUCATION_BG = "学士";
+						}
+					}
+
 					TZ_CLASS_START_TIME = (String) l.get(i).get("TZ_CLASS_START_TIME");
 					TZ_CLASS_END_TIME = (String) l.get(i).get("TZ_CLASS_END_TIME");
 					TZ_SCHEDULE_ID = (String) l.get(i).get("TZ_SCHEDULE_ID");
@@ -379,13 +410,13 @@ public class OnlineAPPImpl extends FrameworkImpl {
 					sb.append("<td valign=\"middle\" width=\"15%\" align=\"left\" style=\"padding-left:5px;\" >"
 							+ EDUCATION_BG + "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >"
-							+ TZ_CLASS_START_TIME + "</td>");
+							+ TZ_CLASS_START_TIME.substring(0, 16) + "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >"
-							+ TZ_CLASS_END_TIME + "</td>");
+							+ TZ_CLASS_END_TIME.substring(0, 16) + "</td>");
 
-					int count = jdbcTemplate.queryForObject(sql, new Object[] { TZ_SCHEDULE_ID }, "Integer");
+					int count = jdbcTemplate.queryForObject(sqlxx, new Object[] { TZ_SCHEDULE_ID, oprid }, "Integer");
 
-					if (count > 0) {
+					if (count == 0) {
 						sb.append(
 								"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='showT(\""
 										+ OPRID
@@ -426,7 +457,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 				// 在线预约
 				// 先查询预定表是否有记录，如果有记录并且状态正常，返回错误，
 				String TZ_SCHEDULE_ID = jacksonUtil.getString("TZ_SCHEDULE_ID");
-
+				TZ_SCHEDULE_ID = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(TZ_SCHEDULE_ID);
 				int flag = 0;
 
 				PxTeaScheduleT pxTeaScheduleT = pxTeaScheduleTMapper.selectByPrimaryKey(TZ_SCHEDULE_ID);

@@ -69,7 +69,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 
 		if (htmlTpye != null && htmlTpye.equals("search")) {
 			String opType = jacksonUtil.getString("opType");
-			
+
 			return this.getTable(opType, oprid);
 		} else {
 
@@ -141,7 +141,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 		// 距离多少小时属于即将上课
 		String limitHour = jdbcTemplate.queryForObject(
 				"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
-				new Object[] { "TZ_LIMIT_HOUR" }, "String");
+				new Object[] { "TZ_LIMIT_MINUTE" }, "String");
 		StringBuffer sb = new StringBuffer();
 		Date now = new Date();
 		String path = request.getContextPath();
@@ -153,7 +153,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 		long currentTime = System.currentTimeMillis();
 
 		// 加N小时
-		currentTime += Integer.parseInt(limitHour) * 60 * 60 * 1000;
+		currentTime += Integer.parseInt(limitHour) * 60 * 1000;
 
 		Date date = new Date(currentTime);
 
@@ -162,8 +162,11 @@ public class MyOverCourseImpl extends FrameworkImpl {
 		List<Map<String, Object>> l = null;
 		String sql = "";
 
-		String annexSQL = "SELECT TZ_ATTACHFILE_NAME,TZ_ATT_A_URL FROM PX_COURSE_ANNEX_T WHERE TZ_COURSE_ID=?";
+		String annexSQL = "SELECT TZ_ATTACHFILE_NAME,TZ_ATT_A_URL,TZ_ATTACHSYSFILENA FROM PX_COURSE_ANNEX_T WHERE TZ_COURSE_ID=?";
 		List<Map<String, Object>> annex = null;
+		String TZ_ATTACHFILE_NAME = "";
+		String TZ_ATT_A_URL = "";
+		String TZ_ATTACHSYSFILENA = "";
 		try {
 			switch (opType) {
 			// 1预约课程 2正在上课 3上完课程 4即将开课 5取消课程 6 缺课
@@ -227,8 +230,8 @@ public class MyOverCourseImpl extends FrameworkImpl {
 					sb.append("<tr>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + KCJB
 							+ "</td>");
-					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + SKSJ
-							+ "</td>");
+					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >"
+							+ SKSJ.substring(0, 16) + "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + KEMC
 							+ "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + SKJS
@@ -239,13 +242,26 @@ public class MyOverCourseImpl extends FrameworkImpl {
 					annex = jdbcTemplate.queryForList(annexSQL, new Object[] { TZ_COURSE_ID });
 					if (annex != null && annex.size() > 0) {
 						for (int x = 0; x < annex.size(); x++) {
-							if (x == 0) {
-								flies = "<a href=\"" + path + "/" + l.get(i).get("TZ_ATT_A_URL").toString() + "\">"
-										+ l.get(i).get("TZ_ATTACHFILE_NAME").toString() + "</a>";
+							TZ_ATTACHFILE_NAME = annex.get(i).get("TZ_ATTACHFILE_NAME").toString();
+							TZ_ATT_A_URL = annex.get(i).get("TZ_ATTACHFILE_NAME").toString();
+							TZ_ATTACHSYSFILENA = annex.get(i).get("TZ_ATTACHSYSFILENA").toString();
+
+							if (TZ_ATT_A_URL.startsWith("/")) {
+								TZ_ATT_A_URL = path + TZ_ATT_A_URL;
 							} else {
-								flies = flies + "&nbsp;&nbsp;,&nbsp;&nbsp;" + "<a href=\"" + path + "/"
-										+ l.get(i).get("TZ_ATT_A_URL").toString() + "\">"
-										+ l.get(i).get("TZ_ATTACHFILE_NAME").toString() + "</a>";
+								TZ_ATT_A_URL = path + "/" + TZ_ATT_A_URL;
+							}
+
+							if (TZ_ATT_A_URL.endsWith("/")) {
+								TZ_ATT_A_URL = TZ_ATT_A_URL + TZ_ATTACHSYSFILENA;
+							} else {
+								TZ_ATT_A_URL = TZ_ATT_A_URL + "/" + TZ_ATTACHSYSFILENA;
+							}
+							if (x == 0) {
+								flies = "<a href=\"" + TZ_ATT_A_URL + "\">" + TZ_ATTACHFILE_NAME + "</a>";
+							} else {
+								flies = flies + "&nbsp;&nbsp;,&nbsp;&nbsp;" + "<a href=\"" + TZ_ATT_A_URL + "\">"
+										+ TZ_ATTACHFILE_NAME + "</a>";
 							}
 
 						}
@@ -269,6 +285,5 @@ public class MyOverCourseImpl extends FrameworkImpl {
 
 		return sb.toString();
 	}
-
 
 }

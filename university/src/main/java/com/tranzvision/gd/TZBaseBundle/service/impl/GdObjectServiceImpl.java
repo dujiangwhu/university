@@ -17,6 +17,7 @@ import com.tranzvision.gd.TZWebSiteUtilBundle.service.impl.SiteRepCssServiceImpl
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.Memoryparameter;
 import com.tranzvision.gd.util.base.TzSystemException;
+import com.tranzvision.gd.util.cfgdata.GetHardCodePoint;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
 import com.tranzvision.gd.util.cookie.TzCookie;
 import com.tranzvision.gd.util.session.TzSession;
@@ -88,6 +89,9 @@ public class GdObjectServiceImpl implements GdObjectService {
 
 	@Autowired
 	private SiteRepCssServiceImpl siteRepCssServiceImpl;
+	
+	@Autowired
+	private GetHardCodePoint getHardCodePoint;
 
 	@Override
 	// 获取当前登录会话语言代码的方法
@@ -636,7 +640,17 @@ public class GdObjectServiceImpl implements GdObjectService {
 							"select TZ_SITE_LANG from PS_TZ_SITEI_DEFN_T where TZ_SITEI_ID=?", new Object[] { siteId },
 							"String");
 					if (tmpOrgID != null && !"".equals(tmpOrgID)) {
-						tmpLoginURL = request.getContextPath() + "/user/login/" + tmpOrgID.toLowerCase() + "/" + siteId;
+						String stuSiteid = getHardCodePoint.getHardCodePointVal("TZ_STU_MH");
+						String teaSiteid = getHardCodePoint.getHardCodePointVal("TZ_TEA_MH");
+						
+						if (siteId.equals(stuSiteid)) {
+							tmpLoginURL = request.getContextPath() + "/user/login/stuLogin";
+						} else if (siteId.equals(teaSiteid)) {
+							tmpLoginURL = request.getContextPath() + "/user/login/teaLogin";
+						} else {
+							tmpLoginURL = request.getContextPath() + "/user/login/" + tmpOrgID.toLowerCase() + "/" + siteId;
+						}
+						//tmpLoginURL = request.getContextPath() + "/user/login/" + tmpOrgID.toLowerCase() + "/" + siteId;
 					}
 				}
 
@@ -653,7 +667,16 @@ public class GdObjectServiceImpl implements GdObjectService {
 							"select TZ_SITE_LANG from PS_TZ_SITEI_DEFN_T where TZ_SITEI_ID=?", new Object[] { siteId },
 							"String");
 					if (tmpOrgID != null && !"".equals(tmpOrgID)) {
-						tmpLoginURL = request.getContextPath() + "/user/login/" + tmpOrgID.toLowerCase() + "/" + siteId;
+						String stuSiteid = getHardCodePoint.getHardCodePointVal("TZ_STU_MH");
+						String teaSiteid = getHardCodePoint.getHardCodePointVal("TZ_TEA_MH");
+						
+						if (siteId.equals(stuSiteid)) {
+							tmpLoginURL = request.getContextPath() + "/user/login/stuLogin";
+						} else if (siteId.equals(teaSiteid)) {
+							tmpLoginURL = request.getContextPath() + "/user/login/teaLogin";
+						} else {
+							tmpLoginURL = request.getContextPath() + "/user/login/" + tmpOrgID.toLowerCase() + "/" + siteId;
+						}
 					} else {
 						tmpOrgID = "";
 						tmpLoginURL = request.getContextPath() + "/login";
@@ -674,8 +697,17 @@ public class GdObjectServiceImpl implements GdObjectService {
 						String sql = "SELECT count(1) FROM PS_TZ_JG_BASE_T WHERE TZ_JG_EFF_STA='Y' AND LOWER(TZ_JG_ID)=LOWER(?)";
 						int count = jdbcTemplate.queryForObject(sql, new Object[] { tmpOrgID }, "Integer");
 						if ("SQR".equals(tmpLoginType)) {
-							tmpLoginURL = request.getContextPath() + "/user/login/" + tmpOrgID.toLowerCase() + "/"
-									+ siteId;
+							String stuSiteid = getHardCodePoint.getHardCodePointVal("TZ_STU_MH");
+							String teaSiteid = getHardCodePoint.getHardCodePointVal("TZ_TEA_MH");
+							
+							if (siteId.equals(stuSiteid)) {
+								tmpLoginURL = request.getContextPath() + "/user/login/stuLogin";
+							} else if (siteId.equals(teaSiteid)) {
+								tmpLoginURL = request.getContextPath() + "/user/login/teaLogin";
+							} else {
+								tmpLoginURL = request.getContextPath() + "/user/login/" + tmpOrgID.toLowerCase() + "/" + siteId;
+							}
+							
 						} else {
 							if (count > 0) {
 								tmpLoginURL = request.getContextPath() + "/login/" + tmpOrgID.toLowerCase();
