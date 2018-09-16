@@ -25,6 +25,8 @@ import com.tranzvision.gd.TZAccountMgBundle.model.Psroleuser;
 import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
+import com.tranzvision.gd.TZLeaguerAccountBundle.dao.PsTzRegUserTMapper;
+import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsTzRegUserT;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZOrganizationMgBundle.model.PsTzJgBaseTWithBLOBs;
 import com.tranzvision.gd.TZPXBundle.dao.PkStuCourseChangeTMapper;
@@ -70,7 +72,8 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 	private PsoprdefnMapper psoprdefnMapper;
 	@Autowired
 	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
-	
+	@Autowired
+	private PsTzRegUserTMapper psTzRegUserTMapper;
 	@Autowired
 	private TzLoginServiceImpl tzLoginServiceImpl;
 	
@@ -491,6 +494,7 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 					pxStudentT.setAge(0);
 					pxStudentT.setQq("");
 					pxStudentT.setEmail("");
+					pxStudentT.setPhone(strStuPhone);
 					pxStudentT.setContact("");
 					pxStudentT.setContactPhone("");
 					pxStudentT.setContactAddress("");
@@ -498,6 +502,19 @@ public class TzTrainStudentListServiceImpl extends FrameworkImpl {
 					pxStudentT.setTimecardUsed(0);
 					pxStudentT.setStuStatus("A");
 					pxStudentTMapper.insert(pxStudentT);
+					
+					
+					/*添加学员注册信息表*/
+					PsTzRegUserT psTzRegUserT = new PsTzRegUserT();
+					psTzRegUserT.setOprid(oprID);
+					psTzRegUserT.setTzRealname(strStuName);
+					psTzRegUserT.setTzGender("");
+					psTzRegUserT.setTzComment1("");
+					psTzRegUserT.setTzComment2("");
+					psTzRegUserT.setTzComment3("");
+					psTzRegUserT.setTzComment4("");
+					psTzRegUserT.setTzComment5("");
+					psTzRegUserTMapper.insert(psTzRegUserT);
 					
 				}						
 			}

@@ -17,11 +17,14 @@ import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
 import com.tranzvision.gd.TZAccountMgBundle.dao.PsoprdefnMapper;
 import com.tranzvision.gd.TZAccountMgBundle.dao.PsroleuserMapper;
 import com.tranzvision.gd.TZAccountMgBundle.model.PsTzAqYhxxTbl;
+import com.tranzvision.gd.TZAccountMgBundle.model.PsTzAqYhxxTblKey;
 import com.tranzvision.gd.TZAccountMgBundle.model.Psoprdefn;
 import com.tranzvision.gd.TZAccountMgBundle.model.Psroleuser;
 import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
+import com.tranzvision.gd.TZLeaguerAccountBundle.dao.PsTzRegUserTMapper;
+import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsTzRegUserT;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxStudentTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxStudentT;
@@ -57,6 +60,9 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 	private PsoprdefnMapper psoprdefnMapper;
 	@Autowired
 	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
+	
+	@Autowired
+	private PsTzRegUserTMapper psTzRegUserTMapper;
 	
 	@Autowired
 	private GetSeqNum getSeqNum;
@@ -269,6 +275,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						pxStudentT.setAge(jacksonUtil.getInt("age"));
 						pxStudentT.setQq(jacksonUtil.getString("qq"));
 						pxStudentT.setEmail(jacksonUtil.getString("email"));
+						pxStudentT.setPhone(phone);
 						pxStudentT.setContact(jacksonUtil.getString("contactor"));
 						pxStudentT.setContactPhone(jacksonUtil.getString("contactorPhone"));
 						pxStudentT.setContactAddress(jacksonUtil.getString("contactorAddress"));
@@ -276,6 +283,18 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						pxStudentT.setTimecardUsed(0);
 						pxStudentT.setStuStatus(usStatu);
 						pxStudentTMapper.insert(pxStudentT);
+						
+						/*添加学员注册信息表*/
+						PsTzRegUserT psTzRegUserT = new PsTzRegUserT();
+						psTzRegUserT.setOprid(oprID);
+						psTzRegUserT.setTzRealname(usName);
+						psTzRegUserT.setTzGender(jacksonUtil.getString("sex"));
+						psTzRegUserT.setTzComment1(String.valueOf(jacksonUtil.getInt("age")));
+						psTzRegUserT.setTzComment2(jacksonUtil.getString("qq"));
+						psTzRegUserT.setTzComment3(jacksonUtil.getString("contactor"));
+						psTzRegUserT.setTzComment4(jacksonUtil.getString("contactorPhone"));
+						psTzRegUserT.setTzComment5(jacksonUtil.getString("contactorAddress"));
+						psTzRegUserTMapper.insertSelective(psTzRegUserT);
 						
 						//将机构ID返回
 						Map<String, Object> mapRet = new HashMap<String, Object>();
@@ -313,6 +332,7 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 				//Map<String, Object> infoData  = jacksonUtil.getMap("update");
 				String oprid=jacksonUtil.getString("oprid");
 				String orgid=jacksonUtil.getString("orgid");
+				String phone = jacksonUtil.getString("phone").trim();
 				System.out.println(jacksonUtil.getString("sex"));
 				if(oprid==null){
 					errMsg[0] = "1";
@@ -332,8 +352,47 @@ public class TzTrainStudentInfoServiceImpl extends FrameworkImpl {
 						pxStudentT.setContactPhone(jacksonUtil.getString("contactorPhone"));
 						pxStudentT.setContactAddress(jacksonUtil.getString("contactorAddress"));
 						pxStudentT.setStuStatus(jacksonUtil.getString("statu"));
-
-						pxStudentTMapper.updateByPrimaryKey(pxStudentT);
+						pxStudentTMapper.updateByPrimaryKeySelective(pxStudentT);
+						
+						PsTzAqYhxxTblKey psTzAqYhxxTblKey = new PsTzAqYhxxTblKey();
+						psTzAqYhxxTblKey.setTzDlzhId(phone);
+						psTzAqYhxxTblKey.setTzJgId(orgid);
+						
+						PsTzAqYhxxTbl psTzAqYhxxTbl = psTzAqYhxxTblMapper.selectByPrimaryKey(psTzAqYhxxTblKey);
+						psTzAqYhxxTbl.setTzEmail(jacksonUtil.getString("email"));
+						String updateOperid = tzLoginServiceImpl.getLoginedManagerOprid(request);
+						psTzAqYhxxTbl.setRowLastmantDttm(new Date());
+						psTzAqYhxxTbl.setRowLastmantOprid(updateOperid);
+						psTzAqYhxxTblMapper.updateByPrimaryKey(psTzAqYhxxTbl);
+						
+						/*添加学员注册信息表*/
+						PsTzRegUserT psTzRegUserT = psTzRegUserTMapper.selectByPrimaryKey(oprid);
+						if(psTzRegUserT!=null){
+							System.out.println(jacksonUtil.getString("sex"));
+							System.out.println(jacksonUtil.getString("qq"));
+							System.out.println(jacksonUtil.getString("age"));
+							System.out.println(jacksonUtil.getString("contactor"));
+							System.out.println(jacksonUtil.getString("contactorPhone"));
+							psTzRegUserT.setTzGender(jacksonUtil.getString("sex"));
+							psTzRegUserT.setTzComment1(String.valueOf(jacksonUtil.getInt("age")));
+							psTzRegUserT.setTzComment2(jacksonUtil.getString("qq"));
+							psTzRegUserT.setTzComment3(jacksonUtil.getString("contactor"));
+							psTzRegUserT.setTzComment4(jacksonUtil.getString("contactorPhone"));
+							psTzRegUserT.setTzComment5(jacksonUtil.getString("contactorAddress"));
+							psTzRegUserTMapper.updateByPrimaryKeySelective(psTzRegUserT);
+						}else{
+							psTzRegUserT = new PsTzRegUserT();
+							psTzRegUserT.setOprid(oprid);
+							psTzRegUserT.setTzRealname(jacksonUtil.getString("name"));
+							psTzRegUserT.setTzGender(jacksonUtil.getString("sex"));
+							psTzRegUserT.setTzComment1(String.valueOf(jacksonUtil.getInt("age")));
+							psTzRegUserT.setTzComment2(jacksonUtil.getString("qq"));
+							psTzRegUserT.setTzComment3(jacksonUtil.getString("contactor"));
+							psTzRegUserT.setTzComment4(jacksonUtil.getString("contactorPhone"));
+							psTzRegUserT.setTzComment5(jacksonUtil.getString("contactorAddress"));
+							psTzRegUserTMapper.insertSelective(psTzRegUserT);
+						}
+						
 					}					
 				}
 			}
