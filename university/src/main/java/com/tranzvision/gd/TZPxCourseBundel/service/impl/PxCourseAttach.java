@@ -16,6 +16,7 @@ import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZPXBundle.dao.PxCourseAnnexTMapper;
 import com.tranzvision.gd.TZPXBundle.model.PxCourseAnnexT;
 import com.tranzvision.gd.util.base.JacksonUtil;
+import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
 /**
@@ -36,6 +37,8 @@ public class PxCourseAttach extends FrameworkImpl {
 	private HttpServletRequest request;
 	@Autowired
 	private PxCourseAnnexTMapper pxCourseAnnexMapper;
+	@Autowired
+	private GetSeqNum getSeqNum;
 
 	/* 新增组件注册信息 */
 	@Override
@@ -65,7 +68,7 @@ public class PxCourseAttach extends FrameworkImpl {
 				PxCourseAnnexT pxCourseAnnex=new PxCourseAnnexT();
 				pxCourseAnnex.setTzCourseId(tzCourseId);
 				//需要修改
-				pxCourseAnnex.setTzPkskXh((int)new Date().getTime());
+				pxCourseAnnex.setTzPkskXh(getSeqNum.getSeqNum("PX_COURSE_ANNEX_T", "TZ_PXSK_XH"));
 				pxCourseAnnex.setTzAttachfileName(filename);
 				pxCourseAnnex.setTzAttachsysfilena(sysFileName);
 				pxCourseAnnex.setTzAttAUrl(accessPath);

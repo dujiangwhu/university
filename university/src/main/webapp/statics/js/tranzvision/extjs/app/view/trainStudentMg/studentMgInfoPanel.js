@@ -53,6 +53,11 @@
                 },
                 items: [{
                     xtype: 'hiddenfield',
+                    fieldLabel: 'ORGID',
+                    name: 'orgid'
+                    //fieldStyle:'background:#F4F4F4'
+                },{
+                    xtype: 'hiddenfield',
                     fieldLabel: 'OPRID',
                     name: 'oprid'
                     //fieldStyle:'background:#F4F4F4'

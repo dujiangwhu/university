@@ -3,11 +3,11 @@ SELECT
 	A.TZ_SCHEDULE_ID,
 	date_format(
 		B.TZ_CLASS_START_TIME,
-		'%Y-%m-%d %H:%I:%S'
+		'%Y-%m-%d %H:%i:%S'
 	) AS TZ_CLASS_START_TIME,
 	date_format(
 		B.TZ_CLASS_END_TIME,
-		'%Y-%m-%d %H:%I:%S'
+		'%Y-%m-%d %H:%i:%S'
 	) AS TZ_CLASS_END_TIME,
 	D.TZ_COURSE_TYPE_NAME,
 	E.TZ_COURSE_NAME,

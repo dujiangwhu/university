@@ -14,6 +14,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
+import com.tranzvision.gd.TZLeaguerAccountBundle.dao.PsTzRegUserTMapper;
 import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsTzRegUserT;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
@@ -47,6 +48,9 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 	
 	@Autowired
 	private PsTzAqYhxxTblMapper psTzAqYhxxTblMapper;
+	
+	@Autowired
+	private PsTzRegUserTMapper psTzRegUserTMapper;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -232,6 +236,48 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 						pxTeacher.setIdCard(jacksonUtil.getString("idCard"));
 						
 						pxTeacherMapper.updateByPrimaryKey(pxTeacher);
+						
+						
+						/*添加教师注册信息表*/
+						PsTzRegUserT psTzRegUserT = psTzRegUserTMapper.selectByPrimaryKey(oprid);
+						if(psTzRegUserT!=null){
+							psTzRegUserT.setTzRealname(jacksonUtil.getString("name"));
+							psTzRegUserT.setTzGender(jacksonUtil.getString("sex"));
+							psTzRegUserT.setNationalId(jacksonUtil.getString("idCard"));
+							psTzRegUserT.setTzHighestEdu(jacksonUtil.getString("educationBg"));
+							psTzRegUserT.setTzComment1(String.valueOf(jacksonUtil.getString("age")));
+							psTzRegUserT.setTzComment2(String.valueOf(jacksonUtil.getString("schoolAge")));
+							psTzRegUserT.setTzComment3(jacksonUtil.getString("qq"));
+							psTzRegUserT.setTzComment4(jacksonUtil.getString("contactor"));
+							psTzRegUserT.setTzComment5(jacksonUtil.getString("contactorPhone"));
+							psTzRegUserT.setTzComment6(jacksonUtil.getString("contactorAddress"));
+							psTzRegUserT.setTzComment7(jacksonUtil.getString("teacherCard"));
+							psTzRegUserT.setTzComment8(jacksonUtil.getString("introduce"));
+							psTzRegUserTMapper.updateByPrimaryKeySelective(psTzRegUserT);
+						}else{
+							psTzRegUserT = new PsTzRegUserT();
+							psTzRegUserT.setOprid(oprid);
+							psTzRegUserT.setTzRealname(jacksonUtil.getString("name"));
+							psTzRegUserT.setTzGender(jacksonUtil.getString("sex"));
+							psTzRegUserT.setNationalId(jacksonUtil.getString("idCard"));
+							psTzRegUserT.setTzHighestEdu(jacksonUtil.getString("educationBg"));
+							psTzRegUserT.setTzComment1(String.valueOf(jacksonUtil.getString("age")));
+							psTzRegUserT.setTzComment2(String.valueOf(jacksonUtil.getString("schoolAge")));
+							psTzRegUserT.setTzComment3(jacksonUtil.getString("qq"));
+							psTzRegUserT.setTzComment4(jacksonUtil.getString("contactor"));
+							psTzRegUserT.setTzComment5(jacksonUtil.getString("contactorPhone"));
+							psTzRegUserT.setTzComment6(jacksonUtil.getString("contactorAddress"));
+							psTzRegUserT.setTzComment7(jacksonUtil.getString("teacherCard"));
+							psTzRegUserT.setTzComment8(jacksonUtil.getString("introduce"));
+							psTzRegUserTMapper.updateByPrimaryKeySelective(psTzRegUserT);
+						}
+						
+						/*机构角色表*/
+						String PS_TZ_AQ_YHXX_TBL = "UPDATE PS_TZ_AQ_YHXX_TBL SET TZ_REALNAME = ?,TZ_EMAIL = ? WHERE TZ_DLZH_ID=?";
+						jdbcTemplate.update(PS_TZ_AQ_YHXX_TBL, new Object[]{
+								jacksonUtil.getString("name").trim(),
+								jacksonUtil.getString("email").trim(),
+								jacksonUtil.getString("phone").trim()});
 					}					
 				}
 			}

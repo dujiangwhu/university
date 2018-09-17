@@ -28,6 +28,7 @@ import com.tranzvision.gd.util.Calendar.DateUtil;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.TzSystemException;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
@@ -65,6 +66,10 @@ public class OnlinePKImpl extends FrameworkImpl {
 
 	@Autowired
 	private PkStuCourseChangeTMapper pkStuCourseChangeTMapper;
+	
+	@Autowired
+	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
+
 
 	/**
 	 * 查看某天 某时间，是否排课
@@ -127,7 +132,7 @@ public class OnlinePKImpl extends FrameworkImpl {
 			String hour = "";
 			for (int i = 0; i < l.size(); i++) {
 				sdata = (String) l.get(i).get("TZ_CLASS_START_TIME");
-				hour = (String) l.get(i).get("TZ_HOUR");
+				hour =  l.get(i).get("TZ_HOUR").toString();
 				hasmap.put(sdata + "@" + hour, "OK");
 			}
 		}
@@ -191,6 +196,7 @@ public class OnlinePKImpl extends FrameworkImpl {
 		if (htmlTpye != null && htmlTpye.equals("select")) {
 			// 根据课程类型，获取课程列表
 			String courseTypeId = jacksonUtil.getString("courseTypeId");
+			courseTypeId = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(courseTypeId);
 			String sql = "SELECT TZ_COURSE_ID,TZ_COURSE_NAME FROM PX_COURSE_T WHERE TZ_COURSE_TYPE_ID=?";
 
 			List<Map<String, Object>> l = jdbcTemplate.queryForList(sql, new Object[] { courseTypeId });
@@ -211,6 +217,8 @@ public class OnlinePKImpl extends FrameworkImpl {
 		} else if (htmlTpye != null && htmlTpye.equals("PKShow")) {
 			String hour = jacksonUtil.getString("hour");
 			String starDate = jacksonUtil.getString("starDate");
+			hour = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(hour);
+			starDate = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(starDate);
 			String sql = "SELECT A.TZ_COURSE_TYPE_ID,A.TZ_COURSE_TYPE_NAME FROM PX_COURSE_TYPE_T A,PX_TEA_COURSE_TYPE_T B where A.TZ_COURSE_TYPE_ID=B.TZ_COURSE_TYPE_ID and B.OPRID=?";
 
 			List<Map<String, Object>> l = jdbcTemplate.queryForList(sql, new Object[] { oprid });
@@ -321,6 +329,11 @@ public class OnlinePKImpl extends FrameworkImpl {
 				String starDate = jacksonUtil.getString("starDate");
 				String courseId = jacksonUtil.getString("courseId");
 				String courseType = jacksonUtil.getString("courseType");
+				
+				hour = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(hour);
+				starDate = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(starDate);
+				courseId = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(courseId);
+				courseType = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(courseType);
 				// 首先检查是否已经排课了
 
 				String sql = "select count(*) from PX_TEA_SCHEDULE_T where date(TZ_CLASS_START_TIME)=? AND hour(TZ_CLASS_START_TIME)=? AND TZ_SCHEDULE_TYPE!=-1";
@@ -380,9 +393,7 @@ public class OnlinePKImpl extends FrameworkImpl {
 				}
 
 			}
-		} catch (
-
-		Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 			errorMsg[0] = "1";
 			errorMsg[1] = e.toString();

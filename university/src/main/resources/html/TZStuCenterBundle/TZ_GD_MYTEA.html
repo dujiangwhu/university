@@ -58,9 +58,10 @@
 			data : {
 				tzParams : tzParams
 			},
+			dataType: "JSON",
 			success : function(response) {
-				console.log(response);
-				alert(response.fouseRs);
+				//console.log(response);
+				alert(response.comContent.fouseRs);
 				window.location.reload();
 			},
 			failure : function() {
@@ -78,9 +79,11 @@
 			data : {
 				tzParams : tzParams
 			},
+			dataType: "JSON",
 			success : function(response) {
 				console.log(response);
-				alert(response.cancelRs);
+				alert(response.comContent.cancelRs);
+				window.location.reload();
 			},
 			failure : function() {
 			}
@@ -128,8 +131,10 @@
 
 	//显示评论窗体
 	function PL(OPRID) {
-		var displayURL = '/dispatcher?tzParams={"PageID":"PX_STU_TEA_STD","comParams":{"htmlTpye":"PLHTML","tcOPRID":"'
-				+ OPRID + '"},"ComID":"PX_STU_CENTER_COM","OperateType":"HTML"}';
+		
+		var displayURL = '/dispatcher?classid=PLTea&htmlTpye=PLHTML&tcOPRID='+OPRID;
+		//var displayURL = '/dispatcher?tzParams={"PageID":"PX_STU_TEA_STD","comParams":{"htmlTpye":"PLHTML","tcOPRID":"'
+		//		+ OPRID + '"},"ComID":"PX_STU_CENTER_COM","OperateType":"HTML"}';
 		var cover = document.createElement("div");
 		cover.className = "cover";
 		cover.style.cssText = "background: none repeat scroll 0 0 rgba(0, 0, 0, 0.5);height: 100%;left: 0;position: fixed;top: 0;width: 100%;z-index: 10000;";
@@ -196,13 +201,14 @@
 				<!--  上课老师 -->
 				<div class="tab1 block">
 					<div class="padding_div_50px"></div>
-					<div class="main_full_line" style="height:100%;width:100%">%bind(:1)</div>
+					<div class="main_full_line" style="height:100%;width:100%"><div class="o-application">%bind(:1)</div></div>
 
 				</div>
 				<!--  我关注的老师-->
 				<div class="tab1">
 					<div class="padding_div_50px"></div>
-					<div class="main_full_line" id="FouseTE" style="height:100%;width:100%"></div>
+					<div class="main_full_line"  style="height:100%;width:100%">
+					<div class="o-application" id="FouseTE"></div></div>
 
 				</div>
 			</div>

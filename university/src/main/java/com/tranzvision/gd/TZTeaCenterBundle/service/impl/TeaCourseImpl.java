@@ -20,6 +20,7 @@ import com.tranzvision.gd.util.Calendar.DateUtil;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.TzSystemException;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
@@ -46,6 +47,9 @@ public class TeaCourseImpl extends FrameworkImpl {
 	@Autowired
 	private GetSeqNum getSeqNum;
 
+	@Autowired
+	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
+
 	@Override
 	public String tzGetHtmlContent(String strParams) {
 		String applicationCenterHtml = "";
@@ -64,6 +68,42 @@ public class TeaCourseImpl extends FrameworkImpl {
 		if (htmlTpye != null && htmlTpye.equals("search")) {
 			String opType = jacksonUtil.getString("opType");
 			return this.getTable(opType, oprid);
+		} else if (htmlTpye != null && htmlTpye.equals("showFile")) {
+			// 显示文档
+			String SCHEDULE_ID = jacksonUtil.getString("SCHEDULE_ID");
+			SCHEDULE_ID = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(SCHEDULE_ID);
+			String sql = "select A.TZ_ATTACHFILE_NAME,A.TZ_PKSK_XH,A.TZ_COURSE_ID FROM PX_COURSE_ANNEX_T A,PX_TEA_SCHEDULE_T B where A.TZ_COURSE_ID = B.TZ_COURSE_ID and B.TZ_SCHEDULE_ID=? and B.OPRID=?";
+			String TZ_ATTACHFILE_NAME = "";
+			String TZ_PKSK_XH = "";
+			String TZ_COURSE_ID = "";
+			List<Map<String, Object>> l = jdbcTemplate.queryForList(sql, new Object[] { SCHEDULE_ID, oprid });
+			StringBuffer sb = new StringBuffer();
+			if (l != null && l.size() > 0) {
+				for (int i = 0; i < l.size(); i++) {
+					TZ_ATTACHFILE_NAME = l.get(i).get("TZ_ATTACHFILE_NAME") == null ? ""
+							: l.get(i).get("TZ_ATTACHFILE_NAME").toString();
+					TZ_PKSK_XH = l.get(i).get("TZ_PKSK_XH") == null ? "" : l.get(i).get("TZ_PKSK_XH").toString();
+					TZ_COURSE_ID = l.get(i).get("TZ_COURSE_ID") == null ? "" : l.get(i).get("TZ_COURSE_ID").toString();
+					sb.append("<tr class='font666'>");
+					sb.append("<td valign='middle' width='30' align='center'>");
+					sb.append("<input style='width: 15px;' type='radio' name='classidradio' value='"+TZ_PKSK_XH+"'>");
+					sb.append("</td> ");
+					sb.append("<td valign='middle' width='417' align='left' onclick='selectRadioClassId("+i+")'>");
+					
+					sb.append(TZ_ATTACHFILE_NAME);
+					sb.append("</td></tr> ");
+				}
+			}
+			String returnHtml = "";
+			try {
+				returnHtml = tzGDObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_GD_CHOOSE_FILE", true, sb.toString(),
+						TZ_COURSE_ID);
+			} catch (TzSystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			return returnHtml;
+
 		} else {
 
 			// 查询类型：0本周课程 1下周课程 2即将上课 3正在上课 4上完课程 5取消课程
@@ -110,7 +150,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 			String classSelectHtml = "";
 			try {
 				classSelectHtml = tzGDObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_GD_TEA_COURSE", true, table,
-						ZSGL_URL, strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath());
+						ZSGL_URL, strCssDir, "我的排课课表", str_jg_id, strSiteId, request.getContextPath());
 			} catch (TzSystemException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -134,7 +174,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 		// 距离多少小时属于即将上课
 		String limitHour = jdbcTemplate.queryForObject(
 				"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
-				new Object[] { "TZ_LIMIT_HOUR" }, "String");
+				new Object[] { "TZ_LIMIT_MINUTE" }, "String");
 		StringBuffer sb = new StringBuffer();
 		Date now = new Date();
 		String formatString = "yyyy-MM-dd HH:mm:ss";
@@ -144,8 +184,8 @@ public class TeaCourseImpl extends FrameworkImpl {
 
 		long currentTime = System.currentTimeMillis();
 
-		// 加N小时
-		currentTime += Integer.parseInt(limitHour) * 60 * 60 * 1000;
+		// 加N分钟
+		currentTime += Integer.parseInt(limitHour)  * 60 * 1000;
 
 		Date date = new Date(currentTime);
 
@@ -221,11 +261,18 @@ public class TeaCourseImpl extends FrameworkImpl {
 					KEMC = (String) l.get(i).get("TZ_COURSE_NAME");
 					status = (String) l.get(i).get("TZ_SCHEDULE_TYPE");
 					KKID = (String) l.get(i).get("TZ_SCHEDULE_ID");
+
+					System.out.println(KCJB);
+					System.out.println(SKSJ);
+					System.out.println(JSSJ);
+					System.out.println(KEMC);
+					System.out.println(status);
+					System.out.println(KKID);
 					sb.append("<tr>");
 					sb.append("<td valign=\"middle\" width=\"25%\" align=\"left\" style=\"padding-left:5px;\" >" + KCJB
 							+ "</td>");
-					sb.append("<td valign=\"middle\" width=\"25%\" align=\"left\" style=\"padding-left:5px;\" >" + SKSJ
-							+ "</td>");
+					sb.append("<td valign=\"middle\" width=\"25%\" align=\"left\" style=\"padding-left:5px;\" >"
+							+ SKSJ.substring(0, 16) + "</td>");
 					sb.append("<td valign=\"middle\" width=\"25%\" align=\"left\" style=\"padding-left:5px;\" >" + KEMC
 							+ "</td>");
 					// 查询类型：0本周课程 1下周课程 2即将上课 3正在上课 4上完课程 5取消课程
@@ -238,8 +285,8 @@ public class TeaCourseImpl extends FrameworkImpl {
 						// 如果当前时间小于 开始时间，显示等待上课
 
 						if (status.equals("0")) {
-							Date starDate = DateUtil.parse(SKSJ);
-							Date endDate = DateUtil.parse(JSSJ);
+							Date starDate = DateUtil.parseTimeStamp(SKSJ);
+							Date endDate = DateUtil.parseTimeStamp(JSSJ);
 							// 结束时间小于 当前时间，缺课
 							if (endDate.compareTo(now) < 0) {
 								sb.append(

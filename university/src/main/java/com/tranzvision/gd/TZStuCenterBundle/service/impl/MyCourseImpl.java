@@ -20,6 +20,7 @@ import com.tranzvision.gd.util.Calendar.DateUtil;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.TzSystemException;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
@@ -51,6 +52,10 @@ public class MyCourseImpl extends FrameworkImpl {
 
 	@Autowired
 	private GetSeqNum getSeqNum;
+	
+
+	@Autowired
+	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
 
 	@Override
 	public String tzGetHtmlContent(String strParams) {
@@ -140,7 +145,7 @@ public class MyCourseImpl extends FrameworkImpl {
 		// 距离多少小时属于即将上课
 		String limitHour = jdbcTemplate.queryForObject(
 				"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
-				new Object[] { "TZ_LIMIT_HOUR" }, "String");
+				new Object[] { "TZ_LIMIT_MINUTE" }, "String");
 		StringBuffer sb = new StringBuffer();
 		Date now = new Date();
 
@@ -150,8 +155,8 @@ public class MyCourseImpl extends FrameworkImpl {
 
 		long currentTime = System.currentTimeMillis();
 
-		// 加N小时
-		currentTime += Integer.parseInt(limitHour) * 60 * 60 * 1000;
+		// 加N分钟
+		currentTime += Integer.parseInt(limitHour) * 60 * 1000;
 
 		Date date = new Date(currentTime);
 
@@ -226,7 +231,7 @@ public class MyCourseImpl extends FrameworkImpl {
 					sb.append("<tr>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + KCJB
 							+ "</td>");
-					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + SKSJ
+					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + SKSJ.substring(0, 16)
 							+ "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + KEMC
 							+ "</td>");
@@ -242,8 +247,8 @@ public class MyCourseImpl extends FrameworkImpl {
 					switch (status) {
 					// 0 正常 1 撤销 2已上课
 					case "0":
-						Date starDate = DateUtil.parse(SKSJ);
-						Date endDate = DateUtil.parse(JSSJ);
+						Date starDate = DateUtil.parseTimeStamp(SKSJ);
+						Date endDate = DateUtil.parseTimeStamp(JSSJ);
 						// 结束时间小于 当前时间，缺课
 						if (endDate.compareTo(now) < 0) {
 							sb.append(
@@ -304,7 +309,8 @@ public class MyCourseImpl extends FrameworkImpl {
 				// 预约取消
 
 				String kkid = jacksonUtil.getString("kkid");
-				String sql = "SELECT date_format(B.TZ_CLASS_START_TIME,'%Y-%m-%d %H:%I:%S') AS TZ_CLASS_START_TIME,date_format(B.TZ_CLASS_END_TIME,'%Y-%m-%d %H:%I:%S') AS TZ_CLASS_END_TIME FROM PX_TEA_SCHEDULE_T B WHERE B.TZ_SCHEDULE_ID=?";
+				kkid = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(kkid);
+				String sql = "SELECT date_format(B.TZ_CLASS_START_TIME,'%Y-%m-%d %H:%i:%S') AS TZ_CLASS_START_TIME,date_format(B.TZ_CLASS_END_TIME,'%Y-%m-%d %H:%i:%S') AS TZ_CLASS_END_TIME FROM PX_TEA_SCHEDULE_T B WHERE B.TZ_SCHEDULE_ID=?";
 
 				String TZ_CLASS_START_TIME = "";
 				String TZ_CLASS_END_TIME = "";
@@ -328,8 +334,8 @@ public class MyCourseImpl extends FrameworkImpl {
 				currentTime += Integer.parseInt(limitHour) * 60 * 60 * 1000;
 
 				Date date = new Date(currentTime);
-				Date starDate = DateUtil.parse(TZ_CLASS_START_TIME);
-				Date endDate = DateUtil.parse(TZ_CLASS_END_TIME);
+				Date starDate = DateUtil.parseTimeStamp(TZ_CLASS_START_TIME);
+				Date endDate = DateUtil.parseTimeStamp(TZ_CLASS_END_TIME);
 
 				if (starDate.compareTo(now) <= 0 && endDate.compareTo(now) > 0) {
 					strRet = "{\"cancelRs\":\"正在上课前不可取消\"}";

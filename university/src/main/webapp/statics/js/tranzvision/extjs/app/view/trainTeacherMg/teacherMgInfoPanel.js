@@ -124,9 +124,15 @@
                     fieldLabel: '毕业院校',
                     name: 'school'
                 },{
-                    xtype: 'textfield',
+                    xtype: 'combobox',
                     fieldLabel: '学历',
-                    name: 'educationBg'
+                    name: 'educationBg',
+					editable:false,
+                    emptyText:'请选择',
+                    queryMode: 'remote',
+            	    	valueField: 'TValue',
+                		displayField: 'TSDesc',
+                		store: new KitchenSink.view.common.store.appTransStore("TZ_EDU_BG")
                 },{
                     xtype: 'textfield',
                     fieldLabel: '教龄',

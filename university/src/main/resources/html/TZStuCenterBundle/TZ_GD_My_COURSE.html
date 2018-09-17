@@ -32,7 +32,7 @@
 				tzParams:tzParams
 			},
 			success:function(response){
-				console.log(response);
+				//console.log(response);
 				$("#loadXK").html(response);
 			},
 			failure: function () {
@@ -56,9 +56,10 @@
 			data:{
 				tzParams:tzParams
 			},
+			dataType: "JSON",
 			success:function(response){
 				console.log(response);
-				alert(response.cancelRs);
+				alert(response.comContent.cancelRs);
 			},
 			failure: function () {
 			}    

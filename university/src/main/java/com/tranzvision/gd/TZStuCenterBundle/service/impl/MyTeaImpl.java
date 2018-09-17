@@ -24,6 +24,7 @@ import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.TzSystemException;
 import com.tranzvision.gd.util.captcha.Patchca;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 import com.tranzvision.gd.util.sql.TZGDObject;
@@ -58,6 +59,10 @@ public class MyTeaImpl extends FrameworkImpl {
 	private PxTeacherMapper pxTeacherMapper;
 	@Autowired
 	private PxStuReviewTeaTMapper pxStuReviewTeaTMapper;
+	
+
+	@Autowired
+	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
 
 	@Override
 	public String tzGetHtmlContent(String strParams) {
@@ -74,11 +79,18 @@ public class MyTeaImpl extends FrameworkImpl {
 			htmlTpye = jacksonUtil.getString("htmlTpye");
 		}
 
+		if (htmlTpye == null || htmlTpye.equals("")) {
+			htmlTpye = request.getParameter("htmlTpye");
+		}
+
 		if (htmlTpye != null && htmlTpye.equals("search")) {
 			String strRet = "";
 			String contextPath = request.getContextPath();
 			// 查看教师信息和评论
 			String tcOPRID = jacksonUtil.getString("tcOPRID");
+			if (tcOPRID == null || tcOPRID.equals("")) {
+				tcOPRID = request.getParameter("tcOPRID");
+			}
 			// 教师信息
 			PxTeacher pxTeacher = pxTeacherMapper.selectByPrimaryKey(tcOPRID);
 
@@ -128,6 +140,7 @@ public class MyTeaImpl extends FrameworkImpl {
 								: l.get(i).get("TZ_REVIEW_DESC").toString();
 						TZ_REVIEW_TIME = l.get(i).get("TZ_REVIEW_TIME") == null ? ""
 								: l.get(i).get("TZ_REVIEW_TIME").toString();
+						
 						sb.append("<div stype=\"padding:15px;border-bottom:1px solid #ddd\">");
 						sb.append("<div>");
 						sb.append("<div style=\"width:78px;height:14px;\">");
@@ -142,7 +155,7 @@ public class MyTeaImpl extends FrameworkImpl {
 							sb.append("<span style=\"color:red\"></span>");
 						}
 						sb.append("</div>");
-						sb.append("<p style=\"font-size:14px;padding:10px 0;line-height:180%;color:#333\">");
+						sb.append("<p style=\"font-size:14px;padding:10px 0;line-height:180%;color:#333;white-space:pre-wrap;word-wrap:break-word; \">");
 						sb.append(TZ_REVIEW_DESC);
 						sb.append("</p>");
 						sb.append("<div>");
@@ -152,6 +165,8 @@ public class MyTeaImpl extends FrameworkImpl {
 						sb.append("</div>");
 						sb.append("</div>");
 						sb.append("</div>");
+						sb.append("<br>");
+						sb.append("<br>");
 					}
 				}
 				PLTable = sb.toString();
@@ -165,10 +180,21 @@ public class MyTeaImpl extends FrameworkImpl {
 						sex = "女";
 					}
 				}
+				String EDUCATION_BG = "";
+				if (pxTeacher.getEducationBg() != null) {
+					EDUCATION_BG = pxTeacher.getEducationBg();
+					if (EDUCATION_BG.equals("D")) {
+						EDUCATION_BG = "博士";
+					} else if (EDUCATION_BG.equals("S")) {
+						EDUCATION_BG = "硕士";
+					} else if (EDUCATION_BG.equals("X")) {
+						EDUCATION_BG = "学士";
+					}
+				}
 				try {
 					strRet = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_GD_SHOW_TAR", true, userPhoto,
 							pxTeacher.getName(), sex, String.valueOf(pxTeacher.getAge()), pxTeacher.getLevel(),
-							pxTeacher.getSchool(), pxTeacher.getEducationBg(), String.valueOf(pxTeacher.getSchoolAge()),
+							pxTeacher.getSchool(), EDUCATION_BG, String.valueOf(pxTeacher.getSchoolAge()),
 							pxTeacher.getTeacherCard(), pxTeacher.getIntroduce(), PLTable, pxTeacher.getIdCard());
 				} catch (TzSystemException e) {
 					// TODO Auto-generated catch block
@@ -183,6 +209,9 @@ public class MyTeaImpl extends FrameworkImpl {
 		} else if (htmlTpye != null && htmlTpye.equals("PLHTML")) {
 			String strRet = "";
 			String tcOPRID = jacksonUtil.getString("tcOPRID");
+			if (tcOPRID == null || tcOPRID.equals("")) {
+				tcOPRID = request.getParameter("tcOPRID");
+			}
 
 			// 校验是否有权限评论，只有拥有课程的才可以评论
 			String sql = "SELECT 'Y' FROM PX_STU_APP_COURSE_T A,PX_TEA_SCHEDULE_T B WHERE A.TZ_SCHEDULE_ID=B.TZ_SCHEDULE_ID AND (A.TZ_APP_STATUS='0' OR  A.TZ_APP_STATUS='2') AND (B.TZ_SCHEDULE_TYPE='0' OR B.TZ_SCHEDULE_TYPE='2') AND A.OPRID=? AND B.OPRID=?";
@@ -237,7 +266,7 @@ public class MyTeaImpl extends FrameworkImpl {
 						+ "</li>";
 
 				try {
-					strRet = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_APPLY_REG_FORM_HEAD", str_items_html,
+					strRet = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_APPLY_REG_FORM_HEAD",true, str_items_html,
 							strUrl, "", "", timeOut, serverError, onlineApplyText, tipsMsg, closeBtn, backBtn,
 							submitBtn, requireTips, request.getContextPath());
 				} catch (TzSystemException e) {
@@ -312,23 +341,23 @@ public class MyTeaImpl extends FrameworkImpl {
 
 		List<Map<String, Object>> l = null;
 		// String sql = "";
-		StringBuffer sql = null;
+		StringBuffer sql = new StringBuffer();
 		StringBuffer sb = new StringBuffer();
 		try {
 			switch (opType) {
 			// 0 上课老师 1。关注老师
 			case "0":
-				sql = new StringBuffer();
+				// sql = new StringBuffer();
 				sql.append("SELECT C.NAME,C.SEX,C.AGE,C.SCHOOL_AGE,C.`LEVEL`,C.SCHOOL,C.EDUCATION_BG,C.OPRID ");
 				sql.append("FROM PX_TEACHER_T C WHERE C.OPRID IN ");
 				sql.append("(SELECT DISTINCT B.OPRID ");
 				sql.append("FROM PX_STU_APP_COURSE_T A,PX_TEA_SCHEDULE_T B ");
-				sql.append("WHERE A.TZ_SCHEDULE_ID =B.TZ_SCHEDULE_ID AND A.OPRID=?) ");
+				sql.append("WHERE A.TZ_SCHEDULE_ID =B.TZ_SCHEDULE_ID AND A.OPRID=? and A.TZ_APP_STATUS!=1) ");
 				l = jdbcTemplate.queryForList(sql.toString(), new Object[] { oprid });
 				break;
 			// 关注老师
 			case "1":
-				sql = new StringBuffer();
+				// sql = new StringBuffer();
 				sql.append("SELECT C.NAME,C.SEX,C.AGE,C.SCHOOL_AGE,C.`LEVEL`,C.SCHOOL,C.EDUCATION_BG,C.OPRID ");
 				sql.append("FROM PX_TEACHER_T C WHERE C.OPRID IN ");
 				sql.append("(SELECT  B.TEA_OPRID ");
@@ -363,19 +392,27 @@ public class MyTeaImpl extends FrameworkImpl {
 				for (int i = 0; i < l.size(); i++) {
 					NAME = (String) l.get(i).get("NAME");
 					SEX = (String) l.get(i).get("SEX");
-					SCHOOL_AGE = (String) l.get(i).get("SCHOOL_AGE");
-					AGE = (String) l.get(i).get("AGE");
+
+					if (SEX != null) {
+						if (SEX.equals("M")) {
+							SEX = "男";
+						} else {
+							SEX = "女";
+						}
+					}
+					SCHOOL_AGE = l.get(i).get("SCHOOL_AGE").toString();
+					AGE = l.get(i).get("AGE").toString();
 					SCHOOL = (String) l.get(i).get("SCHOOL");
-					tcOPRID = (String) l.get(i).get("tcOPRID");
+					tcOPRID = (String) l.get(i).get("OPRID");
 					sb.append("<tr>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + NAME
 							+ "</td>");
 					sb.append("<td valign=\"middle\" width=\"10%\" align=\"left\" style=\"padding-left:5px;\" >" + SEX
 							+ "</td>");
 					sb.append("<td valign=\"middle\" width=\"10%\" align=\"left\" style=\"padding-left:5px;\" >" + AGE
-							+ "</td>");
+							+ "年</td>");
 					sb.append("<td valign=\"middle\" width=\"10%\" align=\"left\" style=\"padding-left:5px;\" >"
-							+ SCHOOL_AGE + "</td>");
+							+ SCHOOL_AGE + "年</td>");
 
 					sb.append("<td valign=\"middle\" width=\"30%\" align=\"left\" style=\"padding-left:5px;\" >"
 							+ SCHOOL + "</td>");
@@ -426,6 +463,7 @@ public class MyTeaImpl extends FrameworkImpl {
 
 			if ("focusT".equals(oprType)) {
 				String tcOPRID = jacksonUtil.getString("tcOPRID");
+				tcOPRID = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(tcOPRID);
 				// 关注教师
 				PxStuFocusTeaTKey key = new PxStuFocusTeaTKey();
 				key.setStuOprid(oprid);
@@ -444,6 +482,7 @@ public class MyTeaImpl extends FrameworkImpl {
 				strRet = "{\"fouseRs\":\"关注成功\"}";
 			} else if ("focusTcancle".equals(oprType)) {
 				String tcOPRID = jacksonUtil.getString("tcOPRID");
+				tcOPRID = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(tcOPRID);
 				PxStuFocusTeaTKey key = new PxStuFocusTeaTKey();
 				key.setStuOprid(oprid);
 				key.setTeaOprid(tcOPRID);
@@ -486,6 +525,11 @@ public class MyTeaImpl extends FrameworkImpl {
 			String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 			// 验证码
 			String strAuthCode = jacksonUtil.getString("CODE");
+			
+			PJTYPE = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(PJTYPE);
+			PJDESC = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(PJDESC);
+			TOPRID = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(TOPRID);
+			strAuthCode = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(strAuthCode);
 
 			String authCodeError = "您输入的验证码有误！";
 

@@ -31,9 +31,11 @@
 	$(document).ready(function(){
     	 
 		//课程类型和课程联动
-		$('#courseType').on("change",function(){
+		$("body").on("change","#courseType",function(){
+			
+			//console.log("111111");
     	 	var p1=$(this).children('option:selected').val();
-    	 	console.log(p1);
+    	 	//console.log(p1);
     	 	var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_YK_STD","OperateType":"HTML","comParams":{"htmlTpye":"select","courseTypeId":"' + p1+ '"}}';
     		$.ajax({
     			type:"POST",
@@ -42,7 +44,7 @@
     				tzParams:tzParams
     			},
     			success:function(response){
-    				console.log(response);
+    				//console.log(response);
     				$("#course").append(response);
     			},
     			failure: function () {
@@ -51,7 +53,8 @@
     	 })
     	 
     	 //查询按钮点击事件
-    	 $('#btnpass').on("click",function(){
+    	 $("body").on("click","#btnpass",function(){
+    		 //console.log("222");
     	 	var courseType=$('#courseType').val();
     	 	var course=$('#course').val();
     	 	var hour=$('#hour').val();
@@ -79,9 +82,11 @@
     				data:{
     					tzParams:tzParams
     				},
+    				dataType: "JSON",
     				success:function(response){
-    					console.log(response);
-    					alert(response.pkRs);
+    					//console.log(response);
+    					//console.log(response.comContent);
+    					alert(response.comContent.pkRs);
     					window.location.reload();
     				},
     				failure: function () {
@@ -105,7 +110,7 @@
 			//dataType:'json',
 			success:function(response){
 				
-				console.log(response);
+				//console.log(response);
 				var divhtml='<div class="modal-backdrop fade in"></div>';
 				divhtml +='<div aria-hidden="false" style="display: block;" class="modal fade in" tabindex="-1" role="dialog"> ';
 				divhtml +='	<div class="modal-dialog">    ';
