@@ -11,6 +11,6 @@ Ext.define('KitchenSink.view.trainTeacherMg.reviewModel', {
         {name: 'rowLastmantDttm'},
         {name: 'rowLastmantOprid'},
         {name: 'stuName'},
-        {name: 'teaName'},
+        {name: 'teaName'}
 	]
 });

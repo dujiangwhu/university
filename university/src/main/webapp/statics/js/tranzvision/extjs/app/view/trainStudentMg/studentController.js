@@ -272,7 +272,7 @@
            }
        }
        
-       cmp = new ViewClass({ oprid:record.get("oprid") });
+       cmp = new ViewClass({ stuOprid:record.get("oprid") });
        //操作类型设置为更新
        cmp.actType = "update";
 
