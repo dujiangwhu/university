@@ -18,7 +18,7 @@ Ext.define('KitchenSink.view.trainTeacherMg.crashManage', {//项目管理列表�
     },
 	style:"margin:8px",
     multiSelect: true,
-    title: "体现记录",
+    title: "提现记录",
     viewConfig: {
         enableTextSelection:true
     },
