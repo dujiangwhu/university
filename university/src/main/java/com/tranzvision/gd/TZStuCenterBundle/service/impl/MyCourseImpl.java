@@ -52,7 +52,6 @@ public class MyCourseImpl extends FrameworkImpl {
 
 	@Autowired
 	private GetSeqNum getSeqNum;
-	
 
 	@Autowired
 	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
@@ -91,6 +90,11 @@ public class MyCourseImpl extends FrameworkImpl {
 			if (opType == null || "".equals(opType)) {
 				opType = "0";
 			}
+
+			// 批量重置已经上过课的课程,状态为2
+			// 0 正常 1 撤销 2已上课
+			String ppsql = "update PX_STU_APP_COURSE_T set TZ_APP_STATUS=?,ROW_LASTMANT_DTTM=now() where TZ_APP_STATUS=? and OPRID=? and TZ_SCHEDULE_ID in (select TZ_SCHEDULE_ID from PK_STU_SK_LOG where OPRID=?)";
+			jdbcTemplate.update(ppsql, new Object[] { "2", "1", oprid, oprid });
 
 			String strSiteId = jdbcTemplate.queryForObject(
 					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
@@ -231,8 +235,8 @@ public class MyCourseImpl extends FrameworkImpl {
 					sb.append("<tr>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + KCJB
 							+ "</td>");
-					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + SKSJ.substring(0, 16)
-							+ "</td>");
+					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >"
+							+ SKSJ.substring(0, 16) + "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + KEMC
 							+ "</td>");
 					sb.append("<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" >" + SKJS
@@ -244,6 +248,9 @@ public class MyCourseImpl extends FrameworkImpl {
 					// 取消课程 显示已取消
 					// 缺课 显示 学生缺席
 					// 其他显示 取消 按钮
+
+					String SKurl = request.getContextPath() + "/viewInface/stu/" + KKID;
+
 					switch (status) {
 					// 0 正常 1 撤销 2已上课
 					case "0":
@@ -257,14 +264,14 @@ public class MyCourseImpl extends FrameworkImpl {
 						// 开始时间 小于当前时间 结束时间大于当前时间 正在上课
 						if (starDate.compareTo(now) <= 0 && endDate.compareTo(now) > 0) {
 							sb.append(
-									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='shangK(\""
-											+ KKID + "\")'>正在上课</a></td>");
+									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\""
+											+ SKurl + "\" target='_blank'>正在上课</a></td>");
 						} else
 						// 开始时间 大于当前时间，开始时间小于当前时间+N小时 即将开课
 						if (starDate.compareTo(now) > 0 && starDate.compareTo(date) < 0) {
 							sb.append(
-									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='shangK(\""
-											+ KKID + "\")'>即将开课</a></td>");
+									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\""
+											+ SKurl + "\" target='_blank'>即将开课</a></td>");
 						} else {
 							sb.append(
 									"<td valign=\"middle\" width=\"20%\" align=\"left\" style=\"padding-left:5px;\" ><a href=\"javaScript: void(0)\" onClick='cancel(\""
@@ -390,13 +397,13 @@ public class MyCourseImpl extends FrameworkImpl {
 							pkStuCourseChangeTMapper.insert(pkStuCourseChangeT);
 
 							// 修改教师排课表预约状态
-
+							// 1 有预约 0 没有预约
 							int count = jdbcTemplate.queryForObject(
-									"SELECT COUNT(1) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS=0",
+									"SELECT COUNT(1) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS='0'",
 									new Object[] { kkid }, "Integer");
 							if (count < 1) {
 								jdbcTemplate.update(
-										"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=0  WHERE TZ_SCHEDULE_ID=? ",
+										"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS='0'  WHERE TZ_SCHEDULE_ID=? ",
 										new Object[] { kkid });
 							}
 							// 提交事务

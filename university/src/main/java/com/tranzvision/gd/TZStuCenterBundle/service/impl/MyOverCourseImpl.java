@@ -243,7 +243,7 @@ public class MyOverCourseImpl extends FrameworkImpl {
 					if (annex != null && annex.size() > 0) {
 						for (int x = 0; x < annex.size(); x++) {
 							TZ_ATTACHFILE_NAME = annex.get(i).get("TZ_ATTACHFILE_NAME").toString();
-							TZ_ATT_A_URL = annex.get(i).get("TZ_ATTACHFILE_NAME").toString();
+							TZ_ATT_A_URL = annex.get(i).get("TZ_ATT_A_URL").toString();
 							TZ_ATTACHSYSFILENA = annex.get(i).get("TZ_ATTACHSYSFILENA").toString();
 
 							if (TZ_ATT_A_URL.startsWith("/")) {

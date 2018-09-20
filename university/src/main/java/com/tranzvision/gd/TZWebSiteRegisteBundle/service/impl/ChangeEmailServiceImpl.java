@@ -246,7 +246,7 @@ public class ChangeEmailServiceImpl extends FrameworkImpl {
 			}
 
 			// 创建短信、邮件发送的听众;
-			String createAudience = createTaskServiceImpl.createAudience(taskId,strJgid,"光华用户邮箱修改", "JSRW");
+			String createAudience = createTaskServiceImpl.createAudience(taskId,strJgid,"用户邮箱修改", "JSRW");
 			if (createAudience == null || "".equals(createAudience)) {
 				mess = "创建邮件发送的听众失败！";
 				return mess;
@@ -261,7 +261,7 @@ public class ChangeEmailServiceImpl extends FrameworkImpl {
 			}
 
 			// 修改主题;
-			boolean bl = createTaskServiceImpl.updateEmailSendTitle(taskId,"光华管理学院-账户管理邮箱修改");
+			boolean bl = createTaskServiceImpl.updateEmailSendTitle(taskId,"账户管理邮箱修改");
 			if (bl == false) {
 				mess = "修改发送主题失败！";
 				return mess;

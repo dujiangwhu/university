@@ -86,10 +86,11 @@ public class TeaCourseImpl extends FrameworkImpl {
 					TZ_COURSE_ID = l.get(i).get("TZ_COURSE_ID") == null ? "" : l.get(i).get("TZ_COURSE_ID").toString();
 					sb.append("<tr class='font666'>");
 					sb.append("<td valign='middle' width='30' align='center'>");
-					sb.append("<input style='width: 15px;' type='radio' name='classidradio' value='"+TZ_PKSK_XH+"'>");
+					sb.append(
+							"<input style='width: 15px;' type='radio' name='classidradio' value='" + TZ_PKSK_XH + "'>");
 					sb.append("</td> ");
-					sb.append("<td valign='middle' width='417' align='left' onclick='selectRadioClassId("+i+")'>");
-					
+					sb.append("<td valign='middle' width='417' align='left' onclick='selectRadioClassId(" + i + ")'>");
+
 					sb.append(TZ_ATTACHFILE_NAME);
 					sb.append("</td></tr> ");
 				}
@@ -97,7 +98,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 			String returnHtml = "";
 			try {
 				returnHtml = tzGDObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_GD_CHOOSE_FILE", true, sb.toString(),
-						TZ_COURSE_ID);
+						SCHEDULE_ID);
 			} catch (TzSystemException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -120,6 +121,11 @@ public class TeaCourseImpl extends FrameworkImpl {
 			if (opType == null || "".equals(opType)) {
 				opType = "0";
 			}
+
+			// 批量重置已经上过课的课程,状态为2
+			// 0 正常 1撤销 2已上课
+			String ppsql = "update PX_TEA_SCHEDULE_T set TZ_SCHEDULE_TYPE=?,ROW_LASTMANT_DTTM=now() where TZ_SCHEDULE_TYPE=? and OPRID=? and TZ_ROOM_ID !='' and TZ_ROOM_KEY !=''";
+			jdbcTemplate.update(ppsql, new Object[] { "2", "1", oprid });
 
 			String strSiteId = jdbcTemplate.queryForObject(
 					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
@@ -185,7 +191,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 		long currentTime = System.currentTimeMillis();
 
 		// 加N分钟
-		currentTime += Integer.parseInt(limitHour)  * 60 * 1000;
+		currentTime += Integer.parseInt(limitHour) * 60 * 1000;
 
 		Date date = new Date(currentTime);
 

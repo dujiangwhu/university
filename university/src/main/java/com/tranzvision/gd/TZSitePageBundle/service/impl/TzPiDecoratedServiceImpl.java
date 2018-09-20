@@ -168,9 +168,14 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 						String.valueOf(sy), String.valueOf(td_long));
 
 				int yd = sqlQuery.queryForObject(
-						"SELECT COUNT(*) FROM  PK_STU_COURSE_CHANGE_T where OPRID=? AND TZ_CHANGE_TYPE=?",
+						"SELECT COUNT(*) FROM  PK_STU_COURSE_CHANGE_T where OPRID=? AND TZ_CHANGE_TYPE=? ",
 						new Object[] { m_curOPRID, "1" }, "Integer");
-
+				
+				int qx = sqlQuery.queryForObject(
+						"SELECT COUNT(*) FROM  PK_STU_COURSE_CHANGE_T where OPRID=? AND TZ_CHANGE_TYPE=? ",
+						new Object[] { m_curOPRID, "2" }, "Integer");
+				//使用的工時卡 =约课的-取消约课
+				yd =yd-qx;
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "使用的课时卡",
 						String.valueOf(yd), String.valueOf(td_long));
 

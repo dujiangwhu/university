@@ -52,7 +52,7 @@ public class TzLoginController {
 
 	private String adminOrgId;
 
-	private String adminOrgName = "创景云招生系统";
+	private String adminOrgName = "兴语传文";
 
 	private String adminOrgBjImg = "/statics/images/login/loginDefaultBg.jpg";
 

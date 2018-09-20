@@ -85,14 +85,15 @@
 	
 	function addBmb(){
 		var classidVale = $('input[name="classidradio"]:checked ').val();
-		var course  = $('#course').val();
+		var kkid  = $('#kkid').val();
 		console.log(classidVale);
-		console.log(course);
+		console.log(kkid); 
 		if(classidVale == null || classidVale == ""){
 			alert("请选择文件");
 		}else{
 			//打开新页面。去课程可以
-			alert("打开新页面");
+			var url = TzUniversityContextPath + "/viewInface/tea/" + kkid+"/"+classidVale;
+			window.open(url, '_blank');
 			
 		}
 	}

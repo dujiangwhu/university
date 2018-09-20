@@ -27,7 +27,9 @@ import com.tranzvision.gd.TZLeaguerAccountBundle.dao.PsTzRegUserTMapper;
 import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsShowPrjNewsTKey;
 import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsTzLxfsInfoTbl;
 import com.tranzvision.gd.TZLeaguerAccountBundle.model.PsTzRegUserT;
+import com.tranzvision.gd.TZPXBundle.dao.PkTeaIntegralChangeTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
+import com.tranzvision.gd.TZPXBundle.model.PkTeaIntegralChangeT;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.TZWebSiteRegisteBundle.dao.PsTzDzyxYzmTblMapper;
 import com.tranzvision.gd.TZWebSiteRegisteBundle.model.PsTzDzyxYzmTbl;
@@ -87,6 +89,9 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 
 	@Autowired
 	private GetHardCodePoint getHardCodePoint;
+	
+	@Autowired
+	private PkTeaIntegralChangeTMapper pkTeaIntegralChangeTMapper;
 
 	// 原：WEBLIB_GD_USER.TZ_REG.FieldFormula.Iscript_GetNowField
 	@Override
@@ -663,6 +668,20 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 				String score = getHardCodePoint.getHardCodePointVal("TZ_TEA_REG");
 				pxTeacher.setScore(new Integer(score));
 				pxTeacherMapper.insertSelective(pxTeacher);
+				
+				
+				//增加教师积分变动表
+				PkTeaIntegralChangeT pkTeaIntegralChangeT  =new  PkTeaIntegralChangeT();
+				pkTeaIntegralChangeT.setOprid(oprId);
+				pkTeaIntegralChangeT.setRowLastmantDttm(new Date());
+				pkTeaIntegralChangeT.setRowLastmantOprid(oprId);
+				pkTeaIntegralChangeT.setTzAfterChange(new Integer(score));
+				pkTeaIntegralChangeT.setTzBeforeChange(new Integer(0));
+				pkTeaIntegralChangeT.setTzChange(new Integer(score));
+				//1：上课产生积分 2：提现消耗积分 3：管理员修改 4:注册产生积分
+				pkTeaIntegralChangeT.setTzChangeId(""+getSeqNum.getSeqNum("PK_TES_INTEGRAL_CHANGE_T", "TZ_CHANGE_ID"));
+				pkTeaIntegralChangeT.setTzChangeType("4");
+				pkTeaIntegralChangeTMapper.insertSelective(pkTeaIntegralChangeT);
 
 				// 通过所有校验，保存联系方式;
 				PsTzLxfsInfoTbl psTzLxfsInfoTbl = new PsTzLxfsInfoTbl();

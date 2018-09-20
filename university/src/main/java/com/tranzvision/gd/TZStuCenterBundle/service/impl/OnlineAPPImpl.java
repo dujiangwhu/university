@@ -547,7 +547,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 
 									// 修改教师排课表预约状态
 									rs = jdbcTemplate.update(
-											"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=1  WHERE TZ_SCHEDULE_ID=?",
+											"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS='1'  WHERE TZ_SCHEDULE_ID=?",
 											new Object[] { TZ_SCHEDULE_ID });
 									tzGDObject.commit(status);
 									strRet = "{\"yyRs\":\"预约课程成功\"}";
@@ -613,7 +613,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 
 									// 修改教师排课表预约状态
 									rs = jdbcTemplate.update(
-											"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS=1  WHERE TZ_SCHEDULE_ID=?",
+											"UPDATE PX_TEA_SCHEDULE_T SET TZ_APP_STATUS='1'  WHERE TZ_SCHEDULE_ID=?",
 											new Object[] { TZ_SCHEDULE_ID });
 									tzGDObject.commit(status);
 									strRet = "{\"yyRs\":\"预约课程成功\"}";
