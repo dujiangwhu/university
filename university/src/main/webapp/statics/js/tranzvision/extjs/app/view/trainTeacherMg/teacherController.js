@@ -140,6 +140,11 @@
 				}else{
 					msgForm.down('image[name=titileImage]').setSrc(TzUniversityContextPath + "/statics/images/tranzvision/mrtx02.jpg");
 				}
+				
+				if(formData.teacherCardUrl!=""){
+					//panel.down("image").setSrc(TzUniversityContextPath + formData.orgLoginBjImgUrl);
+					panel.down('image[name=teacherCardImage]').setSrc(TzUniversityContextPath + formData.teacherCardUrl);
+				}
 			});
 			
 		});

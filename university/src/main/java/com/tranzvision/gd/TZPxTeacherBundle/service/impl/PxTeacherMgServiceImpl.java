@@ -4,14 +4,18 @@
 package com.tranzvision.gd.TZPxTeacherBundle.service.impl;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+
+import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.tranzvision.gd.TZAccountMgBundle.dao.PsTzAqYhxxTblMapper;
+import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZLeaguerAccountBundle.dao.PsTzRegUserTMapper;
@@ -39,6 +43,12 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 	
 	@Autowired
 	private SqlQuery sqlQuery;
+	
+	@Autowired
+	private HttpServletRequest request;
+
+	@Autowired
+	private TzLoginServiceImpl tzLoginServiceImpl;
 
 	@Autowired
 	private PsTzJgBaseTMapper psTzJgBaseTMapper;
@@ -139,6 +149,11 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 				// 头像地址;
 				titleImageUrlSQL = "SELECT TZ_REALNAME,TZ_MOBILE FROM PS_TZ_AQ_YHXX_TBL WHERE OPRID=? ";
 				Map<String, Object> userMap = jdbcTemplate.queryForMap(titleImageUrlSQL, new Object[] { str_oprid });
+				
+				//教师证件
+				String terCardSql = "SELECT TZ_ATTACHSYSFILENA,TZ_ATTACHFILE_NAME,TZ_ATT_P_URL,TZ_ATT_A_URL FROM PX_TEA_CERT_T WHERE OPRID = ?";
+				Map<String, Object> teaCardMap = jdbcTemplate.queryForMap(terCardSql, new Object[] { str_oprid });
+				
 
 				if (userMap == null) {
 					errMsg[0] = "1";
@@ -175,6 +190,18 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 						jsonMap2.put("contactorAddress", pxTeacher.getContactorAddress());
 						jsonMap2.put("statu", pxTeacher.getStatu());
 						jsonMap2.put("idCard", pxTeacher.getIdCard());
+						
+						if(teaCardMap!=null){
+							jsonMap2.put("teacherCardFileName", teaCardMap.get("TZ_ATTACHFILE_NAME"));
+							jsonMap2.put("teacherCardSysFileName", teaCardMap.get("TZ_ATTACHSYSFILENA"));
+							jsonMap2.put("teacherCardUrl", teaCardMap.get("TZ_ATT_A_URL"));
+							jsonMap2.put("teacherCardPath", teaCardMap.get("TZ_ATT_P_URL"));
+						}else{
+							jsonMap2.put("teacherCardFileName", "");
+							jsonMap2.put("teacherCardSysFileName", "");
+							jsonMap2.put("teacherCardUrl", "");
+							jsonMap2.put("teacherCardPath", "");
+						}
 
 						returnJsonMap.replace("formData", jsonMap2);
 					}
@@ -194,6 +221,7 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 	}
 	/* 修改组件注册信息 */
 	public String tzUpdate(String[] actData, String[] errMsg) {
+		
 		String strRet = "{}";
 		try {
 			JacksonUtil jacksonUtil = new JacksonUtil();
@@ -206,7 +234,8 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 				// 类型标志;
 				//Map<String, Object> infoData  = jacksonUtil.getMap("update");
 				String oprid=jacksonUtil.getString("oprid");
-				System.out.println(jacksonUtil.getString("sex"));
+				//System.out.println(jacksonUtil.getString("sex"));
+				System.out.println(jacksonUtil.getString("teacherCardSysFileName"));
 				if(oprid==null){
 					errMsg[0] = "1";
 					errMsg[1] = "保存失败";
@@ -270,6 +299,36 @@ public class PxTeacherMgServiceImpl extends FrameworkImpl {
 							psTzRegUserT.setTzComment7(jacksonUtil.getString("teacherCard"));
 							psTzRegUserT.setTzComment8(jacksonUtil.getString("introduce"));
 							psTzRegUserTMapper.updateByPrimaryKeySelective(psTzRegUserT);
+						}
+						
+						String filename = jacksonUtil.getString("teacherCardFileName")==null?"":jacksonUtil.getString("teacherCardFileName");
+						String sysfilename = jacksonUtil.getString("teacherCardSysFileName")==null?"":jacksonUtil.getString("teacherCardSysFileName");
+						String pUrl = jacksonUtil.getString("teacherCardPath")==null?"":jacksonUtil.getString("teacherCardPath");
+						String aUrl = jacksonUtil.getString("teacherCardUrl")==null?"":jacksonUtil.getString("teacherCardUrl");
+						System.out.println("文件名："+filename);
+						System.out.println("文件名："+sysfilename);
+						System.out.println("文件名："+pUrl);
+						System.out.println("文件名："+aUrl);
+						/*更新图片信息*/
+						if("".equals(sysfilename) || "".equals(filename)||"".equals(pUrl)||"".equals(aUrl)){
+							String deleteTerCard = "DELETE FROM PX_TEA_CERT_T WHERE OPRID = ?";
+							jdbcTemplate.update(deleteTerCard, new Object[]{oprid});
+						}else{
+							String selectTerCard = "SELECT COUNT(1) FROM PX_TEA_CERT_T WHERE OPRID = ?";
+							int count = jdbcTemplate.queryForObject(selectTerCard, new Object[]{oprid},"Integer");
+							if(count==0){
+								String insertTerCard = "INSERT INTO PX_TEA_CERT_T VALUES(?,?,?,?,?,?,?)";
+								jdbcTemplate.update(insertTerCard, new Object[]{
+										oprid,sysfilename,filename,pUrl,aUrl,new Date(),tzLoginServiceImpl.getLoginedManagerOprid(request)
+								});
+							}else{
+								String updateTerCard = "UPDATE PX_TEA_CERT_T SET TZ_ATTACHSYSFILENA = ?,TZ_ATTACHFILE_NAME = ?,TZ_ATT_P_URL = ?,"
+										+ " TZ_ATT_A_URL = ?,ROW_LASTMANT_DTTM = ?,ROW_LASTMANT_OPRID = ? WHERE OPRID = ?";
+								jdbcTemplate.update(updateTerCard, new Object[]{
+										sysfilename,filename,pUrl,aUrl,new Date(),tzLoginServiceImpl.getLoginedManagerOprid(request),oprid
+								});
+							}
+							
 						}
 						
 						/*机构角色表*/

@@ -179,7 +179,7 @@
                     fieldStyle:'background:#F4F4F4'
                 },{
                     xtype: 'textfield',
-                    fieldLabel: 'QQ',
+                    fieldLabel: '微信',
                     name: 'qq'
                 },{
                     xtype: 'textfield',
@@ -212,13 +212,142 @@
                 		displayField: 'TSDesc',
                 		store: new KitchenSink.view.common.store.appTransStore("PX_TEACHER_STATU")
                 },{
-                    xtype: 'textfield',
+                    xtype: 'textarea',
                     //height:100,
                     //width:300,
                     grow:false,
                     fieldLabel: '自我介绍',
                     name: 'introduce'
-                },{
+                }, {
+					xtype: 'hiddenfield',
+					//fieldLabel: '背景图片路径',
+					name: 'teacherCardUrl'
+				}, {
+					xtype: 'hiddenfield',
+					//fieldLabel: '教师证存储路径',
+					name: 'teacherCardPath'
+				}, {
+					xtype: 'hiddenfield',
+					//fieldLabel: '教师证文件名',
+					name: 'teacherCardFileName'
+				}, {
+					xtype: 'hiddenfield',
+					//fieldLabel: '教师证系统文件名',
+					name: 'teacherCardSysFileName'
+				},{
+			xtype: 'form',
+			layout: 'hbox',
+			width:'100%',
+			height:'100%',
+			defaults:{
+				margin:'0 0 0 20px',
+			},
+			items:[{
+				margin:'10 35 0 0',		
+				xtype:'label',
+				html:'<span style="font-weight:bold">'+ '教师证' +':</span>'
+			},{
+				xtype:'image',
+				name:'teacherCardImage',
+				width:320,
+				height:150,
+				border:1,
+				style: {
+				    borderColor: '#eee'
+				},
+				margin:'0 20 10 35',
+				src:''
+			},{
+				xtype:'button',
+				text:'删除',
+				listeners:{
+					click:function(file, value, eOpts ){
+						file.previousSibling().setSrc("");
+						//获取该类
+						var panel = file.findParentByType("teacherMgInfoPanel");
+						panel.child("form").getForm().findField("teacherCardUrl").setValue("");
+						panel.child("form").getForm().findField("teacherCardPath").setValue("");
+						panel.child("form").getForm().findField("teacherCardFileName").setValue("");
+						panel.child("form").getForm().findField("teacherCardSysFileName").setValue("");
+					}
+				}
+			},{
+	            xtype: 'fileuploadfield',
+	            name: 'websitefile',
+	            buttonText: '上传',
+	            //msgTarget: 'side',
+	            buttonOnly:true,
+							listeners:{
+								change:function(file, value, eOpts ){
+									if(value != ""){
+										var form = file.findParentByType("form").getForm();
+										//获取该类
+										var panel = file.findParentByType("teacherMgInfoPanel");
+										
+											//获取后缀
+											var fix = value.substring(value.lastIndexOf(".") + 1,value.length);
+											if(fix.toLowerCase() == "jpg" || fix.toLowerCase() == "jpeg" || fix.toLowerCase() == "png" || fix.toLowerCase() == "gif" || fix.toLowerCase() == "bmp" || fix.toLowerCase() == "ico"){
+												form.submit({
+													url: TzUniversityContextPath + '/UpdWebServlet?filePath=TeaFile',
+													waitMsg: '图片正在上传，请耐心等待....',
+													success: function (form, action) {
+														var message = action.result.msg;
+														var path = message.accessPath;
+														var fileName = message.filename;
+														var sysFileName = message.sysFileName;
+														
+														panel.child("form").getForm().findField("teacherCardPath").setValue(path);
+														panel.child("form").getForm().findField("teacherCardFileName").setValue(fileName);
+														panel.child("form").getForm().findField("teacherCardSysFileName").setValue(sysFileName);
+														
+														if(path.charAt(path.length - 1) == '/'){
+															path = path + sysFileName;
+														}else{
+															path = path + "/" + sysFileName;
+														}
+														
+														file.previousSibling().previousSibling().setSrc(TzUniversityContextPath + path);
+														panel.child("form").getForm().findField("teacherCardUrl").setValue(path);
+														/*
+														tzParams = '{"ComID":"TZ_PX_ORGGL_COM","PageID":"TZ_PX_ORGDEF_STD","OperateType":"HTML","comParams":' + Ext.JSON.encode(action.result.msg) +'}';
+				
+														Ext.Ajax.request({
+														    url: Ext.tzGetGeneralURL,
+														    params: {
+														        tzParams: tzParams
+														    },
+														    success: function(response){
+														    	var responseText = eval( "(" + response.responseText + ")" );
+														      if(responseText.success == 0){
+																		
+																	}else{
+																		file.previousSibling().previousSibling().setSrc("");
+																		panel.child("form").getForm().findField("orgLoginBjImgUrl").setValue("");
+																		Ext.MessageBox.alert("错误", responseText.message);	
+																	}
+																}
+														});
+														*/
+														//重置表单
+														form.reset();
+													},
+													failure: function (form, action) {
+														//重置表单
+														form.reset();
+														Ext.MessageBox.alert("错误", action.result.msg);
+													}
+												});
+											}else{
+												//重置表单
+												form.reset();
+												Ext.MessageBox.alert("提示", "请上传jpg|jpeg|png|gif|bmp|ico格式的图片。");
+											}
+										
+									}
+								}
+							}
+	      }]
+			},{
                         xtype: 'hiddenfield',
                         name: 'titleImageUrl'
                     }]
