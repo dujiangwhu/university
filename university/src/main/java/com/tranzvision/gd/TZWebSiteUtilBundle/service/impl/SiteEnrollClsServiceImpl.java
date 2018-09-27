@@ -664,6 +664,8 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 				pxTeacher.setName(strTZ_REALNAME);
 				pxTeacher.setEmail(strTZ_EMAIL);
 				pxTeacher.setContactorPhone(strTZ_MOBILE);
+				pxTeacher.setStatu("B");
+				pxTeacher.setLevel("A");
 				//注册初始积分
 				String score = getHardCodePoint.getHardCodePointVal("TZ_TEA_REG");
 				pxTeacher.setScore(new Integer(score));

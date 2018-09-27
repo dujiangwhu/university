@@ -71,10 +71,9 @@ public class OnlineAPPImpl extends FrameworkImpl {
 	private PxTeaScheduleTMapper pxTeaScheduleTMapper;
 	@Autowired
 	private PxTeacherMapper pxTeacherMapper;
-	
+
 	@Autowired
 	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
-
 
 	@Override
 	public String tzGetHtmlContent(String strParams) {
@@ -291,13 +290,15 @@ public class OnlineAPPImpl extends FrameworkImpl {
 			String strDate = "";
 			do {
 				cd.setTime(now);
-				cd.add(Calendar.DATE, 1);
+
 				_year = cd.get(Calendar.YEAR);
 				_month = cd.get(Calendar.MONTH);
 				_day = cd.get(Calendar.DAY_OF_MONTH);
-				now = cd.getTime();
+
 				strDate = DateUtil.ISOSECDateString(now);
 				selectDate.append("<option value =\"" + strDate + "\">" + strDate + "</option>");
+				cd.add(Calendar.DATE, 1);
+				now = cd.getTime();
 			} while (!(_year == year && _month == month && day == _day));
 
 			// 通用链接;
@@ -306,7 +307,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 			try {
 				classSelectHtml = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_GD_ONLINE_APP", true,
 						select.toString(), ZSGL_URL, strCssDir, "我的课表", str_jg_id, strSiteId, request.getContextPath(),
-						selectDate.toString(), "预约时间从第二天开始到下周的周日");
+						selectDate.toString(), "预约时间从当天开始到下周的周日");
 			} catch (TzSystemException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -350,7 +351,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 		sql.append(" A.TZ_COURSE_ID =? ");
 		sql.append("AND A.TZ_SCHEDULE_TYPE = ? ");
 		sql.append("AND A.TZ_CLASS_START_TIME >=? ");
-		sql.append("AND A.TZ_CLASS_START_TIME <=? ");
+		sql.append("AND A.TZ_CLASS_START_TIME <=? and A.TZ_CLASS_START_TIME>now()");
 
 		String sqlxx = "SELECT COUNT(*) FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND TZ_APP_STATUS='0' AND OPRID=?";
 
@@ -491,6 +492,30 @@ public class OnlineAPPImpl extends FrameworkImpl {
 				}
 
 				if (flag == 0) {
+					// 检查同一时间是否有 其他已经约了的课程
+					String starTime = DateUtil.formatShortDate(pxTeaScheduleT.getTzClassStartTime());
+
+					Calendar calendar = Calendar.getInstance();
+					calendar.setTime(pxTeaScheduleT.getTzClassStartTime());
+					int hour = calendar.get(Calendar.HOUR_OF_DAY);
+
+					System.out.println("hour:" + hour);
+					System.out.println("starTime:" + starTime);
+					String sql = "select count(*) from PX_STU_APP_COURSE_T where TZ_APP_STATUS=? and OPRID=? and TZ_SCHEDULE_ID ";
+					sql = sql
+							+ "in (select TZ_SCHEDULE_ID from PX_TEA_SCHEDULE_T where TZ_SCHEDULE_TYPE=? and date(TZ_CLASS_START_TIME)=? AND hour(TZ_CLASS_START_TIME)=?)";
+
+					int count = jdbcTemplate.queryForObject(sql, new Object[] { "0", oprid, "0", starTime,hour },
+							"Integer");
+					if (count > 0) {
+						//return "{\"pkRs\":\"该时间已经排过课程了，不能重复排课！\"}";
+						strRet = "{\"yyRs\":\"同一时间 已经预约了其他课程，该时间不可预约\"}";
+						flag = 1;
+					}
+				}
+
+				if (flag == 0) {
+
 					String sql = "SELECT TZ_APP_STATUS FROM PX_STU_APP_COURSE_T WHERE TZ_SCHEDULE_ID=? AND OPRID=?";
 					String TZ_APP_STATUS = jdbcTemplate.queryForObject(sql, new Object[] { TZ_SCHEDULE_ID, oprid },
 							"String");

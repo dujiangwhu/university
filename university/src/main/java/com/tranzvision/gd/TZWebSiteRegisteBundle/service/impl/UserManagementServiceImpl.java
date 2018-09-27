@@ -415,6 +415,47 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					}
 
 				}
+				
+				
+				// 教师增加上传附件 以及textarea，直接读取内容，不需要二次加载
+				TzSession tmpSession = new TzSession(request);
+				String LoginType = tmpSession.getSession("LoginType") == null ? ""
+						: tmpSession.getSession("LoginType").toString();
+				if (LoginType.equals("TEA")) {
+
+					sql = "select INTRODUCE from PX_TEACHER_T where OPRID=? ";
+					String INTRODUCE = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "String");
+					sql = "SELECT TZ_ATTACHSYSFILENA,TZ_ATTACHFILE_NAME,TZ_ATT_A_URL FROM PX_TEA_CERT_T where OPRID=?";
+
+					Map<String, Object> FJMap = jdbcTemplate.queryForMap(sql, new Object[] { oprid });
+					String FJURL = "";
+					String FJName = "";
+					String FJSysName = "";
+					if (FJMap != null) {
+						FJSysName = FJMap.get("TZ_ATTACHSYSFILENA") == null ? ""
+								: FJMap.get("TZ_ATTACHSYSFILENA").toString();
+						FJName = FJMap.get("TZ_ATTACHFILE_NAME") == null ? ""
+								: FJMap.get("TZ_ATTACHFILE_NAME").toString();
+						FJURL = FJMap.get("TZ_ATT_A_URL") == null ? "" : FJMap.get("TZ_ATT_A_URL").toString();
+					}
+					// 上传附件
+					String FJ2 = "";
+
+					if (!FJSysName.equals("") && !FJName.equals("") && !FJURL.equals("")) {
+						FJ2 = tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ2", true, FJName);
+					}
+
+					fields = fields + tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ", true, FJ2, FJSysName,
+							FJURL, FJName);
+
+					// 自我介绍
+					fields = fields + "<div class=\"main_inner_right_line_50px\">";
+					fields = fields + "<div class=\"main_inner_right_line_left_user\">自我介绍：</div>";
+					fields = fields
+							+ "<textarea rows=\"5\" cols=\"20\" name=\"TZ_COMMENT8\" id=\"TZ_COMMENT8\" style=\"background-color: rgb(255, 255, 255); border-color: rgb(169, 169, 169); margin: 0px; width: 249px; height: 51px;\" class=\"input_text input_251px\">"
+							+ INTRODUCE + "</textarea>";
+					fields = fields + "</div>";
+				}
 
 				// 选择省份;
 				String Province = commonUrl;
@@ -463,7 +504,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 				String strIsShowPhoto = jdbcTemplate.queryForObject(strIsShowPhotoSQL, new Object[] { siteId },
 						"String");
 				if ("Y".equals(strIsShowPhoto)) {
-					return tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_GD_WDZH_HTML", saveActivate_url,
+					return tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_GD_WDZH_HTML",true, saveActivate_url,
 							phoUrl, updpassword, commonUrl, str_mobile, msgmail_html, zhbd, str_userInfo, SaveRemind,
 							fields, Province, City1, strColuTitle, strTab1, strTab2, strTab3, strTab4, strPhoto,
 							strSaveBtn, strBind, strRelease, strAbsence, strPassSucTips, countryUrl, strImgC, userPhoto,
@@ -486,7 +527,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 
 	}
 
-	// 个人信息管理;
+	// 个人信息管理 页面展示
 	public String userPhoneInformation(String siteId) {
 		try {
 			String language = "", jgId = "", skinId = "";
@@ -851,6 +892,8 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					}
 
 				}
+
+				
 
 				// 选择省份;
 				String Province = commonUrl;
@@ -1330,8 +1373,8 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 							regFieldYsmc = regFieldName;
 						}
 					}
-					
-					if (regFieldId != null && !"".equals(regFieldId)  && !"TZ_EMAIL".equals(regFieldId)
+
+					if (regFieldId != null && !"".equals(regFieldId) && !"TZ_EMAIL".equals(regFieldId)
 							&& !"TZ_MOBILE".equals(regFieldId) && !"TZ_PASSWORD".equals(regFieldId)
 							&& !"TZ_REPASSWORD".equals(regFieldId)) {
 						field = jacksonUtil.getString(regFieldId);
@@ -1478,8 +1521,8 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 			String LoginType = tmpSession.getSession("LoginType") == null ? ""
 					: tmpSession.getSession("LoginType").toString();
 			if (LoginType.equals("STU")) {
-				
-				 updateYhxxSQL = "UPDATE PS_TZ_AQ_YHXX_TBL SET TZ_EMAIL=? WHERE OPRID=?";
+
+				updateYhxxSQL = "UPDATE PS_TZ_AQ_YHXX_TBL SET TZ_EMAIL=? WHERE OPRID=?";
 				jdbcTemplate.update(updateYhxxSQL, new Object[] { strUserEmail, oprid });
 				// 学生信息
 				// 教师信息

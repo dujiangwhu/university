@@ -170,18 +170,18 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 				int yd = sqlQuery.queryForObject(
 						"SELECT COUNT(*) FROM  PK_STU_COURSE_CHANGE_T where OPRID=? AND TZ_CHANGE_TYPE=? ",
 						new Object[] { m_curOPRID, "1" }, "Integer");
-				
+
 				int qx = sqlQuery.queryForObject(
 						"SELECT COUNT(*) FROM  PK_STU_COURSE_CHANGE_T where OPRID=? AND TZ_CHANGE_TYPE=? ",
 						new Object[] { m_curOPRID, "2" }, "Integer");
-				//使用的工時卡 =约课的-取消约课
-				yd =yd-qx;
+				// 使用的工時卡 =约课的-取消约课
+				yd = yd - qx;
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "使用的课时卡",
 						String.valueOf(yd), String.valueOf(td_long));
 
 			} else if (TZ_RYLX.equals("JGJS")) { // 教师
-				// 显示 手机号码，姓名， 剩余积分 提 课程类型
-				tz_fld_num = 4;
+				// 显示 手机号码，姓名， 剩余积分 提 课程类型 审核转态，等级
+				tz_fld_num = 6;
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "姓名",
 						TZ_REALNAME, String.valueOf(td_long));
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "手机号码",
@@ -192,12 +192,55 @@ public class TzPiDecoratedServiceImpl extends FrameworkImpl {
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "剩余积分",
 						String.valueOf(sy), String.valueOf(td_long));
 
-				// 课程类型 目前没表
+				// 课程类型
 				sql = "SELECT  group_concat(B.TZ_COURSE_TYPE_NAME) FROM PX_TEA_COURSE_TYPE_T A,PX_COURSE_TYPE_T B WHERE A.TZ_COURSE_TYPE_ID=B.TZ_COURSE_TYPE_ID AND A.OPRID=? GROUP BY A.OPRID";
 				String types = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
 
 				strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "课程类型",
 						types, String.valueOf(td_long));
+
+				sql = "select STATU from PX_TEACHER_T where OPRID=?";
+				String STATU = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
+
+				if (STATU == null) {
+					STATU = "";
+				}
+				if (STATU.equals("A")) {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的状态",
+							"已通过审核，可排课", String.valueOf(td_long));
+				} else if (STATU.equals("B")) {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的状态",
+							"未通过审核，不可排课", String.valueOf(td_long));
+				} else if (STATU.equals("C")) {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的状态",
+							"违规，禁止排课", String.valueOf(td_long));
+				} else {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的状态",
+							"未通过审核，不可排课", String.valueOf(td_long));
+				}
+
+				sql = "select LEVEL from PX_TEACHER_T where OPRID=?";
+				String level = sqlQuery.queryForObject(sql, new Object[] { m_curOPRID }, "String");
+
+				if (level == null) {
+					level = "";
+				}
+				if (level.equals("A")) {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的等级",
+							"暂无星级", String.valueOf(td_long));
+				} else if (level.equals("B")) {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的等级",
+							"五星教师", String.valueOf(td_long));
+				} else if (level.equals("C")) {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的等级",
+							"四星教师", String.valueOf(td_long));
+				} else if (level.equals("D")) {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的等级",
+							"三星教师", String.valueOf(td_long));
+				} else {
+					strResult_fld = strResult_fld + tzGDObject.getHTMLText("HTML.TZSitePageBundle.TzPerInfoFld", "我的等级",
+							"暂无星级，不可排课", String.valueOf(td_long));
+				}
 
 			} else { // 管理
 				// sql = "select count(1) from PS_TZ_REG_FIELD_T where TZ_JG_ID

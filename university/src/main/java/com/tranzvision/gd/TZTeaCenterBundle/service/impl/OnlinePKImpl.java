@@ -66,10 +66,9 @@ public class OnlinePKImpl extends FrameworkImpl {
 
 	@Autowired
 	private PkStuCourseChangeTMapper pkStuCourseChangeTMapper;
-	
+
 	@Autowired
 	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
-
 
 	/**
 	 * 查看某天 某时间，是否排课
@@ -132,7 +131,7 @@ public class OnlinePKImpl extends FrameworkImpl {
 			String hour = "";
 			for (int i = 0; i < l.size(); i++) {
 				sdata = (String) l.get(i).get("TZ_CLASS_START_TIME");
-				hour =  l.get(i).get("TZ_HOUR").toString();
+				hour = l.get(i).get("TZ_HOUR").toString();
 				hasmap.put(sdata + "@" + hour, "OK");
 			}
 		}
@@ -329,71 +328,90 @@ public class OnlinePKImpl extends FrameworkImpl {
 				String starDate = jacksonUtil.getString("starDate");
 				String courseId = jacksonUtil.getString("courseId");
 				String courseType = jacksonUtil.getString("courseType");
-				
+
 				hour = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(hour);
 				starDate = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(starDate);
 				courseId = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(courseId);
 				courseType = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(courseType);
-				// 首先检查是否已经排课了
 
-				String sql = "select count(*) from PX_TEA_SCHEDULE_T where date(TZ_CLASS_START_TIME)=? AND hour(TZ_CLASS_START_TIME)=? AND TZ_SCHEDULE_TYPE!=-1";
-				int recExists = jdbcTemplate.queryForObject(sql, new Object[] { starDate, hour }, "Integer");
-				if (recExists > 0) {
-					return "{\"pkRs\":\"该时间已经排过课程了，不能重复排课！\"}";
+				// 检查教师是否通过审核，如果不通过，不允许排课
+				String sql = "select STATU from PX_TEACHER_T where OPRID=?";
+				String STATU = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "String");
+
+				if (STATU == null || !STATU.equals("A")) {
+					return "{\"pkRs\":\"您未通过审核或已经违规，不能排课！\"}";
 				} else {
-					String xx = "";
-					int i = Integer.parseInt(hour);
-					if (i < 10) {
-						xx = starDate + " 0" + String.valueOf(i) + ":00:00";
+					// 检查拍的课程是否有 附件，如果没有 不允许排课
+					sql = "select count(*) from PX_COURSE_ANNEX_T where TZ_COURSE_ID=?";
+					int isFJ = jdbcTemplate.queryForObject(sql, new Object[] { courseId }, "Integer");
+					if (isFJ <= 0) {
+						return "{\"pkRs\":\"该课程没有附件，不能排课！\"}";
 					} else {
-						xx = starDate + " " + String.valueOf(i) + ":00:00";
+
+						// 首先检查是否已经排课了
+						sql = "select count(*) from PX_TEA_SCHEDULE_T where date(TZ_CLASS_START_TIME)=? AND hour(TZ_CLASS_START_TIME)=? AND TZ_SCHEDULE_TYPE!=-1";
+						int recExists = jdbcTemplate.queryForObject(sql, new Object[] { starDate, hour }, "Integer");
+						if (recExists > 0) {
+							return "{\"pkRs\":\"该时间已经排过课程了，不能重复排课！\"}";
+						} else {
+							String xx = "";
+							int i = Integer.parseInt(hour);
+							if (i < 10) {
+								xx = starDate + " 0" + String.valueOf(i) + ":00:00";
+							} else {
+								xx = starDate + " " + String.valueOf(i) + ":00:00";
+							}
+							Date xxD = DateUtil.parseTimeStamp(xx);
+							Date now = new Date();
+							if (xxD.compareTo(now) < 0) {
+								return "{\"pkRs\":\"时间已经过期，不能排课！\"}";
+							}
+
+							// 插入排课表
+							PxTeaScheduleT pxTeaScheduleT = new PxTeaScheduleT();
+							pxTeaScheduleT
+									.setTzScheduleId("" + getSeqNum.getSeqNum("PX_TEA_SCHEDULE_T", "TZ_SCHEDULE_ID"));
+							pxTeaScheduleT.setOprid(oprid);
+							pxTeaScheduleT.setTzCourseTypeId(courseType);
+							pxTeaScheduleT.setTzCourseId(courseId);
+							// 1 有预约 0 没有预约
+							pxTeaScheduleT.setTzAppStatus("0");
+							int inthour = Integer.parseInt(hour);
+							if (inthour < 10) {
+								hour = "0" + String.valueOf(inthour);
+							}
+							String classStar = starDate + " " + hour + ":00:00";
+							System.out.println("classStar:" + classStar);
+							Date dclassStar = DateUtil.parseTimeStamp(classStar);
+
+							// 每堂课多少分钟
+							String skHour = jdbcTemplate.queryForObject(
+									"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
+									new Object[] { "TZ_ONE_Course" }, "String");
+
+							Calendar cal = Calendar.getInstance();
+							cal.setTime(dclassStar);
+							cal.add(Calendar.MINUTE, Integer.parseInt(skHour));
+							Date dclassEnd = cal.getTime();
+
+							pxTeaScheduleT.setTzClassStartTime(dclassStar);
+							pxTeaScheduleT.setTzClassEndTime(dclassEnd);
+							// 0 正常 1撤销 2已上课
+							pxTeaScheduleT.setTzScheduleType("0");
+							pxTeaScheduleT.setTzScheduleDate(new Date());
+
+							pxTeaScheduleT.setRowLastmantDttm(new Date());
+							pxTeaScheduleT.setRowLastmantOprid(oprid);
+							pxTeaScheduleTMapper.insertSelective(pxTeaScheduleT);
+							return "{\"pkRs\":\"排课成功！\"}";
+						}
 					}
-					Date xxD = DateUtil.parseTimeStamp(xx);
-					Date now = new Date();
-					if (xxD.compareTo(now) < 0) {
-						return "{\"pkRs\":\"时间已经过期，不能排课！\"}";
-					}
-
-					// 插入排课表
-					PxTeaScheduleT pxTeaScheduleT = new PxTeaScheduleT();
-					pxTeaScheduleT.setTzScheduleId("" + getSeqNum.getSeqNum("PX_TEA_SCHEDULE_T", "TZ_SCHEDULE_ID"));
-					pxTeaScheduleT.setOprid(oprid);
-					pxTeaScheduleT.setTzCourseTypeId(courseType);
-					pxTeaScheduleT.setTzCourseId(courseId);
-					// 1 有预约 0 没有预约
-					pxTeaScheduleT.setTzAppStatus("0");
-					int inthour = Integer.parseInt(hour);
-					if (inthour < 10) {
-						hour = "0" + String.valueOf(inthour);
-					}
-					String classStar = starDate + " " + hour + ":00:00";
-					System.out.println("classStar:" + classStar);
-					Date dclassStar = DateUtil.parseTimeStamp(classStar);
-
-					// 每堂课多少分钟
-					String skHour = jdbcTemplate.queryForObject(
-							"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
-							new Object[] { "TZ_ONE_Course" }, "String");
-
-					Calendar cal = Calendar.getInstance();
-					cal.setTime(dclassStar);
-					cal.add(Calendar.MINUTE, Integer.parseInt(skHour));
-					Date dclassEnd = cal.getTime();
-
-					pxTeaScheduleT.setTzClassStartTime(dclassStar);
-					pxTeaScheduleT.setTzClassEndTime(dclassEnd);
-					// 0 正常 1撤销 2已上课
-					pxTeaScheduleT.setTzScheduleType("0");
-					pxTeaScheduleT.setTzScheduleDate(new Date());
-
-					pxTeaScheduleT.setRowLastmantDttm(new Date());
-					pxTeaScheduleT.setRowLastmantOprid(oprid);
-					pxTeaScheduleTMapper.insertSelective(pxTeaScheduleT);
-					return "{\"pkRs\":\"排课成功！\"}";
 				}
 
 			}
-		} catch (Exception e) {
+		} catch (
+
+		Exception e) {
 			e.printStackTrace();
 			errorMsg[0] = "1";
 			errorMsg[1] = e.toString();

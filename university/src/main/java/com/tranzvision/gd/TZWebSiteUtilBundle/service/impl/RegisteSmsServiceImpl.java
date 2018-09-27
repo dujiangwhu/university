@@ -395,7 +395,7 @@ public class RegisteSmsServiceImpl extends FrameworkImpl{
 						return strResult;
 					}
 					// 创建短信、邮件发送的听众;
-					String createAudience = createTaskServiceImpl.createAudience(taskId,strOrgid,"考生申请用户注册手机验证", "JSRW");
+					String createAudience = createTaskServiceImpl.createAudience(taskId,strOrgid,"申请教师注册手机验证", "JSRW");
 					if(createAudience == null || "".equals(createAudience)){
 						errorMsg[0] = "31";
 						errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang,"TZ_SITE_MESSAGE", "127", "短信发送失败", "Failed to send SMS。");
