@@ -250,6 +250,16 @@ $(document).ready(function() {
 		userInfoJson["lang"] = $("#lang").val();
 		//一个机构下有多个站点
 		userInfoJson["siteId"] = $("#siteid").val();
+		
+		//教師的部分
+		userInfoJson["SysName"] = $("#SysName").val();
+		userInfoJson["Fileurl"] = $("#Fileurl").val();
+		userInfoJson["FileName"] = $("#FileName").val();
+		userInfoJson["TZ_COMMENT8"] = $("#TZ_COMMENT8").val();
+		console.log(userInfoJson["SysName"]);
+		console.log(userInfoJson["Fileurl"]);
+		console.log(userInfoJson["FileName"]);
+		console.log(userInfoJson["TZ_COMMENT8"]);
 
 		var tzParams = '{"ComID":"TZ_GD_ZS_USERMNG","PageID":"TZ_ZS_USERMNG_STD","OperateType":"SAVEUSERINFO","comParams":'
 				+ JSON.stringify(userInfoJson)

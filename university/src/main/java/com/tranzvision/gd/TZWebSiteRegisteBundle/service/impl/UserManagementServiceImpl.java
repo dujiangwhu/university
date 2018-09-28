@@ -415,8 +415,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					}
 
 				}
-				
-				
+
 				// 教师增加上传附件 以及textarea，直接读取内容，不需要二次加载
 				TzSession tmpSession = new TzSession(request);
 				String LoginType = tmpSession.getSession("LoginType") == null ? ""
@@ -438,21 +437,27 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 								: FJMap.get("TZ_ATTACHFILE_NAME").toString();
 						FJURL = FJMap.get("TZ_ATT_A_URL") == null ? "" : FJMap.get("TZ_ATT_A_URL").toString();
 					}
-					// 上传附件
-					String FJ2 = "";
+					// style="display: none;"
 
 					if (!FJSysName.equals("") && !FJName.equals("") && !FJURL.equals("")) {
-						FJ2 = tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ2", true, FJName);
+						fields = fields
+								+ tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ", true,
+										"style=\"display: none;\"")
+								+ tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ2", true, FJName, FJSysName,
+										FJURL, "style=\"display: block;\"",FJURL+"/"+FJSysName);
+					} else {
+						fields = fields
+								+ tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ", true,
+										"style=\"display: block;\"")
+								+ tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ2", true, FJName, FJSysName,
+										FJURL, "style=\"display: none;\"","");
 					}
 
-					fields = fields + tzGdObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_TEA_FJ", true, FJ2, FJSysName,
-							FJURL, FJName);
-
 					// 自我介绍
-					fields = fields + "<div class=\"main_inner_right_line_50px\">";
+					fields = fields + "<div class=\"main_inner_right_line_50px\" style=\"height:100px\">";
 					fields = fields + "<div class=\"main_inner_right_line_left_user\">自我介绍：</div>";
 					fields = fields
-							+ "<textarea rows=\"5\" cols=\"20\" name=\"TZ_COMMENT8\" id=\"TZ_COMMENT8\" style=\"background-color: rgb(255, 255, 255); border-color: rgb(169, 169, 169); margin: 0px; width: 249px; height: 51px;\" class=\"input_text input_251px\">"
+							+ "<textarea rows=\"5\" cols=\"20\" name=\"TZ_COMMENT8\" id=\"TZ_COMMENT8\" style=\"background-color: rgb(255, 255, 255); border-color: rgb(169, 169, 169); margin: 0px; width: 249px; height: 100px;\" class=\"input_text input_251px\">"
 							+ INTRODUCE + "</textarea>";
 					fields = fields + "</div>";
 				}
@@ -504,7 +509,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 				String strIsShowPhoto = jdbcTemplate.queryForObject(strIsShowPhotoSQL, new Object[] { siteId },
 						"String");
 				if ("Y".equals(strIsShowPhoto)) {
-					return tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_GD_WDZH_HTML",true, saveActivate_url,
+					return tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_GD_WDZH_HTML", true, saveActivate_url,
 							phoUrl, updpassword, commonUrl, str_mobile, msgmail_html, zhbd, str_userInfo, SaveRemind,
 							fields, Province, City1, strColuTitle, strTab1, strTab2, strTab3, strTab4, strPhoto,
 							strSaveBtn, strBind, strRelease, strAbsence, strPassSucTips, countryUrl, strImgC, userPhoto,
@@ -893,8 +898,6 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 
 				}
 
-				
-
 				// 选择省份;
 				String Province = commonUrl;
 				Province = Province
@@ -1112,7 +1115,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 
 				try {
 					String contextPath = request.getContextPath();
-					strResultConten = tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_MENU_ZHGL_HTML",
+					strResultConten = tzGdObject.getHTMLTextForDollar("HTML.TZWebSiteRegisteBundle.TZ_MENU_ZHGL_HTML",
 							contextPath, strOrgId, strSiteId, strResultConten);
 				} catch (TzSystemException e) {
 					e.printStackTrace();
@@ -1484,6 +1487,16 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 				}
 			}
 
+			// 增加教师学生的修改
+			TzSession tmpSession = new TzSession(request);
+			String LoginType = tmpSession.getSession("LoginType") == null ? ""
+					: tmpSession.getSession("LoginType").toString();
+
+			if (LoginType.equals("TEA")) {
+
+				TZ_COMMENT8 = jacksonUtil.getString("TZ_COMMENT8");
+			}
+
 			if (!"".equals(updateRegSql)) {
 				updateRegSql = updateRegSql + " where OPRID = ?";
 				Object[] obj = new Object[updateList.size() + 1];
@@ -1516,10 +1529,6 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 				jdbcTemplate.update(updateLxfsSQL, new Object[] { strUserSkype, oprid });
 			}
 
-			// 增加教师学生的修改
-			TzSession tmpSession = new TzSession(request);
-			String LoginType = tmpSession.getSession("LoginType") == null ? ""
-					: tmpSession.getSession("LoginType").toString();
 			if (LoginType.equals("STU")) {
 
 				updateYhxxSQL = "UPDATE PS_TZ_AQ_YHXX_TBL SET TZ_EMAIL=? WHERE OPRID=?";
@@ -1567,6 +1576,24 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					pxStudentTMapper.updateByPrimaryKeySelective(pxStudentT);
 				}
 			} else if (LoginType.equals("TEA")) {
+
+				// TZ_COMMENT8 = jacksonUtil.getString("TZ_COMMENT8");
+
+				String SysName = "";
+				String Fileurl = "";
+				String FileName = "";
+
+				if (jacksonUtil.containsKey("SysName")) {
+					SysName = jacksonUtil.getString("SysName");
+				}
+
+				if (jacksonUtil.containsKey("Fileurl")) {
+					Fileurl = jacksonUtil.getString("Fileurl");
+				}
+				if (jacksonUtil.containsKey("FileName")) {
+					FileName = jacksonUtil.getString("FileName");
+				}
+
 				// 教师信息
 				PxTeacher pxTeacher = pxTeacherMapper.selectByPrimaryKey(oprid);
 
@@ -1612,11 +1639,25 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 					} catch (Exception e) {
 					}
 					pxTeacherMapper.updateByPrimaryKeySelective(pxTeacher);
+
+					sql = "select count(*) from PX_TEA_CERT_T where OPRID=?";
+					int count = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "Integer");
+					if (count < 1) {
+						jdbcTemplate.update("insert into PX_TEA_CERT_T values (?,?,?,?,?,now(),?)",
+								new Object[] { oprid, SysName, FileName, Fileurl, Fileurl, oprid });
+					} else {
+						jdbcTemplate.update(
+								"update PX_TEA_CERT_T set TZ_ATTACHSYSFILENA=?,TZ_ATTACHFILE_NAME=?,TZ_ATT_P_URL=?,TZ_ATT_A_URL=?,ROW_LASTMANT_DTTM=now(),ROW_LASTMANT_OPRID=? where OPRID=?",
+								new Object[] { SysName, FileName, Fileurl, Fileurl, oprid, oprid });
+					}
 				}
 			}
 
 			String strPassSucTips = validateUtil.getMessageTextWithLanguageCd(strJgid, strLang, "TZ_SITE_MESSAGE", "29",
 					"修改成功", "The modification is successful");
+			if (LoginType.equals("TEA")) {
+				strPassSucTips="您的信息已经提交，管理员将会尽快审核，审核通过后，您便可排课。然后在管理后台 对应老师的管理里，管理员进行审核决定是否通过。";
+			}
 			return tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_GD_USERMG_JSON", strPassSucTips);
 		} catch (Exception e) {
 			e.printStackTrace();
