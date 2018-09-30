@@ -1656,7 +1656,7 @@ public class UserManagementServiceImpl extends FrameworkImpl {
 			String strPassSucTips = validateUtil.getMessageTextWithLanguageCd(strJgid, strLang, "TZ_SITE_MESSAGE", "29",
 					"修改成功", "The modification is successful");
 			if (LoginType.equals("TEA")) {
-				strPassSucTips="您的信息已经提交，管理员将会尽快审核，审核通过后，您便可排课。然后在管理后台 对应老师的管理里，管理员进行审核决定是否通过。";
+				strPassSucTips="您的信息已经提交，管理员将会尽快审核，审核通过后，您便可排课。";
 			}
 			return tzGdObject.getHTMLText("HTML.TZWebSiteRegisteBundle.TZ_GD_USERMG_JSON", strPassSucTips);
 		} catch (Exception e) {

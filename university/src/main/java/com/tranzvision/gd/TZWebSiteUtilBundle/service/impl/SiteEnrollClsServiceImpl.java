@@ -679,6 +679,7 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 				pkTeaIntegralChangeT.setRowLastmantOprid(oprId);
 				pkTeaIntegralChangeT.setTzAfterChange(new Integer(score));
 				pkTeaIntegralChangeT.setTzBeforeChange(new Integer(0));
+				pkTeaIntegralChangeT.setTzChangeTime(new Date());
 				pkTeaIntegralChangeT.setTzChange(new Integer(score));
 				//1：上课产生积分 2：提现消耗积分 3：管理员修改 4:注册产生积分
 				pkTeaIntegralChangeT.setTzChangeId(""+getSeqNum.getSeqNum("PK_TES_INTEGRAL_CHANGE_T", "TZ_CHANGE_ID"));

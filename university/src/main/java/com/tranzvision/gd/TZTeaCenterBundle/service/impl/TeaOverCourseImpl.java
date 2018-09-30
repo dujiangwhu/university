@@ -135,7 +135,7 @@ public class TeaOverCourseImpl extends FrameworkImpl {
 			if (l == null || l.size() == 0) {
 				sb.append("<tr>");
 				sb.append(
-						"<td colspan=\"5\" valign=\"middle\" width=\"100%\" align=\"left\" style=\"padding-left:5px;\" >没有数据</td>");
+						"<td colspan=\"4\" valign=\"middle\" width=\"100%\" align=\"left\" style=\"padding-left:5px;\" >没有数据</td>");
 				sb.append("</tr>");
 				sb.append("</tbody></table>");
 			} else {
