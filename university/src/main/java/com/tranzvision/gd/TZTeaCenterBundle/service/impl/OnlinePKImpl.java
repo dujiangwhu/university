@@ -28,6 +28,7 @@ import com.tranzvision.gd.util.Calendar.DateUtil;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.TzSystemException;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.gh.sms.SmsService;
 import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
@@ -69,6 +70,9 @@ public class OnlinePKImpl extends FrameworkImpl {
 
 	@Autowired
 	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
+
+	@Autowired
+	private SmsService smsService;
 
 	/**
 	 * 查看某天 某时间，是否排课
@@ -403,7 +407,29 @@ public class OnlinePKImpl extends FrameworkImpl {
 							pxTeaScheduleT.setRowLastmantDttm(new Date());
 							pxTeaScheduleT.setRowLastmantOprid(oprid);
 							pxTeaScheduleTMapper.insertSelective(pxTeaScheduleT);
+
+							// 约课成功，发送短信
+							String getSmsSendTmpSql = "SELECT TZ_HARDCODE_VAL FROM PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT = ? LIMIT 1";
+							String strSmsSendTmp = jdbcTemplate.queryForObject(getSmsSendTmpSql,
+									new Object[] { "TZ_SMS_SEND_PK_TPL" }, "String");
+							if (strSmsSendTmp == null) {
+								strSmsSendTmp = "SMS_146804570";
+							}
+							String strPhone = "";
+
+							sql = "select TZ_MOBILE from  PS_TZ_AQ_YHXX_TBL where OPRID=?";
+							strPhone = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "String");
+
+							// 恭喜您排课成功，您的上课时间是${datetime}，请提前做好备课工作，学生等待您的教导,一起共创大语文新时代！
+							String json = "{\"datetime\":\"" + classStar + "\"}";
+							boolean sendrs = smsService.sendSmsAndLog(strPhone, strSmsSendTmp, json);
+							// 失败后，重新发送一次
+							if (!sendrs) {
+								smsService.sendSmsAndLog(strPhone, strSmsSendTmp, json);
+							}
+
 							return "{\"pkRs\":\"排课成功！\"}";
+
 						}
 					}
 				}

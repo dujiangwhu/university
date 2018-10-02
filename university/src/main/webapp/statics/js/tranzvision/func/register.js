@@ -98,9 +98,9 @@ function submitEnroll() {
 					_statusFlg="error";
 				}
 			}
-		}else if(key=="TZ_EMAIL"){//邮箱
+		}else if(key=="TZ_EMAIL"){//邮箱  修改 注册没有邮箱
 			if(jsonValue[key] == "Y"){
-				if(_emailFlg !=0 || $('#TZ_EMAIL').val()==''){
+				/*if(_emailFlg !=0 || $('#TZ_EMAIL').val()==''){
 					if ($('#TZ_EMAIL_status').html())
 					{
 						$("#TZ_EMAILStyle").removeClass("alert_display_none");
@@ -110,7 +110,7 @@ function submitEnroll() {
 						$("#TZ_EMAILStyle").removeClass("alert_display_none");
 						_statusFlg="error";
 					}
-				}
+				} */
 			}
 		}else if(key=="TZ_MOBILE"){//手机
 			if(jsonValue[key] == "Y"){

@@ -27,6 +27,7 @@ import com.tranzvision.gd.util.Calendar.DateUtil;
 import com.tranzvision.gd.util.base.JacksonUtil;
 import com.tranzvision.gd.util.base.TzSystemException;
 import com.tranzvision.gd.util.cfgdata.GetSysHardCodeVal;
+import com.tranzvision.gd.util.gh.sms.SmsService;
 import com.tranzvision.gd.util.security.TzFilterIllegalCharacter;
 import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
@@ -74,6 +75,9 @@ public class OnlineAPPImpl extends FrameworkImpl {
 
 	@Autowired
 	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
+
+	@Autowired
+	private SmsService smsService;
 
 	@Override
 	public String tzGetHtmlContent(String strParams) {
@@ -505,10 +509,10 @@ public class OnlineAPPImpl extends FrameworkImpl {
 					sql = sql
 							+ "in (select TZ_SCHEDULE_ID from PX_TEA_SCHEDULE_T where TZ_SCHEDULE_TYPE=? and date(TZ_CLASS_START_TIME)=? AND hour(TZ_CLASS_START_TIME)=?)";
 
-					int count = jdbcTemplate.queryForObject(sql, new Object[] { "0", oprid, "0", starTime,hour },
+					int count = jdbcTemplate.queryForObject(sql, new Object[] { "0", oprid, "0", starTime, hour },
 							"Integer");
 					if (count > 0) {
-						//return "{\"pkRs\":\"该时间已经排过课程了，不能重复排课！\"}";
+						// return "{\"pkRs\":\"该时间已经排过课程了，不能重复排课！\"}";
 						strRet = "{\"yyRs\":\"同一时间 已经预约了其他课程，该时间不可预约\"}";
 						flag = 1;
 					}
@@ -576,6 +580,49 @@ public class OnlineAPPImpl extends FrameworkImpl {
 											new Object[] { TZ_SCHEDULE_ID });
 									tzGDObject.commit(status);
 									strRet = "{\"yyRs\":\"预约课程成功\"}";
+
+									// 约课成功，发送短信
+									String getSmsSendTmpSql = "SELECT TZ_HARDCODE_VAL FROM PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT = ? LIMIT 1";
+									String strSmsSendTmp = jdbcTemplate.queryForObject(getSmsSendTmpSql,
+											new Object[] { "TZ_SMS_SEND_YK_TPL" }, "String");
+									if (strSmsSendTmp == null) {
+										strSmsSendTmp = "SMS_146804571";
+									}
+
+									String name = "";
+									String strPhone = "";
+									String kec = "";
+									String datetime = "";
+
+									sql = "select TZ_REALNAME,TZ_MOBILE from  PS_TZ_AQ_YHXX_TBL where OPRID=?";
+									Map<String, Object> userInfo = jdbcTemplate.queryForMap(sql,
+											new Object[] { oprid });
+									if (userInfo != null) {
+										name = userInfo.get("TZ_REALNAME") == null ? ""
+												: String.valueOf(userInfo.get("TZ_REALNAME"));
+										strPhone = userInfo.get("TZ_MOBILE") == null ? ""
+												: String.valueOf(userInfo.get("TZ_MOBILE"));
+									}
+
+									sql = "select A.TZ_COURSE_NAME,date_format(B.TZ_CLASS_START_TIME,'%Y-%m-%d %H:%i:%S') AS TZ_CLASS_START_TIME FROM PX_COURSE_T A,PX_TEA_SCHEDULE_T B WHERE A.TZ_COURSE_ID=B.TZ_COURSE_ID AND B.TZ_SCHEDULE_ID=?";
+
+									Map<String, Object> PKInfo = jdbcTemplate.queryForMap(sql,
+											new Object[] { TZ_SCHEDULE_ID });
+									if (userInfo != null) {
+										kec = PKInfo.get("TZ_COURSE_NAME") == null ? ""
+												: String.valueOf(PKInfo.get("TZ_COURSE_NAME"));
+										datetime = PKInfo.get("TZ_CLASS_START_TIME") == null ? ""
+												: String.valueOf(PKInfo.get("TZ_CLASS_START_TIME"));
+									}
+									// ${name}同学，你已成功预约${kec}课程，上课时间：${datetime}。上课请提前登陆兴语系统，老师在等您呦！
+									String json = "{\"name\":\"" + name + "\", \"kec\":\"" + kec + "\",\"datetime\":\""
+											+ datetime + "\"}";
+									boolean sendrs = smsService.sendSmsAndLog(strPhone, strSmsSendTmp, json);
+									// 失败后，重新发送一次
+									if (!sendrs) {
+										smsService.sendSmsAndLog(strPhone, strSmsSendTmp, json);
+									}
+
 								} else {
 									tzGDObject.commit(status);
 									strRet = "{\"yyRs\":\"没有剩余课时卡\"}";
@@ -642,6 +689,47 @@ public class OnlineAPPImpl extends FrameworkImpl {
 											new Object[] { TZ_SCHEDULE_ID });
 									tzGDObject.commit(status);
 									strRet = "{\"yyRs\":\"预约课程成功\"}";
+
+									// 约课成功，发送短信
+									String getSmsSendTmpSql = "SELECT TZ_HARDCODE_VAL FROM PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT = ? LIMIT 1";
+									String strSmsSendTmp = jdbcTemplate.queryForObject(getSmsSendTmpSql,
+											new Object[] { "TZ_SMS_SEND_YK_TPL" }, "String");
+									if (strSmsSendTmp == null) {
+										strSmsSendTmp = "SMS_146804571";
+									}
+									String name = "";
+									String strPhone = "";
+									String kec = "";
+									String datetime = "";
+
+									sql = "select TZ_REALNAME,TZ_MOBILE from  PS_TZ_AQ_YHXX_TBL where OPRID=?";
+									Map<String, Object> userInfo = jdbcTemplate.queryForMap(sql,
+											new Object[] { oprid });
+									if (userInfo != null) {
+										name = userInfo.get("TZ_REALNAME") == null ? ""
+												: String.valueOf(userInfo.get("TZ_REALNAME"));
+										strPhone = userInfo.get("TZ_MOBILE") == null ? ""
+												: String.valueOf(userInfo.get("TZ_MOBILE"));
+									}
+
+									sql = "select A.TZ_COURSE_NAME,date_format(B.TZ_CLASS_START_TIME,'%Y-%m-%d %H:%i:%S') AS TZ_CLASS_START_TIME FROM PX_COURSE_T A,PX_TEA_SCHEDULE_T B WHERE A.TZ_COURSE_ID=B.TZ_COURSE_ID AND B.TZ_SCHEDULE_ID=?";
+
+									Map<String, Object> PKInfo = jdbcTemplate.queryForMap(sql,
+											new Object[] { TZ_SCHEDULE_ID });
+									if (userInfo != null) {
+										kec = PKInfo.get("TZ_COURSE_NAME") == null ? ""
+												: String.valueOf(PKInfo.get("TZ_COURSE_NAME"));
+										datetime = PKInfo.get("TZ_CLASS_START_TIME") == null ? ""
+												: String.valueOf(PKInfo.get("TZ_CLASS_START_TIME"));
+									}
+									// ${name}同学，你已成功预约${kec}课程，上课时间：${datetime}。上课请提前登陆兴语系统，老师在等您呦！
+									String json = "{\"name\":\"" + name + "\", \"kec\":\"" + kec + "\",\"datetime\":\""
+											+ datetime + "\"}";
+									boolean sendrs = smsService.sendSmsAndLog(strPhone, strSmsSendTmp, json);
+									// 失败后，重新发送一次
+									if (!sendrs) {
+										smsService.sendSmsAndLog(strPhone, strSmsSendTmp, json);
+									}
 								} else {
 									tzGDObject.commit(status);
 									strRet = "{\"yyRs\":\"没有剩余课时卡\"}";
