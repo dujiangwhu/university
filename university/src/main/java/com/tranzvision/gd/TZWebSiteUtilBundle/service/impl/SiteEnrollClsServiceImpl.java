@@ -1798,7 +1798,13 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 					new Object[] { siteid }, "String");
 			url = url.replaceAll("\\\\", "/");
 			Boolean isMobile = CommonUtils.isMobile(request);
-			String strEnrollName = "enroll.html";
+			String strEnrollName = "";
+			
+			if (siteid.equals("46")){
+				strEnrollName="enrollTea.html";
+			} else if (siteid.equals("45")){
+				strEnrollName="enrollStu.html";
+			}
 			if (isMobile) {
 				strEnrollName = "menroll.html";
 			}
