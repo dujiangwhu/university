@@ -21,3 +21,4 @@ WHERE
 	A.OPRID = ?
 ORDER BY
 	A.TZ_CHANGE_TIME DESC
+limit ?,?

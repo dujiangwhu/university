@@ -17,9 +17,21 @@
 		$("#letf_menu").height(922);
     });
 	
-	function selectRadioClassId(num){
-		$("input[name='classidradio']").eq(num).click();
-	}
+	function loadPage(page,viewType){
+		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_PL_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","opType":"' + viewType+ '","pageNo":"' + page+ '"}}';
+		$.ajax({
+			type:"POST",
+			url: urlBegin,
+			data:{
+				tzParams:tzParams
+			},
+			success:function(response){
+				$("#loadXK").html(response);
+			},
+			failure: function () {
+			}    
+		});	
+   	}
 	
 	
 	//变换课程类型
@@ -28,7 +40,7 @@
 		for (i = 0; i < menu.length; i++) {
 			menu[i].className = i == n ? "now" : "";
 		}
-		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_PL_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","opType":"' + viewType+ '"}}';
+		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_PL_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","opType":"' + viewType+ '","pageNo":"1"}}';
 		$.ajax({
 			type:"POST",
 			url: urlBegin,

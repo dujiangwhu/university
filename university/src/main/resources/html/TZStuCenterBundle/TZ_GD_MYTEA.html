@@ -21,6 +21,22 @@
 		$("#letf_menu").height(922);
 	});
 
+	function loadPage(page,viewType){
+		var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"HTML","comParams":{"htmlTpye":"SearchFouse","opType":"' + viewType+ '","pageNo":"' + page+ '"}}';
+		$.ajax({
+			type:"POST",
+			url: urlBegin,
+			data:{
+				tzParams:tzParams
+			},
+			success:function(response){
+				$("#loadXK").html(response);
+			},
+			failure: function () {
+			}    
+		});	
+   	}
+	
 	function setTab(m, n) {
 		var menu = document.getElementById("tab" + m)
 				.getElementsByTagName("li");
@@ -31,7 +47,7 @@
 		}
 		//加载关注的老师
 		if (n == 1) {
-			var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"HTML","comParams":{"htmlTpye":"SearchFouse","opType":"1"}}';
+			var tzParams = '{"ComID":"PX_STU_CENTER_COM","PageID":"PX_STU_TEA_STD","OperateType":"HTML","comParams":{"htmlTpye":"SearchFouse","opType":"1","pageNo":"1"}}';
 
 			$.ajax({
 				type : "POST",

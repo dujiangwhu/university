@@ -3,62 +3,6 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" >
 <title>我的课表</title>
 <link href="%bind(:3)" rel="stylesheet" type="text/css">
-<style>
-.main_article_nav {
-    clear: both;
-    height: 51px;
-    width: 96%;
-    margin: 20px auto;
-    text-align: center;
-}
-.main_article_nav_left2{
-	font-size:14px;
-	line-height:22px;
-	color:#474747;
-	float:left;
-	height:51px;
-	width:365px;
-	text-align:left
-}
-.main_article_nav_right2{
-	font-size:14px;
-	line-height:22px;
-	color:#666;
-	float:right;
-	height:51px;
-	width:365px;
-	text-align:right
-}
-.main_article_nav_left2 ul li{
-	display:inline
-}
-.main_article_nav_left2 ul{
-	margin:0;
-	padding:0
-}
-.main_article_nav_left2 li{
-	float:left;
-	height:32px;
-	width:32px;
-	line-height:32px;
-	margin-right:3px;
-	text-align:center;
-	color:#999;
-	font-size:15px;
-	cursor:pointer;
-	border:1px solid #ccc
-}
-.main_article_nav_left2 li.now{
-	color:#fff;
-	background:#123876
-}
-.main_article_nav_left2 li:hover{
-	color:#fff;
-	background:#123876
-}
-</style>
-
-
 <script type="text/javascript">
 	TzUniversityContextPath = "%bind(:7)";
 </script>
@@ -72,8 +16,6 @@
 	var urlBegin="%bind(:2)";
 	$(document).ready(function(){	
 		$("#letf_menu").height(922);
-		//加载数据的函数，默认第一页
-		loadPage(1);
     });
 	
 	

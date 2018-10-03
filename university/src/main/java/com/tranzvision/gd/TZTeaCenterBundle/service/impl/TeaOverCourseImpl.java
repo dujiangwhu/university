@@ -57,48 +57,70 @@ public class TeaOverCourseImpl extends FrameworkImpl {
 		String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 
 		jacksonUtil.json2Map(strParams);
-
 		String htmlTpye = "";
+		if (jacksonUtil.containsKey("htmlTpye")) {
+			htmlTpye = jacksonUtil.getString("htmlTpye");
+		}
 
-		String strSiteId = jdbcTemplate.queryForObject(
-				"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?", new Object[] { "TZ_TEA_MH" },
-				"String");
+		if (htmlTpye != null && htmlTpye.equals("search")) {
 
-		String str_jg_id = "";
-		String strCssDir = "";
-		String siteSQL = "select TZ_JG_ID,TZ_SKIN_STOR,TZ_SITE_LANG from PS_TZ_SITEI_DEFN_T where TZ_SITEI_ID=?";
-		Map<String, Object> siteMap = jdbcTemplate.queryForMap(siteSQL, new Object[] { strSiteId });
-		if (siteMap != null) {
-			str_jg_id = (String) siteMap.get("TZ_JG_ID");
-			String skinstor = (String) siteMap.get("TZ_SKIN_STOR");
-			String websitePath = getSysHardCodeVal.getWebsiteCssPath();
+			String page = jacksonUtil.getString("pageNo");
+			//String opType = jacksonUtil.getString("opType");
 
-			String strRandom = String.valueOf(10 * Math.random());
-			if ("".equals(skinstor) || skinstor == null) {
-				strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
-						+ "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
-			} else {
-				strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
-						+ "/" + skinstor + "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
+			return this.getTable(oprid, page);
+		} else {
+
+			String page = "";
+			if (jacksonUtil.containsKey("pageNo")) {
+				page = jacksonUtil.getString("pageNo");
 			}
-		}
 
-		String table = this.getTable(oprid);
-		// 通用链接;
-		String ZSGL_URL = request.getContextPath() + "/dispatcher";
-		String classSelectHtml = "";
-		try {
-			classSelectHtml = tzGDObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_GD_TEA_Over_COURSE", true, table,
-					ZSGL_URL, strCssDir, "我的排课课程", str_jg_id, strSiteId, request.getContextPath());
-		} catch (TzSystemException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-			return "无法获取相关数据";
+			if (page.equals("")) {
+				page = "1";
+			}
+
+			// String htmlTpye = "";
+
+			String strSiteId = jdbcTemplate.queryForObject(
+					"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
+					new Object[] { "TZ_TEA_MH" }, "String");
+
+			String str_jg_id = "";
+			String strCssDir = "";
+			String siteSQL = "select TZ_JG_ID,TZ_SKIN_STOR,TZ_SITE_LANG from PS_TZ_SITEI_DEFN_T where TZ_SITEI_ID=?";
+			Map<String, Object> siteMap = jdbcTemplate.queryForMap(siteSQL, new Object[] { strSiteId });
+			if (siteMap != null) {
+				str_jg_id = (String) siteMap.get("TZ_JG_ID");
+				String skinstor = (String) siteMap.get("TZ_SKIN_STOR");
+				String websitePath = getSysHardCodeVal.getWebsiteCssPath();
+
+				String strRandom = String.valueOf(10 * Math.random());
+				if ("".equals(skinstor) || skinstor == null) {
+					strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
+							+ "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
+				} else {
+					strCssDir = request.getContextPath() + websitePath + "/" + str_jg_id.toLowerCase() + "/" + strSiteId
+							+ "/" + skinstor + "/" + "style_" + str_jg_id.toLowerCase() + ".css?v=" + strRandom;
+				}
+			}
+
+			String table = this.getTable(oprid, page);
+			// 通用链接;
+			String ZSGL_URL = request.getContextPath() + "/dispatcher";
+			String classSelectHtml = "";
+			try {
+				classSelectHtml = tzGDObject.getHTMLText("HTML.TZTeaCenterBundle.TZ_GD_TEA_Over_COURSE", true, table,
+						ZSGL_URL, strCssDir, "我的排课课程", str_jg_id, strSiteId, request.getContextPath());
+			} catch (TzSystemException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+				return "无法获取相关数据";
+			}
+			applicationCenterHtml = classSelectHtml;
+			applicationCenterHtml = siteRepCssServiceImpl.repTitle(applicationCenterHtml, strSiteId);
+			applicationCenterHtml = siteRepCssServiceImpl.repCss(applicationCenterHtml, strSiteId);
+			return applicationCenterHtml;
 		}
-		applicationCenterHtml = classSelectHtml;
-		applicationCenterHtml = siteRepCssServiceImpl.repTitle(applicationCenterHtml, strSiteId);
-		applicationCenterHtml = siteRepCssServiceImpl.repCss(applicationCenterHtml, strSiteId);
-		return applicationCenterHtml;
 
 	}
 
@@ -109,7 +131,7 @@ public class TeaOverCourseImpl extends FrameworkImpl {
 	 * @param oprid
 	 * @return
 	 */
-	private String getTable(String oprid) {
+	private String getTable(String oprid, String pageNo) {
 		StringBuffer sb = new StringBuffer();
 		List<Map<String, Object>> l = null;
 		String sql = "";
@@ -121,9 +143,38 @@ public class TeaOverCourseImpl extends FrameworkImpl {
 		String TZ_ATT_A_URL = "";
 		String TZ_ATTACHSYSFILENA = "";
 		try {
-			
+
+			// 总条数
+			int count = 0;
+
+			// 当前页数
+			int page = Integer.parseInt(pageNo);
+
+			// 分页总数
+			int pagesize = 0;
+
+			// 每页的行数
+			int pageLimit = Integer.parseInt(
+					jdbcTemplate.queryForObject("select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
+							new Object[] { "TZ_PAGE_LIMIT" }, "String"));
+
+			// sql 查询的开始行数
+			int beginH = (page - 1) * pageLimit;
+
 			sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETALL");
-			l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "2" });
+			l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "2", beginH, pageLimit });
+
+			sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETALLCount");
+			count = jdbcTemplate.queryForObject(sql, new Object[] { oprid, "2" }, "Integer");
+
+			if (count > pageLimit) {
+				pagesize = count / pageLimit;
+				if (count % pageLimit != 0) {
+					pagesize = pagesize + 1;
+				}
+			} else {
+				pagesize = 1;
+			}
 
 			sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"index-bm-border\">");
 			sb.append("<tbody><tr class=\"index_hd\">");
@@ -205,6 +256,54 @@ public class TeaOverCourseImpl extends FrameworkImpl {
 				sb.append("</tbody></table>");
 
 			}
+			// 分页设置
+			System.out.println(count);
+			System.out.println(page);
+			System.out.println(pagesize);
+
+			// 上一页
+			int lastPage = 0;
+			// 下一页
+			int nextPage = 0;
+
+			lastPage = page - 1;
+
+			nextPage = page + 1;
+
+			if (lastPage < 1) {
+				lastPage = 1;
+			}
+
+			if (nextPage > pagesize) {
+				nextPage = pagesize;
+			}
+
+			int index = page;
+
+			System.out.println(lastPage);
+			System.out.println(nextPage);
+
+			sb.append("<div style=\"clear: both;\"></div>");
+			sb.append("<div class=\"main_article_nav\">");
+			sb.append("<div class=\"main_article_nav_left2\" style=\"width:465px\">");
+			sb.append("<ul>");
+			sb.append("<li onclick=\"loadPage(1)\">首页</li>");
+			sb.append("<li onclick=\"loadPage(" + lastPage + ")\">&lt;&lt;</li>");
+			sb.append("<li class=\"now\" onclick=\"loadPage(" + page + ")\">" + page + "</li>");
+			for (int i = 0; i < 4; i++) {
+				index = index + 1;
+				if (index <= pagesize) {
+					sb.append("<li onclick=\"loadPage(" + index + ")\">" + index + "</li>");
+				} else {
+					break;
+				}
+			}
+			sb.append("<li onclick=\"loadPage(" + nextPage + ")\">&gt;&gt;</li>");
+			sb.append("<li onclick=\"loadPage(" + pagesize + ")\">尾页</li>");
+			sb.append("</div>");
+			sb.append("<div class=\"main_article_nav_right2\">第 <span>" + page + "</span>/<span>" + pagesize
+					+ "</span> 页</div>");
+			sb.append("</div>");
 
 		} catch (TzSystemException e) {
 			// TODO Auto-generated catch block

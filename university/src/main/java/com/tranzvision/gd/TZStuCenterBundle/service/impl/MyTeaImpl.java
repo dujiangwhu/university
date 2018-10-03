@@ -59,7 +59,6 @@ public class MyTeaImpl extends FrameworkImpl {
 	private PxTeacherMapper pxTeacherMapper;
 	@Autowired
 	private PxStuReviewTeaTMapper pxStuReviewTeaTMapper;
-	
 
 	@Autowired
 	private TzFilterIllegalCharacter tzFilterIllegalCharacter;
@@ -140,7 +139,7 @@ public class MyTeaImpl extends FrameworkImpl {
 								: l.get(i).get("TZ_REVIEW_DESC").toString();
 						TZ_REVIEW_TIME = l.get(i).get("TZ_REVIEW_TIME") == null ? ""
 								: l.get(i).get("TZ_REVIEW_TIME").toString();
-						
+
 						sb.append("<div stype=\"padding:15px;border-bottom:1px solid #ddd\">");
 						sb.append("<div>");
 						sb.append("<div style=\"width:78px;height:14px;\">");
@@ -155,7 +154,8 @@ public class MyTeaImpl extends FrameworkImpl {
 							sb.append("<span style=\"color:red\"></span>");
 						}
 						sb.append("</div>");
-						sb.append("<p style=\"font-size:14px;padding:10px 0;line-height:180%;color:#333;white-space:pre-wrap;word-wrap:break-word; \">");
+						sb.append(
+								"<p style=\"font-size:14px;padding:10px 0;line-height:180%;color:#333;white-space:pre-wrap;word-wrap:break-word; \">");
 						sb.append(TZ_REVIEW_DESC);
 						sb.append("</p>");
 						sb.append("<div>");
@@ -205,7 +205,8 @@ public class MyTeaImpl extends FrameworkImpl {
 			return strRet;
 		} else if (htmlTpye != null && htmlTpye.equals("SearchFouse")) {
 			String opType = jacksonUtil.getString("opType");
-			return this.getTable(opType, oprid);
+			String page = jacksonUtil.getString("pageNo");
+			return this.getTable(opType, oprid, page);
 		} else if (htmlTpye != null && htmlTpye.equals("PLHTML")) {
 			String strRet = "";
 			String tcOPRID = jacksonUtil.getString("tcOPRID");
@@ -266,9 +267,9 @@ public class MyTeaImpl extends FrameworkImpl {
 						+ "</li>";
 
 				try {
-					strRet = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_APPLY_REG_FORM_HEAD",true, str_items_html,
-							strUrl, "", "", timeOut, serverError, onlineApplyText, tipsMsg, closeBtn, backBtn,
-							submitBtn, requireTips, request.getContextPath());
+					strRet = tzGDObject.getHTMLText("HTML.TZStuCenterBundle.TZ_APPLY_REG_FORM_HEAD", true,
+							str_items_html, strUrl, "", "", timeOut, serverError, onlineApplyText, tipsMsg, closeBtn,
+							backBtn, submitBtn, requireTips, request.getContextPath());
 				} catch (TzSystemException e) {
 					// TODO Auto-generated catch block
 					e.printStackTrace();
@@ -311,7 +312,7 @@ public class MyTeaImpl extends FrameworkImpl {
 				}
 			}
 
-			String table = this.getTable("0", oprid);
+			String table = this.getTable("0", oprid, "1");
 			// 通用链接;
 			String ZSGL_URL = request.getContextPath() + "/dispatcher";
 			String classSelectHtml = "";
@@ -337,12 +338,30 @@ public class MyTeaImpl extends FrameworkImpl {
 	 * @param oprid
 	 * @return
 	 */
-	private String getTable(String opType, String oprid) {
+	private String getTable(String opType, String oprid, String pageNo) {
 
 		List<Map<String, Object>> l = null;
 		// String sql = "";
 		StringBuffer sql = new StringBuffer();
 		StringBuffer sb = new StringBuffer();
+
+		// 总条数
+		int count = 0;
+
+		// 当前页数
+		int page = Integer.parseInt(pageNo);
+
+		// 分页总数
+		int pagesize = 0;
+
+		// 每页的行数
+		int pageLimit = Integer.parseInt(
+				jdbcTemplate.queryForObject("select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
+						new Object[] { "TZ_PAGE_LIMIT" }, "String"));
+
+		// sql 查询的开始行数
+		int beginH = (page - 1) * pageLimit;
+
 		try {
 			switch (opType) {
 			// 0 上课老师 1。关注老师
@@ -352,8 +371,17 @@ public class MyTeaImpl extends FrameworkImpl {
 				sql.append("FROM PX_TEACHER_T C WHERE C.OPRID IN ");
 				sql.append("(SELECT DISTINCT B.OPRID ");
 				sql.append("FROM PX_STU_APP_COURSE_T A,PX_TEA_SCHEDULE_T B ");
+				sql.append("WHERE A.TZ_SCHEDULE_ID =B.TZ_SCHEDULE_ID AND A.OPRID=? and A.TZ_APP_STATUS!=1) limit ?,?");
+				l = jdbcTemplate.queryForList(sql.toString(), new Object[] { oprid, beginH, pageLimit });
+
+				sql = new StringBuffer();
+				sql.append("SELECT count(C.NAME) ");
+				sql.append("FROM PX_TEACHER_T C WHERE C.OPRID IN ");
+				sql.append("(SELECT DISTINCT B.OPRID ");
+				sql.append("FROM PX_STU_APP_COURSE_T A,PX_TEA_SCHEDULE_T B ");
 				sql.append("WHERE A.TZ_SCHEDULE_ID =B.TZ_SCHEDULE_ID AND A.OPRID=? and A.TZ_APP_STATUS!=1) ");
-				l = jdbcTemplate.queryForList(sql.toString(), new Object[] { oprid });
+
+				count = jdbcTemplate.queryForObject(sql.toString(), new Object[] { oprid }, "Integer");
 				break;
 			// 关注老师
 			case "1":
@@ -362,9 +390,27 @@ public class MyTeaImpl extends FrameworkImpl {
 				sql.append("FROM PX_TEACHER_T C WHERE C.OPRID IN ");
 				sql.append("(SELECT  B.TEA_OPRID ");
 				sql.append("FROM PX_STU_FOCUS_TEA_T B ");
+				sql.append("WHERE B.STU_OPRID=?)  limit ?,?");
+				l = jdbcTemplate.queryForList(sql.toString(), new Object[] { oprid, beginH, pageLimit });
+
+				sql = new StringBuffer();
+				sql.append("SELECT count(C.NAME) ");
+				sql.append("FROM PX_TEACHER_T C WHERE C.OPRID IN ");
+				sql.append("(SELECT  B.TEA_OPRID ");
+				sql.append("FROM PX_STU_FOCUS_TEA_T B ");
 				sql.append("WHERE B.STU_OPRID=?) ");
-				l = jdbcTemplate.queryForList(sql.toString(), new Object[] { oprid });
+
+				count = jdbcTemplate.queryForObject(sql.toString(), new Object[] { oprid }, "Integer");
 				break;
+			}
+
+			if (count > pageLimit) {
+				pagesize = count / pageLimit;
+				if (count % pageLimit != 0) {
+					pagesize = pagesize + 1;
+				}
+			} else {
+				pagesize = 1;
 			}
 
 			sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"index-bm-border\">");
@@ -442,6 +488,55 @@ public class MyTeaImpl extends FrameworkImpl {
 				sb.append("</tbody></table>");
 
 			}
+
+			// 分页设置
+			System.out.println(count);
+			System.out.println(page);
+			System.out.println(pagesize);
+
+			// 上一页
+			int lastPage = 0;
+			// 下一页
+			int nextPage = 0;
+
+			lastPage = page - 1;
+
+			nextPage = page + 1;
+
+			if (lastPage < 1) {
+				lastPage = 1;
+			}
+
+			if (nextPage > pagesize) {
+				nextPage = pagesize;
+			}
+
+			int index = page;
+
+			System.out.println(lastPage);
+			System.out.println(nextPage);
+
+			sb.append("<div style=\"clear: both;\"></div>");
+			sb.append("<div class=\"main_article_nav\">");
+			sb.append("<div class=\"main_article_nav_left2\" style=\"width:465px\">");
+			sb.append("<ul>");
+			sb.append("<li onclick=\"loadPage(1," + opType + ")\">首页</li>");
+			sb.append("<li onclick=\"loadPage(" + lastPage + "," + opType + ")\">&lt;&lt;</li>");
+			sb.append("<li class=\"now\" onclick=\"loadPage(" + page + "," + opType + ")\">" + page + "</li>");
+			for (int i = 0; i < 4; i++) {
+				index = index + 1;
+				if (index <= pagesize) {
+					sb.append("<li onclick=\"loadPage(" + index + "," + opType + ")\">" + index + "</li>");
+				} else {
+					break;
+				}
+			}
+			sb.append("<li onclick=\"loadPage(" + nextPage + "," + opType + ")\">&gt;&gt;</li>");
+			sb.append("<li onclick=\"loadPage(" + pagesize + "," + opType + ")\">尾页</li>");
+			sb.append("</div>");
+			sb.append("<div class=\"main_article_nav_right2\">第 <span>" + page + "</span>/<span>" + pagesize
+					+ "</span> 页</div>");
+			sb.append("</div>");
 
 		} catch (Exception e) {
 			// TODO Auto-generated catch block
@@ -525,7 +620,7 @@ public class MyTeaImpl extends FrameworkImpl {
 			String oprid = tzLoginServiceImpl.getLoginedManagerOprid(request);
 			// 验证码
 			String strAuthCode = jacksonUtil.getString("CODE");
-			
+
 			PJTYPE = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(PJTYPE);
 			PJDESC = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(PJDESC);
 			TOPRID = tzFilterIllegalCharacter.filterDirectoryIllegalCharacter(TOPRID);

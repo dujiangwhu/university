@@ -229,7 +229,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 						new Object[] { "TZ_PAGE_LIMIT" }, "String"));
 
 		// sql 查询的开始行数
-		int beginH = (page - 1) * 10;
+		int beginH = (page - 1) * pageLimit;
 
 		try {
 			switch (opType) {
@@ -275,7 +275,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 				break;
 			}
 
-			if (count > 10) {
+			if (count > pageLimit) {
 				pagesize = count / pageLimit;
 				if (count % pageLimit != 0) {
 					pagesize = pagesize + 1;
@@ -294,7 +294,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 			if (l == null || l.size() == 0) {
 				sb.append("<tr>");
 				sb.append(
-						"<td colspan=\"5\" valign=\"middle\" width=\"100%\" align=\"left\" style=\"padding-left:5px;\" >没有数据</td>");
+						"<td colspan=\"4\" valign=\"middle\" width=\"100%\" align=\"left\" style=\"padding-left:5px;\" >没有数据</td>");
 				sb.append("</tr>");
 				sb.append("</tbody></table>");
 			} else {
@@ -406,57 +406,57 @@ public class TeaCourseImpl extends FrameworkImpl {
 					sb.append("</tr>");
 				}
 				sb.append("</tbody></table>");
-
-				// 分页设置
-				System.out.println(count);
-				System.out.println(page);
-				System.out.println(pagesize);
-
-				// 上一页
-				int lastPage = 0;
-				// 下一页
-				int nextPage = 0;
-
-				lastPage = page - 1;
-
-				nextPage = page + 1;
-
-				if (lastPage < 1) {
-					lastPage = 1;
-				}
-
-				if (nextPage > pagesize) {
-					nextPage = pagesize;
-				}
-
-				int index = page;
-
-				System.out.println(lastPage);
-				System.out.println(nextPage);
-
-				sb.append("<div style=\"clear: both;\"></div>");
-				sb.append("<div class=\"main_article_nav\">");
-				sb.append("<div class=\"main_article_nav_left2\" style=\"width:465px\">");
-				sb.append("<ul>");
-				sb.append("<li onclick=\"loadPage(1,\"" + opType + "\")\">首页</li>");
-				sb.append("<li onclick=\"loadPage(" + lastPage + ",\"" + opType + "\")\">&lt;&lt;</li>");
-				sb.append("<li class=\"now\" onclick=\"loadPage(" + page + ",\"" + opType + "\")\">" + page + "</li>");
-				for (int i = 0; i < 4; i++) {
-					index = index + 1;
-					if (index <= pagesize) {
-						sb.append("<li onclick=\"loadPage(" + index + ",\"" + opType + "\")\">" + index + "</li>");
-					} else {
-						break;
-					}
-				}
-				sb.append("<li onclick=\"loadPage(" + nextPage + ",\"" + opType + "\")\">&gt;&gt;</li>");
-				sb.append("<li onclick=\"loadPage(" + pagesize + ",\"" + opType + "\")\">尾页</li>");
-				sb.append("</div>");
-				sb.append("<div class=\"main_article_nav_right2\">第 <span>" + page + "</span>/<span>" + pagesize
-						+ "</span> 页</div>");
-				sb.append("</div>");
-
 			}
+			
+
+			// 分页设置
+			System.out.println(count);
+			System.out.println(page);
+			System.out.println(pagesize);
+
+			// 上一页
+			int lastPage = 0;
+			// 下一页
+			int nextPage = 0;
+
+			lastPage = page - 1;
+
+			nextPage = page + 1;
+
+			if (lastPage < 1) {
+				lastPage = 1;
+			}
+
+			if (nextPage > pagesize) {
+				nextPage = pagesize;
+			}
+
+			int index = page;
+
+			System.out.println(lastPage);
+			System.out.println(nextPage);
+
+			sb.append("<div style=\"clear: both;\"></div>");
+			sb.append("<div class=\"main_article_nav\">");
+			sb.append("<div class=\"main_article_nav_left2\" style=\"width:465px\">");
+			sb.append("<ul>");
+			sb.append("<li onclick=\"loadPage(1," + opType + ")\">首页</li>");
+			sb.append("<li onclick=\"loadPage(" + lastPage + "," + opType + ")\">&lt;&lt;</li>");
+			sb.append("<li class=\"now\" onclick=\"loadPage(" + page + "," + opType + ")\">" + page + "</li>");
+			for (int i = 0; i < 4; i++) {
+				index = index + 1;
+				if (index <= pagesize) {
+					sb.append("<li onclick=\"loadPage(" + index + "," + opType + ")\">" + index + "</li>");
+				} else {
+					break;
+				}
+			}
+			sb.append("<li onclick=\"loadPage(" + nextPage + "," + opType + ")\">&gt;&gt;</li>");
+			sb.append("<li onclick=\"loadPage(" + pagesize + "," + opType + ")\">尾页</li>");
+			sb.append("</div>");
+			sb.append("<div class=\"main_article_nav_right2\">第 <span>" + page + "</span>/<span>" + pagesize
+					+ "</span> 页</div>");
+			sb.append("</div>");
 
 		} catch (TzSystemException e) {
 			// TODO Auto-generated catch block
