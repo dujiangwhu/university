@@ -14,6 +14,7 @@ import com.tranzvision.gd.TZEmailSmsSendBundle.dao.PsTzDxzwlshiTblMapper;
 import com.tranzvision.gd.TZEmailSmsSendBundle.model.PsTzDxfslshiTbl;
 import com.tranzvision.gd.TZEmailSmsSendBundle.model.PsTzDxzwlshiTbl;
 import com.tranzvision.gd.util.sql.GetSeqNum;
+import com.tranzvision.gd.util.sql.SqlQuery;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -29,6 +30,9 @@ public class SmsService {
 
 	@Autowired
 	private PsTzDxfslshiTblMapper psTzDxfslshiTblMapper;
+
+	@Autowired
+	private SqlQuery jdbcTemplate;
 
 	@Autowired
 	private GetSeqNum getSeqNum;
@@ -115,10 +119,20 @@ public class SmsService {
 			response = sendSms(phone, tempID, json);
 
 			if (response != null) {
+				System.out.println("Code=" + response.getCode());
+				System.out.println("Message=" + response.getMessage());
+
+				jdbcTemplate.update("insert into PK_ALI_SMS_LOG_T values (now(),?,?,?,?,?,0)",
+						new Object[] { phone, tempID, json, response.getCode(), response.getMessage() });
 				if (response.getCode() != null && response.getCode().equals("OK")) {
 					Thread.sleep(3000L);
 					QuerySendDetailsResponse querySendDetailsResponse = querySendDetails(response.getBizId());
 					if (querySendDetailsResponse != null) {
+						System.out.println("Code=" + querySendDetailsResponse.getCode());
+						System.out.println("Message=" + querySendDetailsResponse.getMessage());
+
+						jdbcTemplate.update("insert into PK_ALI_SMS_LOG_T values (now(),?,?,?,?,?,1)",
+								new Object[] { phone, tempID, json, response.getCode(), response.getMessage() });
 						if (querySendDetailsResponse.getCode() != null
 								&& querySendDetailsResponse.getCode().equals("OK")) {
 							return true;

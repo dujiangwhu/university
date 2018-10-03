@@ -662,7 +662,11 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 				psTzAqYhxxTbl.setTzRealname(strTZ_REALNAME);
 				psTzAqYhxxTbl.setTzEmail(strTZ_EMAIL);
 				psTzAqYhxxTbl.setTzMobile(strTZ_MOBILE);
-				psTzAqYhxxTbl.setTzRylx("JGJS"); // 类型为 机构教师
+				if (strSiteId.equals("46")) {
+					psTzAqYhxxTbl.setTzRylx("JGJS"); // 类型为 机构教师
+				} else if (strSiteId.equals("45")) {
+					psTzAqYhxxTbl.setTzRylx("PXXY");
+				}
 				// 应光华要求，注册时候不管什么方式激活的，都可以通过手机或者邮箱都能登录系统-(2017-06-01，还原)
 				if ("M".equals(strActivateType)) {
 					psTzAqYhxxTbl.setTzSjbdBz("Y");
@@ -725,6 +729,8 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 					pxStudentT.setTzJgId(strOrgId);
 					pxStudentT.setPhone(strTZ_MOBILE);
 					pxStudentT.setStuStatus("A");
+					//TIMECARD_REMAIND
+					pxStudentT.setTimecardRemaind(new Integer(0));
 
 					pxStudentTMapper.insertSelective(pxStudentT);
 
@@ -828,7 +834,14 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 				}
 
 				if ("M".equals(strActivateType)) {
-					strJumUrl = request.getContextPath() + "/user/login/" + strOrgId.toLowerCase() + "/" + strSiteId;
+					// strJumUrl = request.getContextPath() + "/user/login/" +
+					// strOrgId.toLowerCase() + "/" + strSiteId;
+
+					if (strSiteId.equals("45")) {
+						strJumUrl = request.getContextPath() + "/user/login/stuLogin";
+					} else if (strSiteId.equals("46")) {
+						strJumUrl = request.getContextPath() + "/user/login/teaLogin";
+					}
 				} else {
 					String strEmailSendParas = "{\"email\":\"" + strTZ_EMAIL + "\",\"orgid\":\"" + strOrgId
 							+ "\",\"lang\":\"" + strLang + "\",\"siteid\":\"" + strSiteId + "\",\"dlzhid\":\"" + oprId
@@ -980,7 +993,15 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 				// Object[] { strJgId }, "String");
 				String siteIdSQL = "select TZ_SITEI_ID from PS_TZ_REG_USER_T WHERE OPRID=?";
 				String strSiteId = jdbcTemplate.queryForObject(siteIdSQL, new Object[] { strOprid }, "String");
-				String strJumUrl = request.getContextPath() + "/user/login/" + strJgId.toLowerCase() + "/" + strSiteId;
+
+				String strJumUrl = "";
+				if (strSiteId.equals("45")) {
+					strJumUrl = request.getContextPath() + "/user/login/stuLogin";
+				} else if (strSiteId.equals("46")) {
+					strJumUrl = request.getContextPath() + "/user/login/teaLogin";
+				}
+				// String strJumUrl = request.getContextPath() + "/user/login/"
+				// + strJgId.toLowerCase() + "/" + strSiteId;
 				returnMap.put("jumpurl", strJumUrl);
 				strResult = jacksonUtil.Map2json(returnMap);
 				return strResult;
@@ -1568,7 +1589,12 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 			String imgPath = getSysHardCodeVal.getWebsiteSkinsImgPath();
 			imgPath = request.getContextPath() + imgPath + "/" + skinId;
 
-			String loginUrl = contextPath + "/user/login/" + strOrgid.toLowerCase() + "/" + strSiteId;
+			String loginUrl = "";
+			if (strSiteId.equals("45")) {
+				loginUrl = request.getContextPath() + "/user/login/stuLogin";
+			} else if (strSiteId.equals("46")) {
+				loginUrl = request.getContextPath() + "/user/login/teaLogin";
+			}
 
 			String strSenPara = "";
 			String strHtmlFloder = "";
@@ -1799,11 +1825,11 @@ public class SiteEnrollClsServiceImpl extends FrameworkImpl {
 			url = url.replaceAll("\\\\", "/");
 			Boolean isMobile = CommonUtils.isMobile(request);
 			String strEnrollName = "";
-			
-			if (siteid.equals("46")){
-				strEnrollName="enrollTea.html";
-			} else if (siteid.equals("45")){
-				strEnrollName="enrollStu.html";
+
+			if (siteid.equals("46")) {
+				strEnrollName = "enrollTea.html";
+			} else if (siteid.equals("45")) {
+				strEnrollName = "enrollStu.html";
 			}
 			if (isMobile) {
 				strEnrollName = "menroll.html";

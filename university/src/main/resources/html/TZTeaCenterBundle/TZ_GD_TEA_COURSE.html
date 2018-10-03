@@ -3,6 +3,62 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" >
 <title>我的课表</title>
 <link href="%bind(:3)" rel="stylesheet" type="text/css">
+<style>
+.main_article_nav {
+    clear: both;
+    height: 51px;
+    width: 96%;
+    margin: 20px auto;
+    text-align: center;
+}
+.main_article_nav_left2{
+	font-size:14px;
+	line-height:22px;
+	color:#474747;
+	float:left;
+	height:51px;
+	width:365px;
+	text-align:left
+}
+.main_article_nav_right2{
+	font-size:14px;
+	line-height:22px;
+	color:#666;
+	float:right;
+	height:51px;
+	width:365px;
+	text-align:right
+}
+.main_article_nav_left2 ul li{
+	display:inline
+}
+.main_article_nav_left2 ul{
+	margin:0;
+	padding:0
+}
+.main_article_nav_left2 li{
+	float:left;
+	height:32px;
+	width:32px;
+	line-height:32px;
+	margin-right:3px;
+	text-align:center;
+	color:#999;
+	font-size:15px;
+	cursor:pointer;
+	border:1px solid #ccc
+}
+.main_article_nav_left2 li.now{
+	color:#fff;
+	background:#123876
+}
+.main_article_nav_left2 li:hover{
+	color:#fff;
+	background:#123876
+}
+</style>
+
+
 <script type="text/javascript">
 	TzUniversityContextPath = "%bind(:7)";
 </script>
@@ -11,11 +67,31 @@
 
 
 <script type="text/javascript">
-
+	
+	
 	var urlBegin="%bind(:2)";
 	$(document).ready(function(){	
 		$("#letf_menu").height(922);
+		//加载数据的函数，默认第一页
+		loadPage(1);
     });
+	
+	
+	function loadPage(page,viewType){
+		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_COURSE_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","opType":"' + viewType+ '","pageNo":"' + page+ '"}}';
+		$.ajax({
+			type:"POST",
+			url: urlBegin,
+			data:{
+				tzParams:tzParams
+			},
+			success:function(response){
+				$("#loadXK").html(response);
+			},
+			failure: function () {
+			}    
+		});	
+   	}
 	
 	function selectRadioClassId(num){
 		$("input[name='classidradio']").eq(num).click();
@@ -28,7 +104,7 @@
 		for (i = 0; i < menu.length; i++) {
 			menu[i].className = i == n ? "now" : "";
 		}
-		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_COURSE_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","opType":"' + viewType+ '"}}';
+		var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_COURSE_STD","OperateType":"HTML","comParams":{"htmlTpye":"search","opType":"' + viewType+ '","pageNo":"1"}}';
 		$.ajax({
 			type:"POST",
 			url: urlBegin,
@@ -101,21 +177,6 @@
 	//取消约课
 	function Teacancel(KKID){
 		alert("课程取消请联系管理员");
-		/*var tzParams = '{"ComID":"PX_TEA_CENTER_COM","PageID":"PX_TEA_COURSE_STD","OperateType":"cancel","comParams":{"kkid":"' + KKID+ '"}}';
-		$.ajax({
-			type:"POST",
-			url: urlBegin,
-			data:{
-				tzParams:tzParams
-			},
-			dataType: "JSON",
-			success:function(response){
-				console.log(response);
-				alert(response.cancelRs);
-			},
-			failure: function () {
-			}    
-		});	 */
 	}
 </script>
 

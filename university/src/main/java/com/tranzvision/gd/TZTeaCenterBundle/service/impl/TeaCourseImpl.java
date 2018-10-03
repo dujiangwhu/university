@@ -66,8 +66,11 @@ public class TeaCourseImpl extends FrameworkImpl {
 		}
 
 		if (htmlTpye != null && htmlTpye.equals("search")) {
+
+			String page = jacksonUtil.getString("pageNo");
 			String opType = jacksonUtil.getString("opType");
-			return this.getTable(opType, oprid);
+
+			return this.getTable(opType, oprid, page);
 		} else if (htmlTpye != null && htmlTpye.equals("showFile")) {
 			// 显示文档
 			String SCHEDULE_ID = jacksonUtil.getString("SCHEDULE_ID");
@@ -150,7 +153,7 @@ public class TeaCourseImpl extends FrameworkImpl {
 				}
 			}
 
-			String table = this.getTable(opType, oprid);
+			String table = this.getTable(opType, oprid, "1");
 			// 通用链接;
 			String ZSGL_URL = request.getContextPath() + "/dispatcher";
 			String classSelectHtml = "";
@@ -174,9 +177,11 @@ public class TeaCourseImpl extends FrameworkImpl {
 	 * 
 	 * @param opType
 	 * @param oprid
+	 * @param pageNo
+	 *            第几页
 	 * @return
 	 */
-	private String getTable(String opType, String oprid) {
+	private String getTable(String opType, String oprid, String pageNo) {
 		// 距离多少小时属于即将上课
 		String limitHour = jdbcTemplate.queryForObject(
 				"select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
@@ -209,34 +214,74 @@ public class TeaCourseImpl extends FrameworkImpl {
 		// 下周开始时间，结束时间 从周1开始
 		String NextWeekStartTime = DateUtil.getNextWeekStartTime(formatString);
 		String NextWeekEndTime = DateUtil.getNextWeekEndTime(formatString);
+		// 总条数
+		int count = 0;
+
+		// 当前页数
+		int page = Integer.parseInt(pageNo);
+
+		// 分页总数
+		int pagesize = 0;
+
+		// 每页的行数
+		int pageLimit = Integer.parseInt(
+				jdbcTemplate.queryForObject("select TZ_HARDCODE_VAL from PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT=?",
+						new Object[] { "TZ_PAGE_LIMIT" }, "String"));
+
+		// sql 查询的开始行数
+		int beginH = (page - 1) * 10;
+
 		try {
 			switch (opType) {
 			// 查询类型：0本周课程 1下周课程 2即将上课 3正在上课 4上完课程 5取消课程
-			// 上完课的课程的状态 有后台crontab执行状态修改
 			case "0":
 				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETWEEK");
-				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, WeekEndTime, WeekStartTime });
+				l = jdbcTemplate.queryForList(sql,
+						new Object[] { oprid, WeekEndTime, WeekStartTime, beginH, pageLimit });
+				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETWEEKCount");
+				count = jdbcTemplate.queryForObject(sql, new Object[] { oprid, WeekEndTime, WeekStartTime }, "Integer");
 				break;
 			case "1":
 				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETWEEK");
-				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, NextWeekEndTime, NextWeekStartTime });
+				l = jdbcTemplate.queryForList(sql,
+						new Object[] { oprid, NextWeekEndTime, NextWeekStartTime, beginH, pageLimit });
+				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETWEEKCount");
+				count = jdbcTemplate.queryForObject(sql, new Object[] { oprid, NextWeekEndTime, NextWeekStartTime },
+						"Integer");
 				break;
 			case "2":
 				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETWEEK");
-				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, endTime, starTime });
+				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, endTime, starTime, beginH, pageLimit });
+				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETWEEKCount");
+				count = jdbcTemplate.queryForObject(sql, new Object[] { oprid, endTime, starTime }, "Integer");
 				break;
 			case "3":
 				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETZZSK");
-				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "0" });
+				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "0", beginH, pageLimit });
+				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETZZSKCount");
+				count = jdbcTemplate.queryForObject(sql, new Object[] { oprid, "0" }, "Integer");
 				break;
 			case "4":
 				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETSWK");
-				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "2" });
+				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "2", beginH, pageLimit });
+				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETSWKCount");
+				count = jdbcTemplate.queryForObject(sql, new Object[] { oprid, "2" }, "Integer");
 				break;
 			case "5":
 				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETSWK");
-				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "1" });
+				l = jdbcTemplate.queryForList(sql, new Object[] { oprid, "1", beginH, pageLimit });
+				sql = tzGDObject.getSQLText("SQL.TZTeaCenterBundle.TZ_GETSWKCount");
+				count = jdbcTemplate.queryForObject(sql, new Object[] { oprid, "1" }, "Integer");
 				break;
+			}
+
+			if (count > 10) {
+				pagesize = count / pageLimit;
+				if (count % pageLimit != 0) {
+					pagesize = pagesize + 1;
+				}
+			} else {
+				pagesize = 1;
 			}
 
 			sb.append("<table border=\"0\" cellspacing=\"0\" cellpadding=\"0\" class=\"index-bm-border\">");
@@ -361,6 +406,55 @@ public class TeaCourseImpl extends FrameworkImpl {
 					sb.append("</tr>");
 				}
 				sb.append("</tbody></table>");
+
+				// 分页设置
+				System.out.println(count);
+				System.out.println(page);
+				System.out.println(pagesize);
+
+				// 上一页
+				int lastPage = 0;
+				// 下一页
+				int nextPage = 0;
+
+				lastPage = page - 1;
+
+				nextPage = page + 1;
+
+				if (lastPage < 1) {
+					lastPage = 1;
+				}
+
+				if (nextPage > pagesize) {
+					nextPage = pagesize;
+				}
+
+				int index = page;
+
+				System.out.println(lastPage);
+				System.out.println(nextPage);
+
+				sb.append("<div style=\"clear: both;\"></div>");
+				sb.append("<div class=\"main_article_nav\">");
+				sb.append("<div class=\"main_article_nav_left2\" style=\"width:465px\">");
+				sb.append("<ul>");
+				sb.append("<li onclick=\"loadPage(1,\"" + opType + "\")\">首页</li>");
+				sb.append("<li onclick=\"loadPage(" + lastPage + ",\"" + opType + "\")\">&lt;&lt;</li>");
+				sb.append("<li class=\"now\" onclick=\"loadPage(" + page + ",\"" + opType + "\")\">" + page + "</li>");
+				for (int i = 0; i < 4; i++) {
+					index = index + 1;
+					if (index <= pagesize) {
+						sb.append("<li onclick=\"loadPage(" + index + ",\"" + opType + "\")\">" + index + "</li>");
+					} else {
+						break;
+					}
+				}
+				sb.append("<li onclick=\"loadPage(" + nextPage + ",\"" + opType + "\")\">&gt;&gt;</li>");
+				sb.append("<li onclick=\"loadPage(" + pagesize + ",\"" + opType + "\")\">尾页</li>");
+				sb.append("</div>");
+				sb.append("<div class=\"main_article_nav_right2\">第 <span>" + page + "</span>/<span>" + pagesize
+						+ "</span> 页</div>");
+				sb.append("</div>");
 
 			}
 

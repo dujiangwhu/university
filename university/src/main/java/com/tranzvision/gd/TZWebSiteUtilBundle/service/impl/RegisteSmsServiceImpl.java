@@ -194,8 +194,8 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 				// 20180103,yuds,特殊站点逻辑处理，34、35仍然可以登录，但是不能注册
 				String isSpecialSite = GetHardCodePoint.getHardCodePointVal("TZ_ISPECIAL_SITE");
 				if ("Y".equals(isSpecialSite) && ("34".equals(strSiteId) || "35".equals(strSiteId))) {
-					String tmpSql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TMP WHERE LOWER(TZ_MOBILE) = LOWER(?) AND LOWER(TZ_JG_ID)=LOWER(?) AND TZ_SJBD_BZ='Y'";
-					count = jdbcTemplate.queryForObject(tmpSql, new Object[] { strPhone, strOrgid }, "Integer");
+					String tmpSql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TMP WHERE LOWER(TZ_MOBILE) = LOWER(?) ";
+					count = jdbcTemplate.queryForObject(tmpSql, new Object[] { strPhone }, "Integer");
 					if (count > 0) {
 						errorMsg[0] = "2";
 						errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE",
@@ -248,9 +248,8 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 			// String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL WHERE
 			// LOWER(TZ_MOBILE) = LOWER(?) AND LOWER(TZ_JG_ID)=LOWER(?) AND
 			// TZ_SJBD_BZ='Y'";
-			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID WHERE LOWER(A.TZ_MOBILE) = LOWER(?) AND LOWER(A.TZ_JG_ID)=LOWER(?) AND A.TZ_SJBD_BZ='Y' AND B.TZ_SITEI_ID=?";
-			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone, strOrgid.toLowerCase(), strSiteId },
-					"Integer");
+			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A WHERE  LOWER(A.TZ_MOBILE) = LOWER(?)";
+			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone }, "Integer");
 			if (count > 0) {
 				errorMsg[0] = "2";
 				errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "49",
@@ -300,8 +299,8 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 			// String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL WHERE
 			// LOWER(TZ_MOBILE) = LOWER(?) AND LOWER(TZ_JG_ID)=LOWER(?) AND
 			// TZ_SJBD_BZ='Y'";
-			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID AND LOWER(A.TZ_MOBILE) = LOWER(?) AND LOWER(A.TZ_JG_ID)=LOWER(?) AND A.TZ_SJBD_BZ='Y' AND B.TZ_SITEI_ID=?";
-			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone, strOrgid, siteid }, "Integer");
+			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A  WHERE  LOWER(A.TZ_MOBILE) = LOWER(?)";
+			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone }, "Integer");
 			if (count > 0) {
 				errorMsg[0] = "2";
 				errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "49",
@@ -370,8 +369,8 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 				psTzShjiYzmTblMapper.insert(psTzShjiYzmTbl);
 
 				String getSmsSendTmpSql = "SELECT TZ_HARDCODE_VAL FROM PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT = ? LIMIT 1";
-				String strSmsSendTmp = jdbcTemplate.queryForObject(getSmsSendTmpSql, new Object[] { "TZ_SMS_SEND_REG_TPL" },
-						"String");
+				String strSmsSendTmp = jdbcTemplate.queryForObject(getSmsSendTmpSql,
+						new Object[] { "TZ_SMS_SEND_REG_TPL" }, "String");
 				if (strSmsSendTmp == null) {
 					errorMsg[0] = "32";
 					errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "127",
@@ -439,8 +438,8 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 				return strResult;
 			}
 
-			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID AND LOWER(A.TZ_MOBILE) = LOWER(?) AND LOWER(A.TZ_JG_ID)=LOWER(?) AND A.TZ_JIHUO_ZT = 'Y' AND A.TZ_SJBD_BZ='Y' AND B.TZ_SITEI_ID=?";
-			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone, strOrgid, siteid }, "Integer");
+			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A WHERE  LOWER(A.TZ_MOBILE) = LOWER(?)  AND A.TZ_JIHUO_ZT = 'Y' ";
+			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone }, "Integer");
 			if (count <= 0) {
 				errorMsg[0] = "2";
 				errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "129",
@@ -510,10 +509,9 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 				psTzShjiYzmTbl.setTzSiteiId(siteid);
 				psTzShjiYzmTblMapper.insert(psTzShjiYzmTbl);
 
-
 				String getSmsSendTmpSql = "SELECT TZ_HARDCODE_VAL FROM PS_TZ_HARDCD_PNT WHERE TZ_HARDCODE_PNT = ? LIMIT 1";
-				String strSmsSendTmp = jdbcTemplate.queryForObject(getSmsSendTmpSql, new Object[] { "TZ_SMS_SEND_PWD_TPL" },
-						"String");
+				String strSmsSendTmp = jdbcTemplate.queryForObject(getSmsSendTmpSql,
+						new Object[] { "TZ_SMS_SEND_PWD_TPL" }, "String");
 				if (strSmsSendTmp == null) {
 					errorMsg[0] = "32";
 					errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "127",
@@ -642,8 +640,8 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 			siteid = jacksonUtil.getString("siteid").trim();
 
 			// 是否存在有效验证码
-			String sql = "SELECT A.TZ_DLZH_ID FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID AND A.TZ_MOBILE = ? AND A.TZ_JG_ID = ? AND A.TZ_RYLX = 'ZCYH' and A.TZ_SJBD_BZ='Y' AND B.TZ_SITEI_ID=?";
-			strOprid = jdbcTemplate.queryForObject(sql, new Object[] { strPhone, strOrgid, siteid }, "String");
+			String sql = "SELECT A.TZ_DLZH_ID FROM PS_TZ_AQ_YHXX_TBL A WHERE  A.TZ_MOBILE = ? ";
+			strOprid = jdbcTemplate.queryForObject(sql, new Object[] { strPhone }, "String");
 			if (strOprid != null && !"".equals(strOprid)) {
 
 				if (strCheckCode != null && !"".equals(strCheckCode)) {
@@ -701,7 +699,15 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 				// limit 0,1";
 				// String strSiteId = jdbcTemplate.queryForObject(siteIdSQL, new
 				// Object[]{strOrgid},"String");
-				String strJumUrl = request.getContextPath() + "/user/login/" + strOrgid.toLowerCase() + "/" + siteid;
+				String strJumUrl = "";
+				if (siteid.equals("45")) {
+					strJumUrl = request.getContextPath() + "/user/login/stuLogin";
+				} else if (siteid.equals("46")) {
+					strJumUrl = request.getContextPath() + "/user/login/teaLogin";
+				}
+
+				// String strJumUrl = request.getContextPath() + "/user/login/"
+				// + strOrgid.toLowerCase() + "/" + siteid;
 				returnMap.put("jumpurl", strJumUrl);
 				strResult = jacksonUtil.Map2json(returnMap);
 				return strResult;
@@ -756,7 +762,15 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 			String imgPath = getSysHardCodeVal.getWebsiteSkinsImgPath();
 			imgPath = request.getContextPath() + imgPath + "/" + skinId;
 
-			String loginUrl = contextPath + "/user/login/" + strOrgid.toLowerCase() + "/" + strSiteId;
+			// String loginUrl = contextPath + "/user/login/" +
+			// strOrgid.toLowerCase() + "/" + strSiteId;
+
+			String loginUrl = "";
+			if (strSiteId.equals("45")) {
+				loginUrl = request.getContextPath() + "/user/login/stuLogin";
+			} else if (strSiteId.equals("46")) {
+				loginUrl = request.getContextPath() + "/user/login/teaLogin";
+			}
 
 			String strSenPara = "";
 			String strHtmlFloder = "";
@@ -837,35 +851,38 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 				return strResult;
 			}
 			// 手机号在当前站点下是否已注册
-			String tSql = "SELECT TZ_JIHUO_ZT FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID AND LOWER(A.TZ_MOBILE) = LOWER(?) AND LOWER(A.TZ_JG_ID)=LOWER(?) AND B.TZ_SITEI_ID=?";
-			String tmpAccZt = jdbcTemplate.queryForObject(tSql, new Object[] { strPhone, strOrgid, strSiteId },
-					"String");
+			String tSql = "SELECT TZ_JIHUO_ZT FROM PS_TZ_AQ_YHXX_TBL A WHERE  LOWER(A.TZ_MOBILE) = LOWER(?)";
+			String tmpAccZt = jdbcTemplate.queryForObject(tSql, new Object[] { strPhone }, "String");
 			if (tmpAccZt == null || "".equals(tmpAccZt)) {
 				errorMsg[0] = "4";
 				errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "129",
 						"手机不存在，请先注册", "The mobile phone does not exist, please register");
 				return strResult;
-			} else if (!"Y".equals(tmpAccZt)) {
-				errorMsg[0] = "5";
-				errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "667",
-						"账号未激活，请先激活帐号", "Account is not activated, please activate the account!");
-				return strResult;
-			}
+			} /*
+				 * else if (!"Y".equals(tmpAccZt)) { errorMsg[0] = "5";
+				 * errorMsg[1] =
+				 * validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang,
+				 * "TZ_SITE_MESSAGE", "667", "账号未激活，请先激活帐号",
+				 * "Account is not activated, please activate the account!");
+				 * return strResult; }
+				 */
 
 			// 是否绑定手机
-			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID AND LOWER(A.TZ_MOBILE) = LOWER(?) AND LOWER(A.TZ_JG_ID)=LOWER(?) AND A.TZ_JIHUO_ZT ='Y' AND A.TZ_SJBD_BZ='Y' AND B.TZ_SITEI_ID=?";
-			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone, strOrgid, strSiteId }, "Integer");
-			if (count <= 0) {
-				errorMsg[0] = "2";
-				errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "134",
-						"账号未绑定手机，请使用邮箱验证",
-						"The number is not bound to the cell phone, please use the mailbox to verify.");
-				return strResult;
-			}
+			/*
+			 * String sql =
+			 * "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID AND LOWER(A.TZ_MOBILE) = LOWER(?) AND LOWER(A.TZ_JG_ID)=LOWER(?) AND A.TZ_JIHUO_ZT ='Y' AND A.TZ_SJBD_BZ='Y' AND B.TZ_SITEI_ID=?"
+			 * ; int count = jdbcTemplate.queryForObject(sql, new Object[] {
+			 * strPhone, strOrgid, strSiteId }, "Integer"); if (count <= 0) {
+			 * errorMsg[0] = "2"; errorMsg[1] =
+			 * validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang,
+			 * "TZ_SITE_MESSAGE", "134", "账号未绑定手机，请使用邮箱验证",
+			 * "The number is not bound to the cell phone, please use the mailbox to verify."
+			 * ); return strResult; }
+			 */
 
 			// 判断该账号是否已锁定
-			sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A,PS_TZ_REG_USER_T B WHERE A.OPRID=B.OPRID AND LOWER(A.TZ_MOBILE) = LOWER(?) AND LOWER(A.TZ_JG_ID)=LOWER(?) AND A.TZ_JIHUO_ZT ='Y' AND B.TZ_SITEI_ID=? AND exists(SELECT ACCTLOCK FROM PSOPRDEFN WHERE OPRID=A.OPRID AND ACCTLOCK='0')";
-			count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone, strOrgid, strSiteId }, "Integer");
+			String sql = "SELECT COUNT(1) FROM PS_TZ_AQ_YHXX_TBL A WHERE  LOWER(A.TZ_MOBILE) = LOWER(?)  AND A.TZ_JIHUO_ZT ='Y'  AND exists(SELECT ACCTLOCK FROM PSOPRDEFN WHERE OPRID=A.OPRID AND ACCTLOCK='0')";
+			int count = jdbcTemplate.queryForObject(sql, new Object[] { strPhone }, "Integer");
 			if (count <= 0) {
 				errorMsg[0] = "3";
 				errorMsg[1] = validateUtil.getMessageTextWithLanguageCd(strOrgid, strLang, "TZ_SITE_MESSAGE", "133",
