@@ -17,13 +17,16 @@ import com.tranzvision.gd.TZAuthBundle.service.impl.TzLoginServiceImpl;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FliterForm;
 import com.tranzvision.gd.TZBaseBundle.service.impl.FrameworkImpl;
 import com.tranzvision.gd.TZOrganizationMgBundle.dao.PsTzJgBaseTMapper;
+import com.tranzvision.gd.TZPXBundle.dao.PkTeaIntegralChangeTMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxScoreLogMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeaToCrashMapper;
 import com.tranzvision.gd.TZPXBundle.dao.PxTeacherMapper;
+import com.tranzvision.gd.TZPXBundle.model.PkTeaIntegralChangeT;
 import com.tranzvision.gd.TZPXBundle.model.PxScoreLog;
 import com.tranzvision.gd.TZPXBundle.model.PxTeaToCrash;
 import com.tranzvision.gd.TZPXBundle.model.PxTeacher;
 import com.tranzvision.gd.util.base.JacksonUtil;
+import com.tranzvision.gd.util.sql.GetSeqNum;
 import com.tranzvision.gd.util.sql.SqlQuery;
 
 /**
@@ -62,7 +65,14 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 	private PxTeaToCrashMapper pxTeaToCrashMapper;
 	
 	@Autowired
+	private PkTeaIntegralChangeTMapper pkTeaIntegralChangeTMapper;
+	
+	
+	@Autowired
 	private PxScoreLogMapper pxScoreLogMapper;
+	
+	@Autowired
+	private GetSeqNum getSeqNum;
 
 	@SuppressWarnings("unchecked")
 	@Override
@@ -115,8 +125,9 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 	}
 
 	
-	/* 修改组件注册信息 */
+	/* 提现 */
 	public String tzUpdate(String[] actData, String[] errMsg) {
+		System.out.println("TO HERE UPDATE");
 		String strRet = "{}";
 		try {
 			JacksonUtil jacksonUtil = new JacksonUtil();
@@ -145,16 +156,32 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 						pxTeaToCrash.setOperateOprid(tzLoginServiceImpl.getLoginedManagerOprid(request));
 						pxTeaToCrashMapper.insert(pxTeaToCrash);
 						
-						PxScoreLog pxScoreLog=new PxScoreLog();
+						
+						PkTeaIntegralChangeT pkTeaIntegralChangeT=new PkTeaIntegralChangeT();					
+						String tzChangeId=String.valueOf(pxTeacher.getOprid());//getSeqNum.getSeqNum("PK_TES_INTEGRAL_CHANGE_T", "TZ_CHANGE_ID"));
+						pkTeaIntegralChangeT.setTzChangeId(tzChangeId);
+						pkTeaIntegralChangeT.setOprid(pxTeacher.getOprid());
+						pkTeaIntegralChangeT.setTzBeforeChange(pxTeacher.getScore());
+						pkTeaIntegralChangeT.setTzAfterChange(0);
+						pkTeaIntegralChangeT.setTzChange(0-pxTeacher.getScore());
+						pkTeaIntegralChangeT.setTzChangeTime(new Date());
+						pkTeaIntegralChangeT.setTzChangeType("2");
+						pkTeaIntegralChangeT.setRowLastmantOprid(tzLoginServiceImpl.getLoginedManagerOprid(request));
+						pkTeaIntegralChangeT.setRowLastmantDttm(new Date());
+						pkTeaIntegralChangeTMapper.insert(pkTeaIntegralChangeT);
+						
+						System.out.println("TO HERE UPDATE");
+						/*PxScoreLog pxScoreLog=new PxScoreLog();
 						pxScoreLog.setTeaOprid(pxTeacher.getOprid());
 						pxScoreLog.setChangeScore(0-pxTeacher.getScore());
 						pxScoreLog.setChangeTime(new Date());
-						pxScoreLog.setChangeType("提现");
+						pxScoreLog.setChangeType("提现");						
+						pxScoreLogMapper.insert(pxScoreLog);*/
 						
-						pxScoreLogMapper.insert(pxScoreLog);
+						//pxTeacher.setScore(0);
+						//pxTeacherMapper.updateByPrimaryKey(pxTeacher);
 						
-						pxTeacher.setScore(0);
-						pxTeacherMapper.updateByPrimaryKey(pxTeacher);
+						
 					}					
 				}
 			}
