@@ -5,7 +5,7 @@
     /*按条件查询项目列表，seachCfg在可配置中配置*/
         selectForm:function(btn){
         Ext.tzShowCFGSearch({
-            cfgSrhId: 'PX_STU_COM.PX_COU_TIME_STD.PX_JG_KS_LOG_V', 
+            cfgSrhId: 'PX_STU_COM.PX_COU_TIME_STD.PX_STU_KS_CHG_V', 
             callback: function(seachCfg){
                 var store = btn.findParentByType("grid").store;
                 store.tzStoreParams = seachCfg;

@@ -237,32 +237,45 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 					}else if(pxTeaSchedule.getTzScheduleType().trim().equals("0")){
 						
 						
-						pxTeaSchedule.setTzScheduleType("1");
-						pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
 						
-						PxScheduleCancelT pxScheduleCancel=new PxScheduleCancelT();
-						pxScheduleCancel.setTzScheduleId(tzScheduleId);
-						pxScheduleCancel.setOprid(pxTeaSchedule.getOprid());
-						pxScheduleCancel.setTzCancelDesc(cancelReason);
-						pxScheduleCancel.setTzCancelTime(new Date());
 						//只取消
 						if(pxTeaSchedule.getTzAppStatus()=="0"){
+							pxTeaSchedule.setTzScheduleType("1");
+							pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
+							
+							PxScheduleCancelT pxScheduleCancel=new PxScheduleCancelT();
+							pxScheduleCancel.setTzScheduleId(tzScheduleId);
+							pxScheduleCancel.setOprid(pxTeaSchedule.getOprid());
+							pxScheduleCancel.setTzCancelDesc(cancelReason);
+							pxScheduleCancel.setTzCancelTime(new Date());
+							pxScheduleCancelMapper.insert(pxScheduleCancel);
 							
 						}else{
-							//pxTeaSchedule.setTzScheduleType("B");
-							//pxTeaSchedule.setOprid(oprid);
-							//pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
+							String oldOprid=pxTeaSchedule.getOprid();
+							pxTeaSchedule.setOprid(oprid);
+							pxTeaSchedule.setTzScheduleDate(new Date());
+							pxTeaSchedule.setRowLastmantDttm(new Date());
+							pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
+							
+							
 							
 							String newTzScheduleId=String.valueOf(getSeqNum.getSeqNum("PX_TEA_SCHEDULE_T", "TZ_SCHEDULE_ID"));
 							pxTeaSchedule.setTzScheduleId(newTzScheduleId);
-							pxTeaSchedule.setOprid(oprid);
+							pxTeaSchedule.setOprid(oldOprid);
+							pxTeaSchedule.setTzScheduleType("1");
 							pxTeaScheduleMapper.insert(pxTeaSchedule);
 							
-							pxScheduleCancel.setNewOprid(oprid);
-							pxScheduleCancel.setNewTzScheduleId(newTzScheduleId);
 							
+							PxScheduleCancelT pxScheduleCancel=new PxScheduleCancelT();
+							pxScheduleCancel.setTzScheduleId(newTzScheduleId);
+							pxScheduleCancel.setOprid(oldOprid);
+							pxScheduleCancel.setTzCancelDesc(cancelReason);
+							pxScheduleCancel.setTzCancelTime(new Date());
+							pxScheduleCancel.setNewOprid(oprid);
+							pxScheduleCancel.setNewTzScheduleId(tzScheduleId);
+							pxScheduleCancelMapper.insert(pxScheduleCancel);
 						}
-						pxScheduleCancelMapper.insert(pxScheduleCancel);
+						
 					}					
 				}
 			}

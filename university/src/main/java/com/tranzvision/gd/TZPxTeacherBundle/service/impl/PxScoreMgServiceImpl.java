@@ -90,7 +90,7 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 			String[][] orderByArr = new String[][] {};
 
 			// json数据要的结果字段;
-			String[] resultFldArray = { "TEA_OPRID", "CHANGE_TYPE", "CHANGE_SCORE","CHANGE_TIME","TZ_REALNAME"};
+			String[] resultFldArray = { "TEA_OPRID", "CHANGE_TYPE_DES", "CHANGE_SCORE","CHANGE_TIME","TZ_REALNAME","CHANGE_TYPE"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);
@@ -158,7 +158,8 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 						
 						
 						PkTeaIntegralChangeT pkTeaIntegralChangeT=new PkTeaIntegralChangeT();					
-						String tzChangeId=String.valueOf(pxTeacher.getOprid());//getSeqNum.getSeqNum("PK_TES_INTEGRAL_CHANGE_T", "TZ_CHANGE_ID"));
+						String tzChangeId=String.valueOf(getSeqNum.getSeqNum("PK_TES_INTEGRAL_CHANGE_T", "TZ_CHANGE_ID"));
+						System.out.println(tzChangeId);
 						pkTeaIntegralChangeT.setTzChangeId(tzChangeId);
 						pkTeaIntegralChangeT.setOprid(pxTeacher.getOprid());
 						pkTeaIntegralChangeT.setTzBeforeChange(pxTeacher.getScore());
@@ -178,8 +179,8 @@ public class PxScoreMgServiceImpl extends FrameworkImpl {
 						pxScoreLog.setChangeType("提现");						
 						pxScoreLogMapper.insert(pxScoreLog);*/
 						
-						//pxTeacher.setScore(0);
-						//pxTeacherMapper.updateByPrimaryKey(pxTeacher);
+						pxTeacher.setScore(0);
+						pxTeacherMapper.updateByPrimaryKey(pxTeacher);
 						
 						
 					}					

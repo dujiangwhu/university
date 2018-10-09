@@ -35,7 +35,7 @@ Ext.define('KitchenSink.view.trainStudentMg.courseTimeManage', {//项目管理�
 		],
     initComponent: function () {   
     	var oprid=this.oprid;
-    	var tzStoreParams='{"cfgSrhId":"PX_STU_COM.PX_COU_TIME_STD.PX_JG_KS_LOG_V","condition":{"OPRID-operator":"01","OPRID-value":"'+oprid+'"}}';
+    	var tzStoreParams='{"cfgSrhId":"PX_STU_COM.PX_COU_TIME_STD.PX_STU_KS_CHG_V","condition":{"OPRID-operator":"01","OPRID-value":"'+oprid+'"}}';
 		var store = new KitchenSink.view.trainStudentMg.courseTimeStore({tzStoreParams:tzStoreParams});
         Ext.apply(this, {
         	store: store,
