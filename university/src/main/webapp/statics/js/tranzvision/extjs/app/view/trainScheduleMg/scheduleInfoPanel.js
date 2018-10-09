@@ -41,6 +41,46 @@
 			enforceMaxLength: true
         },{
             xtype: 'textfield',
+            fieldLabel: "课程名称",
+            name: 'tzCourseName',
+            afterLabelTextTpl: [
+                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+            ],
+            allowBlank: false,
+			maxLength: 25,
+			enforceMaxLength: true
+        },{
+            xtype: 'textfield',
+            fieldLabel: "开始时间",
+            name: 'tzClassStartTime',
+            afterLabelTextTpl: [
+                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+            ],
+            allowBlank: false,
+			maxLength: 25,
+			enforceMaxLength: true
+        },{
+            xtype: 'textfield',
+            fieldLabel: "结束时间",
+            name: 'tzClassEndTime',
+            afterLabelTextTpl: [
+                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+            ],
+            allowBlank: false,
+			maxLength: 25,
+			enforceMaxLength: true
+        },{
+            xtype: 'textfield',
+            fieldLabel: "原授课老师",
+            name: 'teaName',
+            afterLabelTextTpl: [
+                '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
+            ],
+            allowBlank: false,
+			maxLength: 25,
+			enforceMaxLength: true
+        },{
+            xtype: 'textfield',
             fieldLabel: "撤销原因",
             allowBlank: false,
 			afterLabelTextTpl: [
@@ -53,10 +93,10 @@
 			},
 			items : [
 					{
-						columnWidth : .55,
+						columnWidth : .35,
 						xtype : 'textfield',
 						fieldLabel :"新授课老师",
-						name : 'oprid',
+						name : 'name',
 						allowBlank: false,
 						afterLabelTextTpl: [
 						                    '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
@@ -76,10 +116,14 @@
 					},
 					{
 						columnWidth : .45,
-						xtype : 'displayfield',
+						xtype : 'textfield',
 						hideLabel : true,
 						style : 'margin-left:5px',
-						name : 'name'
+						name : 'oprid',
+						allowBlank: false,
+						editable : false,
+						//disabled:true,
+						hidden:true
 					} ]
 		}]
     }],

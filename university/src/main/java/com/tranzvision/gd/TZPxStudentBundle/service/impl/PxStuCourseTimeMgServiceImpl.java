@@ -51,6 +51,7 @@ public class PxStuCourseTimeMgServiceImpl extends FrameworkImpl {
 	@Override
 	public String tzQueryList(String strParams, int numLimit, int numStart, String[] errorMsg) {
 
+		System.out.println("to select list");
 		// 返回值;
 		Map<String, Object> mapRet = new HashMap<String, Object>();
 		mapRet.put("total", 0);
@@ -62,10 +63,9 @@ public class PxStuCourseTimeMgServiceImpl extends FrameworkImpl {
 			// 排序字段如果没有不要赋值
 			String[][] orderByArr = new String[][] {};
 			
-			// json数据要的结果字段;
-			String[] resultFldArray = { "TZ_JG_ID","OPRID","TZ_REALNAME","MODIFY_TYPE_DMS"
-					,"TZ_TIMECARD_BEFORE",
-					"TZ_TIMECARD_AFTER","TZ_TIMECARD_MODIFY","ROW_LASTMANT_DTTM"};
+			// json数据要的结果字段;										  
+			String[] resultFldArray = { "TZ_JG_ID","OPRID","TZ_REALNAME","TZ_CHANGE_TYPE_DES","TZ_BEFORE_CHANGE",
+					"TZ_AFTER_CHANGE","TZ_CHANGE","TZ_CHANGE_TIME"};
 
 			// 可配置搜索通用函数;
 			Object[] obj = fliterForm.searchFilter(resultFldArray, orderByArr, strParams, numLimit, numStart, errorMsg);

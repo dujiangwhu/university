@@ -4,7 +4,7 @@ Ext.define('KitchenSink.view.trainStudentMg.courseTimeStore', {//项目列表获
     model: 'KitchenSink.view.trainStudentMg.courseTimeModel',
 	comID: 'PX_STU_COM',
 	pageID: 'PX_COU_TIME_STD',
-	tzStoreParams: '{"cfgSrhId":"PX_STU_COM.PX_COU_TIME_STD.PX_JG_KS_LOG_V"}',
+	tzStoreParams: '{"cfgSrhId":"PX_STU_COM.PX_COU_TIME_STD.PX_STU_KS_CHG_V"}',
 	autoLoad: true,
 	pageSize:30 ,
 	proxy: Ext.tzListProxy()/*,
