@@ -97,7 +97,7 @@
 						xtype : 'textfield',
 						fieldLabel :"新授课老师",
 						name : 'name',
-						allowBlank: false,
+						//allowBlank: false,
 						afterLabelTextTpl: [
 						                    '<span style="color:red;font-weight:bold" data-qtip="Required">*</span>'
 						                ],
@@ -127,15 +127,15 @@
 					} ]
 		}]
     }],
-    buttons: [/*{
+    buttons: [{
         text: '保存',
         iconCls:"save",
         handler: 'onFormSave'
-    },*/ {
+    }/*, {
         text: '确定',
         iconCls:"ensure",
         handler: 'onFormEnsure'
-    }, {
+    }*/, {
         text: '关闭',
         iconCls:"close",
         handler: 'onFormClose'

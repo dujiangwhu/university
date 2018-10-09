@@ -177,6 +177,8 @@
             Ext.tzSubmit(tzParams,function(responseData){
                 comView.actType = "update";
             },"",true,this);
+            var comView = this.getView();
+            comView.close();
         }
     },
     

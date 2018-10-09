@@ -230,7 +230,7 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 					errMsg[1] = "保存失败";
 				}else{
 					PxTeaScheduleT pxTeaSchedule=pxTeaScheduleMapper.selectByPrimaryKey(tzScheduleId);
-					//System.out.println();
+					System.out.println(pxTeaSchedule.getTzAppStatus());
 					if(pxTeaSchedule==null){
 						errMsg[0] = "1";
 						errMsg[1] = "用户不存在！";
@@ -239,7 +239,7 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 						
 						
 						//只取消
-						if(pxTeaSchedule.getTzAppStatus()=="0"){
+						if(pxTeaSchedule.getTzAppStatus().equals("0")){
 							pxTeaSchedule.setTzScheduleType("1");
 							pxTeaScheduleMapper.updateByPrimaryKey(pxTeaSchedule);
 							
