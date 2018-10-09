@@ -27,6 +27,11 @@
 		   Ext.Msg.alert("提示","只能选择一条要修改的记录");   
 		   return;
 	    }
+	   	var score = selList[0].get("score");
+	   	if(score<=0){
+	   		Ext.Msg.alert("提示","当前积分为："+score+",不能体现");   
+			return;
+	   	}
 	   	var removeJson = "";
         var removeRecs = selList;
 

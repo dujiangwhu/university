@@ -76,7 +76,7 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 			// json数据要的结果字段;
 			String[] resultFldArray = { "TZ_SCHEDULE_ID", "OPRID", 
 					"TZ_COURSE_TYPE_ID","TZ_COURSE_ID","TZ_APP_STATUS",
-					"TZ_CLASS_START_TIME","TZ_CLASS_END_TIME",
+					"CLASS_START_TIME","TZ_CLASS_END_TIME",
 					"TZ_SCHEDULE_TYPE","TZ_SCHEDULE_DATE","COURSE_TYPE_NAME","TZ_COURSE_NAME","TEA_NAME","TEA_PHONE","ROW_LASTMANT_DTTM"};
 
 			// 可配置搜索通用函数;

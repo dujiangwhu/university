@@ -14,6 +14,12 @@
         });
     },
     
+    select: function(btn){
+      //项目信息列表
+    	var grid = btn.findParentByType("grid");
+    	grid.close();
+    },
+    
     onGridSave: function(btn){
         //用户账号信息列表
         var grid = btn.findParentByType("grid");

@@ -459,15 +459,27 @@
 			var form =panel.child('form').getForm();
 			form.findField("tzScheduleId").setReadOnly(true);
 			form.findField("tzScheduleId").setFieldStyle('background:#F4F4F4');
+			form.findField("tzCourseName").setReadOnly(true);
+			form.findField("tzCourseName").setFieldStyle('background:#F4F4F4');
+			form.findField("tzClassStartTime").setReadOnly(true);
+			form.findField("tzClassStartTime").setFieldStyle('background:#F4F4F4');
+			form.findField("tzClassEndTime").setReadOnly(true);
+			form.findField("tzClassEndTime").setFieldStyle('background:#F4F4F4');
+			form.findField("teaName").setReadOnly(true);
+			form.findField("teaName").setFieldStyle('background:#F4F4F4');
 			var tzAppStatus=comID.get("tzAppStatus");
+			
+			form.loadRecord(comID);
 			//未预约
-			if(tzAppStatus==1){
-				form.findField("oprid").hide();
-				form.findField("oprid").setFieldStyle('background:#F4F4F4');
+			//alert(tzAppStatus);
+			if(tzAppStatus=="没有预约"||tzAppStatus==0){
+				form.findField("name").hide();
+				form.findField("name").setFieldStyle('background:#F4F4F4');
 				//form.findField("oprid").setReadOnly(true);
 				//form.findField("oprid").setFieldStyle('background:#F4F4F4');
 			}
-			form.loadRecord(comID);
+			
+			
 			//页面注册信息列表
 			/*var grid = panel.child('grid');
 			//参数
@@ -506,26 +518,26 @@
 	pmtSearchCom: function(btn){
 		var form = this.getView().child("form").getForm();
 		Ext.tzShowPromptSearch({
-			recname: 'px_teacher_v',
-			searchDesc: '搜索组件',
+			recname: 'PX_TEACHER_V',
+			searchDesc: '搜索教师',
 			maxRow:20,
 			condition:{
 				srhConFields:{
 					OPRID:{
-						desc:'组件ID',
+						desc:'教师ID',
 						operator:'07',
 						type:'01'	
 					},
 					TZ_REALNAME:{
-						desc:'组件名称',
+						desc:'教师姓名',
 						operator:'07',
 						type:'01'		
 					}	
 				}	
 			},
 			srhresult:{
-				OPRID: '组件ID',
-				TZ_REALNAME: '组件名称'	
+				OPRID: '教师ID',
+				TZ_REALNAME: '教师姓名'	
 			},
 			multiselect: false,
 			callback: function(selection){

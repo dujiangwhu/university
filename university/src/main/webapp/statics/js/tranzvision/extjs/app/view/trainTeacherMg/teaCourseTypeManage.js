@@ -38,9 +38,18 @@ Ext.define('KitchenSink.view.trainTeacherMg.teaCourseTypeManage', {//项目管�
 		]}
 		],
     initComponent: function () { 
-    	var teaOprid=this.teaOprid;
+    	//var teaOprid=this.teaOprid;
     	//alert("alert(this.teaOprid);"+this.teaOprid);
 		var store = new KitchenSink.view.trainTeacherMg.teaCourseTypeStore();
+		
+		var teaOprid=this.teaOprid==undefined?"":this.teaOprid;
+    	//alert(teaOprid);
+    	var tzStoreParams='{"cfgSrhId":"PX_TEACHER_COM.TEA_COU_TYPE_STD.PX_TEA_COURSE_V","condition":{'
+    		+'"OPRID-operator":"01","OPRID-value":"'+teaOprid+'"'
+    		+'}}';
+		var store = new KitchenSink.view.trainTeacherMg.teaCourseTypeStore({tzStoreParams:tzStoreParams});
+		
+		
         Ext.apply(this, {
         	store: store,
             columns: [{
