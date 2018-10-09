@@ -9,7 +9,7 @@ Ext.define('KitchenSink.view.trainScheduleMg.scheduleStore', {//项目列表获�
 	pageSize:30 ,
 	proxy: Ext.tzListProxy()/*,
 	sorters: {
-        property: 'oprid',
+        property: 'tzScheduleDate',
         direction: 'asc'
     }*/
 });

@@ -127,11 +127,11 @@
 					} ]
 		}]
     }],
-    buttons: [{
+    buttons: [/*{
         text: '保存',
         iconCls:"save",
         handler: 'onFormSave'
-    }, {
+    },*/ {
         text: '确定',
         iconCls:"ensure",
         handler: 'onFormEnsure'

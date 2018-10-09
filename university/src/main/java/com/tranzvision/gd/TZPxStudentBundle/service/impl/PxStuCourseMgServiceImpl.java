@@ -60,7 +60,7 @@ public class PxStuCourseMgServiceImpl extends FrameworkImpl {
 
 		try {
 			// 排序字段如果没有不要赋值
-			String[][] orderByArr = new String[][] {};
+			String[][] orderByArr = new String[][] {{"START_TIME","DESC"}};
 
 			// json数据要的结果字段;
 			String[] resultFldArray = { "TZ_SCHEDULE_ID","STU_OPRID","STU_REALNAME","STU_PHONE"

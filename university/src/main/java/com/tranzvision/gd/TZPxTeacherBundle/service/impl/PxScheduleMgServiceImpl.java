@@ -71,7 +71,7 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 
 		try {
 			// 排序字段如果没有不要赋值
-			String[][] orderByArr = new String[][] {};
+			String[][] orderByArr = new String[][] {{"CLASS_START_TIME","DESC"}};
 
 			// json数据要的结果字段;
 			String[] resultFldArray = { "TZ_SCHEDULE_ID", "OPRID", 
@@ -260,10 +260,20 @@ public class PxScheduleMgServiceImpl extends FrameworkImpl {
 							
 							
 							String newTzScheduleId=String.valueOf(getSeqNum.getSeqNum("PX_TEA_SCHEDULE_T", "TZ_SCHEDULE_ID"));
-							pxTeaSchedule.setTzScheduleId(newTzScheduleId);
-							pxTeaSchedule.setOprid(oldOprid);
-							pxTeaSchedule.setTzScheduleType("1");
-							pxTeaScheduleMapper.insert(pxTeaSchedule);
+							System.out.println("tzScheduleDate="+newTzScheduleId);
+							
+							PxTeaScheduleT old=new PxTeaScheduleT();
+							old.setTzScheduleId(newTzScheduleId);
+							old.setOprid(oldOprid);
+							old.setRowLastmantDttm(new Date());
+							old.setTzAppStatus(pxTeaSchedule.getTzAppStatus());
+							old.setTzClassEndTime(pxTeaSchedule.getTzClassEndTime());
+							old.setTzClassStartTime(pxTeaSchedule.getTzClassStartTime());
+							old.setTzCourseId(pxTeaSchedule.getTzCourseId());
+							old.setTzCourseTypeId(pxTeaSchedule.getTzCourseTypeId());
+							old.setTzScheduleDate(new Date());
+							old.setTzScheduleType("1");
+							pxTeaScheduleMapper.insert(old);
 							
 							
 							PxScheduleCancelT pxScheduleCancel=new PxScheduleCancelT();

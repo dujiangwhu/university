@@ -61,7 +61,7 @@ public class PxStuCourseTimeMgServiceImpl extends FrameworkImpl {
 
 		try {
 			// 排序字段如果没有不要赋值
-			String[][] orderByArr = new String[][] {};
+			String[][] orderByArr = new String[][] {{"TZ_CHANGE_TIME","DESC"}};
 			
 			// json数据要的结果字段;										  
 			String[] resultFldArray = { "TZ_JG_ID","OPRID","TZ_REALNAME","TZ_CHANGE_TYPE_DES","TZ_BEFORE_CHANGE",
