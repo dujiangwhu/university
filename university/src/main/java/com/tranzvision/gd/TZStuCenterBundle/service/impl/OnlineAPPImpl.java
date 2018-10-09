@@ -534,7 +534,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 						int tzBeforeChange = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "Integer");
 
 						if (tzBeforeChange < 1) {
-							strRet = "{\"yyRs\":\"没有剩余课时卡\"}";
+							strRet = "{\"yyRs\":\"你还没有足够的课时卡进行约课，请联系您的专属老师为您添加。\"}";
 							flag = 1;
 						}
 						if (flag == 0) {
@@ -625,7 +625,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 
 								} else {
 									tzGDObject.commit(status);
-									strRet = "{\"yyRs\":\"没有剩余课时卡\"}";
+									strRet = "{\"yyRs\":\"你还没有足够的课时卡进行约课，请联系您的专属老师为您添加。\"}";
 								}
 							} catch (Exception e) {
 								// 回滚事务
@@ -644,7 +644,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 						int tzBeforeChange = jdbcTemplate.queryForObject(sql, new Object[] { oprid }, "Integer");
 
 						if (tzBeforeChange < 1) {
-							strRet = "{\"yyRs\":\"没有剩余课时卡\"}";
+							strRet = "{\"yyRs\":\"你还没有足够的课时卡进行约课，请联系您的专属老师为您添加。\"}";
 							flag = 1;
 						}
 						if (flag == 0) {
@@ -732,7 +732,7 @@ public class OnlineAPPImpl extends FrameworkImpl {
 									}
 								} else {
 									tzGDObject.commit(status);
-									strRet = "{\"yyRs\":\"没有剩余课时卡\"}";
+									strRet = "{\"yyRs\":\"你还没有足够的课时卡进行约课，请联系您的专属老师为您添加。\"}";
 								}
 							} catch (Exception e) {
 								// 回滚事务

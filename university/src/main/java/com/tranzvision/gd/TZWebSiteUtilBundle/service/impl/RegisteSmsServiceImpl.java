@@ -636,12 +636,18 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 			strCheckCode = jacksonUtil.getString("checkCode").trim();
 			strPwd = jacksonUtil.getString("pwd").trim();
 			strRePwd = jacksonUtil.getString("repwd").trim();
-			strRePwd = jacksonUtil.getString("repwd").trim();
+			// strRePwd = jacksonUtil.getString("repwd").trim();
 			siteid = jacksonUtil.getString("siteid").trim();
 
+			System.out.println(strPwd);
+			System.out.println(strCheckCode);
+			System.out.println(strPhone);
+			System.out.println(strRePwd);
+
 			// 是否存在有效验证码
-			String sql = "SELECT A.TZ_DLZH_ID FROM PS_TZ_AQ_YHXX_TBL A WHERE  A.TZ_MOBILE = ? ";
+			String sql = "SELECT A.OPRID FROM PS_TZ_AQ_YHXX_TBL A WHERE  A.TZ_MOBILE = ? ";
 			strOprid = jdbcTemplate.queryForObject(sql, new Object[] { strPhone }, "String");
+			System.out.println(strOprid);
 			if (strOprid != null && !"".equals(strOprid)) {
 
 				if (strCheckCode != null && !"".equals(strCheckCode)) {
@@ -686,6 +692,8 @@ public class RegisteSmsServiceImpl extends FrameworkImpl {
 				psoprdefn.setOprid(strOprid);
 				psoprdefn.setOperpswd(password);
 				psoprdefnMapper.updateByPrimaryKeySelective(psoprdefn);
+
+				System.out.println("password:" + password);
 				// 把验证码失效;
 				String yzmSQL = "UPDATE PS_TZ_SHJI_YZM_TBL SET TZ_EFF_FLAG='N' WHERE TZ_JG_ID=? AND TZ_MOBILE_PHONE=? AND TZ_SITEI_ID=?";
 				jdbcTemplate.update(yzmSQL, new Object[] { strOrgid, strPhone, siteid });
